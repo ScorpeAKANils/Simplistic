@@ -34,15 +34,6 @@ public class Health : NetworkBehaviour
     public void Die(BasicSpawner s) 
     {
         transform.position = s.GetRandomPos();
-        RPC_ShowHit("Aua " + s.RunnerRef.LocalPlayer); 
-
-    }
-
-    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority, HostMode = RpcHostMode.SourceIsServer)]
-    public void RPC_ShowHit(string msg, RpcInfo info = default)
-    {
-        var txt = FindObjectOfType<TextMeshProUGUI>();
-        txt.text = msg; 
     }
 
 }

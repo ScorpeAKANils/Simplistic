@@ -10,12 +10,12 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
 {
     [SerializeField] private NetworkPrefabRef _playerPrefab;
     [SerializeField] private List<Transform> transforms = new();
+    [SerializeField] private Camera _cam; 
+    [Networked] int _spawnIndex { get; set; }
     private Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new();
     private Dictionary<PlayerRef, Health> _playersHealths = new(); 
     private NetworkRunner _runnerRef;
     public  NetworkRunner RunnerRef;
-    [Networked]
-    public static BasicSpawner Instance { get; set; }
 
    
     public void ErasePlayer(PlayerRef player) 
@@ -68,7 +68,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
         if (runner.IsServer)
         { 
             int i = UnityEngine.Random.Range(0, transforms.Count - 1);
-         Vector3 pos = transforms[i].position;
+            Vector3 pos = transforms[i].position;
             NetworkObject networkPlayerObject = runner.Spawn(_playerPrefab, pos, Quaternion.identity, player);
             // Keep track of the player avatars for easy access
             _spawnedCharacters.Add(player, networkPlayerObject);
@@ -76,7 +76,6 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
             _playersHealths.Add(player, playerHealth);
             playerHealth.SetPlayerRef(player);
             Debug.Log(playerHealth.GetPlayer());
-            Instance = this;
         }
     }
 
@@ -122,12 +121,13 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
     public void OnObjectEnterAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player) { }
     public void OnReliableDataReceived(NetworkRunner runner, PlayerRef player, ReliableKey key, ArraySegment<byte> data) { }
     public void OnReliableDataProgress(NetworkRunner runner, PlayerRef player, ReliableKey key, float progress) { }
-
     public Vector3 GetRandomPos()
     {
-        int i = UnityEngine.Random.Range(0, transforms.Count - 1);
-        Debug.LogError("spawned"); 
-        return transforms[i].position;
+        if (_runnerRef.IsServer) 
+        {
+            _spawnIndex = UnityEngine.Random.Range(0, transforms.Count - 1);
+        }
+        return transforms[_spawnIndex].position;
     }
 
 }

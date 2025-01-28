@@ -1,62 +1,84 @@
 using Fusion;
 using TMPro;
 using UnityEngine;
-
+using System.Collections; 
 public class FireBullet : NetworkBehaviour
 {
     private bool _fireButtonPressed = false;
     [SerializeField] private NetworkPrefabRef _bulletPrefab;
-    [SerializeField] private Transform _gunBarrel;
-    [SerializeField] private Transform _player;
+    [SerializeField] private Transform GunBarrel; 
     [SerializeField] private LayerMask _playerLayer;
-    private NetworkRunner _runnerBulletRef; 
+    [SerializeField] public LineRenderer LineRend;
+    [Networked] private bool _renderLines {  get; set; }
+    private NetworkRunner _runnerBulletRef;
+    public BasicSpawner Spawner { get; private set; } 
     private void Start()
     {
         _runnerBulletRef = FindObjectOfType<NetworkRunner>();
+        Spawner = FindObjectOfType<BasicSpawner>(); 
     }
 
     private void Update()
     {
-     if(Input.GetButtonDown("Fire1")) 
-     {
+        if(Input.GetButtonDown("Fire1")) 
+        {
             _fireButtonPressed = true;
-     }
+        }
     }
     // Update is called once per frame
     public override void FixedUpdateNetwork()
     {
-        if(!HasInputAuthority) 
+        if (HasInputAuthority == false) 
         {
-            return; 
+            return;
         }
         if(_fireButtonPressed) 
         {
             _fireButtonPressed = false;
-            Shoot(_gunBarrel.position, transform.forward); 
-            RPC_Fire(_gunBarrel.position);
+            Shoot(GunBarrel.position, transform.forward); 
         }
+        RenderLIne();
     }
     void Shoot(Vector3 pos, Vector3 dir) 
     {
-        Debug.DrawLine(pos, pos + (dir * 30f));
+        RPC_SendShotInfo(Spawner.RunnerRef, Spawner.RunnerRef.LocalPlayer, this); 
         if(Physics.Raycast(pos, dir, out RaycastHit hit,  30f, _playerLayer)) 
         {
-            PlayerRef player = hit.collider.gameObject.GetComponent<Health>().GetPlayer();
-            RPC_SendHitInfo(player);
+            PlayerRef enemyPlayer = hit.collider.gameObject.GetComponent<Health>().GetPlayer();
+            RPC_SendHitInfo(Spawner.RunnerRef, enemyPlayer, Spawner.RunnerRef.LocalPlayer, this); 
         }
     }
-    [Rpc(RpcSources.All, RpcTargets.All, HostMode = RpcHostMode.SourceIsServer)]
-    public void RPC_SendHitInfo(PlayerRef p, RpcInfo info = default)
+    [Rpc(RpcSources.InputAuthority, RpcTargets.All, Channel = RpcChannel.Reliable)]
+    public static void RPC_SendHitInfo(NetworkRunner runner, PlayerRef enemy, PlayerRef self, FireBullet gunRef,  RpcInfo info = default)
     {
         var Text = FindObjectOfType<TextMeshProUGUI>();
-        Text.text = p.ToString() + " &Basic Spawner Instace == null: " + (BasicSpawner.Instance==null).ToString();
-        Debug.Log("Habe " + p + " getroffen"); 
-        BasicSpawner.Instance.ErasePlayer(p); 
+        Text.text = enemy.ToString() + " was killed by: " + self;
+        gunRef.Spawner.ErasePlayer(enemy); 
     }
 
-    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority, HostMode = RpcHostMode.SourceIsServer)]
-    public void RPC_Fire(Vector3 pos, RpcInfo info = default)
+    [Rpc(RpcSources.All, RpcTargets.InputAuthority, InvokeLocal = false,  Channel = RpcChannel.Reliable)]
+    public static void RPC_SendShotInfo(NetworkRunner runner, PlayerRef self, FireBullet fb,  RpcInfo info = default)
     {
-        Runner.Spawn(_bulletPrefab, pos, Quaternion.identity);
+        if(runner.LocalPlayer == self) 
+        {
+            fb._renderLines = true;  
+        }
+    }
+
+    private void RenderLIne() 
+    {
+        if(_renderLines) 
+        {
+            _renderLines = false; 
+            LineRend.enabled = true;
+            LineRend.SetPosition(0, GunBarrel.position);
+            LineRend.SetPosition(1, GunBarrel.position + (transform.forward * 30f));
+            StartCoroutine(DisableLineAfterDelay(LineRend, 0.5f));
+        }
+    }
+    public IEnumerator DisableLineAfterDelay(LineRenderer lineRenderer, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        lineRenderer.enabled = false;
     }
 }
