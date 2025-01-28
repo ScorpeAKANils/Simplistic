@@ -53,7 +53,14 @@ public class FireBullet : NetworkBehaviour
     {
         var Text = FindObjectOfType<TextMeshProUGUI>();
         Text.text = enemy.ToString() + " was killed by: " + self;
+        gunRef.StartCoroutine(FireBullet.TextLifeTime(1f));  
         gunRef.Spawner.ErasePlayer(enemy); 
+    }
+    public static IEnumerator TextLifeTime(float duration) 
+    {
+        yield return new WaitForSeconds(duration); 
+        var Text = FindObjectOfType<TextMeshProUGUI>();
+        Text.text = string.Empty;
     }
 
     [Rpc(RpcSources.All, RpcTargets.InputAuthority, InvokeLocal = false,  Channel = RpcChannel.Reliable)]
