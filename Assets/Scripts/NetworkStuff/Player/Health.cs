@@ -10,8 +10,8 @@ public class Health : NetworkBehaviour
     private LayerMask _bulletLayer;
     private NetworkRunner _runnerRef;
     private bool _wasHit = false;
-    private BasicSpawner _spawner; 
-
+    private BasicSpawner _spawner;
+    private CharacterController _cc; 
     [Networked]
     private PlayerRef _player { get ; set;  }
     private Vector3 _spawnPos; 
@@ -20,6 +20,7 @@ public class Health : NetworkBehaviour
     {
         _runnerRef = FindObjectOfType<NetworkRunner>();
         _spawnPos = transform.position; 
+        _cc = this.GetComponent<CharacterController>();
     }
     public void SetPlayerRef(PlayerRef player) 
     {
@@ -33,7 +34,12 @@ public class Health : NetworkBehaviour
 
     public void Die(BasicSpawner s) 
     {
-        transform.position = s.GetRandomPos();
+        Vector3 pos = s.GetRandomPos();
+        Debug.Log(pos);
+        _cc.enabled = false; 
+        transform.position = pos;
+        _cc.enabled = true;
+
     }
 
 }
