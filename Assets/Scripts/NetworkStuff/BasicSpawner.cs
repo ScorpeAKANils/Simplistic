@@ -16,7 +16,12 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
     private Dictionary<PlayerRef, Health> _playersHealths = new(); 
     private NetworkRunner _runnerRef;
     public  NetworkRunner RunnerRef;
+    private float _mouseY; 
 
+    void Update() 
+    {
+        _mouseY = Input.GetAxis("Mouse X"); 
+    }
    
     public void ErasePlayer(PlayerRef player) 
     {
@@ -102,7 +107,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
 
         if (Input.GetKey(KeyCode.D))
             data.direction += Vector3.right;
-
+        data.MouseY = _mouseY; 
         input.Set(data);
     }
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }

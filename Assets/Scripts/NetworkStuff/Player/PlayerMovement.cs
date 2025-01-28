@@ -19,7 +19,24 @@ public class PlayerMovement : NetworkBehaviour
         if (GetInput(out NetworkInputData data))
         {
             data.direction.Normalize();
-            _cc.Move(_speed * data.direction * Runner.DeltaTime);
+            _cc.Move(_speed * TranslateDirectionToLocalSpace(data.direction) * Runner.DeltaTime);
         }
+    }
+
+    private Vector3 TranslateDirectionToLocalSpace(Vector3 dir) 
+    {
+        Vector3 moveVector = Vector3.zero;
+        if(dir.z != 0) 
+        {
+            moveVector += transform.forward * dir.z;  
+        }
+
+        if(dir.x != 0)
+        {
+            moveVector += transform.right * dir.x; 
+        }
+
+        return moveVector.normalized; 
+
     }
 }
