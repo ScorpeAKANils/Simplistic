@@ -19,6 +19,14 @@ public class MouseLook : NetworkBehaviour
         ToggleMouseState();
     }
 
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.F)) 
+        {
+            ToggleMouseState(); 
+        }
+    }
+
     public override void FixedUpdateNetwork()
     {
         base.FixedUpdateNetwork();

@@ -20,6 +20,11 @@ public class PlayerMovement : NetworkBehaviour
         {
             data.direction.Normalize();
             _cc.Move(_speed * TranslateDirectionToLocalSpace(data.direction) * Runner.DeltaTime);
+            if (data.Jump) 
+            {
+                data.Jump = false; 
+                _cc.Jump(); 
+            }
         }
     }
 

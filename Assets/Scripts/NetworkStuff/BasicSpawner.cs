@@ -18,11 +18,15 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
     public  NetworkRunner RunnerRef;
     private float _mouseY;
     private float _mouseX;
-
+    private bool _jump; 
     void Update() 
     {
         _mouseY = Input.GetAxis("Mouse X");
-        _mouseX = Input.GetAxis("Mouse Y"); 
+        _mouseX = Input.GetAxis("Mouse Y");
+        if (Input.GetKeyDown(KeyCode.Space)) 
+        {
+            _jump = true; 
+        }
     }
    
     public void ErasePlayer(PlayerRef player) 
@@ -109,6 +113,11 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
 
         if (Input.GetKey(KeyCode.D))
             data.direction += Vector3.right;
+        if (_jump) 
+        {
+            _jump = false; 
+            data.Jump = true; 
+        }
         data.MouseY = _mouseY;
         data.MouseX = _mouseX; 
         input.Set(data);
