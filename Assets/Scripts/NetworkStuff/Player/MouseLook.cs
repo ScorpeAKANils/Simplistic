@@ -32,7 +32,7 @@ public class MouseLook : NetworkBehaviour
         base.FixedUpdateNetwork();
         if (GetInput(out NetworkInputData data))
         {
-            _xRotation -= (data.MouseX * _sensitivity * Runner.DeltaTime); 
+            _xRotation -= (data.MouseX * (_sensitivity/2) * Runner.DeltaTime); 
             _xRotation = Mathf.Clamp(_xRotation, -90, 90);
             _camTransform.localRotation = Quaternion.Euler(_xRotation, 0, 0);
             transform.Rotate((transform.up) * data.MouseY * _sensitivity * Runner.DeltaTime); 
