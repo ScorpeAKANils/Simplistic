@@ -31,7 +31,7 @@ public class SetCamera : MonoBehaviour
                 _cam = FindObjectOfType<Camera>();
                 _cam.transform.position = _camPos.position; 
                 _cam.transform.transform.rotation = _camPos.rotation;
-                _cam.transform.parent = _playerRef.transform; 
+                _cam.transform.parent = _camPos.transform; 
             }
              
          }
