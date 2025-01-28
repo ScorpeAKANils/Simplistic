@@ -217,8 +217,8 @@ MonoBehaviour:
   Flags: 262145
   NestedObjects:
   - {fileID: 5987394636285546067}
-  - {fileID: 1039523555947081684}
   - {fileID: 8487800994345831963}
+  - {fileID: 1039523555947081684}
   NetworkedBehaviours:
   - {fileID: 7645471081167716647}
   - {fileID: 1931244022990159732}
@@ -497,7 +497,7 @@ Transform:
   m_GameObject: {fileID: 8209102324072601242}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.003, y: 1.691, z: 2.552}
+  m_LocalPosition: {x: -0.78, y: 1.6909999, z: -0.72}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -633,11 +633,11 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 4b5510b840c490e44847203859628a8d,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 4022458691614968933}
+      addedObject: {fileID: 5761836830940726770}
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 4b5510b840c490e44847203859628a8d,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 5761836830940726770}
+      addedObject: {fileID: 4022458691614968933}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 4b5510b840c490e44847203859628a8d,
         type: 3}
@@ -676,8 +676,8 @@ MonoBehaviour:
   ObjectInterest: 1
   Flags: 262145
   NestedObjects:
-  - {fileID: 1039523555947081684}
   - {fileID: 8487800994345831963}
+  - {fileID: 1039523555947081684}
   NetworkedBehaviours:
   - {fileID: 7147985502822877593}
   ForceRemoteRenderTimeframe: 0
