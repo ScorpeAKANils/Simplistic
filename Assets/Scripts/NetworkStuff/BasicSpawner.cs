@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
 {
     [SerializeField] private NetworkPrefabRef _playerPrefab;
-    [SerializeField] private List<Vector3> transforms = new();
+    [SerializeField] private List<Transform> transforms = new();
     [SerializeField] private Camera _cam; 
     [Networked] int _spawnIndex { get; set; }
     private Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new();
@@ -78,8 +78,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
     {
         if (runner.IsServer)
         { 
-            int i = UnityEngine.Random.Range(0, transforms.Count - 1);
-            Vector3 pos = transforms[i];
+            Vector3 pos = GetRandomPos();
             NetworkObject networkPlayerObject = runner.Spawn(_playerPrefab, pos, Quaternion.identity, player);
             // Keep track of the player avatars for easy access
             _spawnedCharacters.Add(player, networkPlayerObject);
@@ -144,7 +143,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
         {
             _spawnIndex = UnityEngine.Random.Range(0, transforms.Count - 1);
         }
-        return transforms[_spawnIndex];
+        return transforms[_spawnIndex].position;
     }
 
 }
