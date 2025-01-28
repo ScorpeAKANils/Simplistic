@@ -42,11 +42,20 @@ public class FireBullet : NetworkBehaviour
     void Shoot(Vector3 pos, Vector3 dir) 
     {
         RPC_SendShotInfo(Spawner.RunnerRef, Spawner.RunnerRef.LocalPlayer, this); 
-        if(Physics.Raycast(pos, dir, out RaycastHit hit,  30f, _playerLayer)) 
+        if(Physics.Raycast(pos, dir, out RaycastHit hit, 30f /*, _playerLayer*/)) 
         {
-            PlayerRef enemyPlayer = hit.collider.gameObject.GetComponent<Health>().GetPlayer();
-            RPC_SendHitInfo(Spawner.RunnerRef, enemyPlayer, Spawner.RunnerRef.LocalPlayer, this); 
+            if(hit.collider.GetComponent<Health>() != null) //layer check randomly not working in if statemant, only as a layer in raycast as parameter, but than the raycast ignore all the other colliders. But Players shouldnt be able to shoot threw walls lmao 
+            {
+                Debug.Log("Gegner getroffen!");
+                PlayerRef enemyPlayer = hit.collider.GetComponent<Health>().GetPlayer();
+                RPC_SendHitInfo(Spawner.RunnerRef, enemyPlayer, Spawner.RunnerRef.LocalPlayer, this);
+            }
+            else
+            {
+                Debug.Log(hit.collider.gameObject.name);
+            }
         }
+        
     }
     [Rpc(RpcSources.InputAuthority, RpcTargets.All, Channel = RpcChannel.Reliable)]
     public static void RPC_SendHitInfo(NetworkRunner runner, PlayerRef enemy, PlayerRef self, FireBullet gunRef,  RpcInfo info = default)
