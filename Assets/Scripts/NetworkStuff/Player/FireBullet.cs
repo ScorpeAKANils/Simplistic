@@ -51,7 +51,7 @@ public class FireBullet : NetworkBehaviour
         {
             _canFire = false; 
             _fireButtonPressed = false;
-            RPC_VisualieShot(Spawner.RunnerRef, this); 
+            RPC_VisualieShot(Spawner.RunnerRef, this, Spawner.RunnerRef.LocalPlayer); 
             Shoot(GunBarrel.position, GunBarrel.forward);
             StartCoroutine(FireCoolDown(0.1f)); 
         }
