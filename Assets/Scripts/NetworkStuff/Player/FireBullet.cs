@@ -13,6 +13,7 @@ public class FireBullet : NetworkBehaviour
     [SerializeField] private TextMeshProUGUI _ammoHud; 
     [Networked] public byte AmmoInMag { get; private set; }
     public BasicSpawner Spawner { get; private set; }
+    [SerializeField] private GameObject _killFeed; 
     private bool _canFire = true;
     private bool _reload;
 
@@ -88,9 +89,10 @@ public class FireBullet : NetworkBehaviour
     [Rpc(RpcSources.InputAuthority, RpcTargets.All, Channel = RpcChannel.Reliable)]
     public static void RPC_SendHitInfo(NetworkRunner runner, PlayerRef enemy, PlayerRef self, FireBullet gunRef,  RpcInfo info = default)
     {
-        var Text = FindObjectOfType<TextMeshProUGUI>();
+        var Canvas = Instantiate(gunRef._killFeed, Vector3.zero, Quaternion.identity);
+        var Text = Canvas.GetComponentInChildren<TextMeshProUGUI>(); 
         Text.text = enemy.ToString() + " was killed by: " + self;
-        gunRef.StartCoroutine(FireBullet.TextLifeTime(3f));  
+        gunRef.StartCoroutine(FireBullet.TextLifeTime( Text, 1f));  
         gunRef.Spawner.ErasePlayer(enemy); 
     }
     [Rpc(RpcSources.InputAuthority, RpcTargets.All, Channel = RpcChannel.Reliable)]
@@ -114,10 +116,9 @@ public class FireBullet : NetworkBehaviour
         gunRef._lineRenderer.enabled = false; 
     }
 
-    public static IEnumerator TextLifeTime(float duration) 
+    public static IEnumerator TextLifeTime(TextMeshProUGUI text, float duration) 
     {
-        yield return new WaitForSeconds(duration); 
-        var Text = FindObjectOfType<TextMeshProUGUI>();
-        Text.text = string.Empty;
+        yield return new WaitForSeconds(duration);
+        Destroy(text); 
     }
 }
