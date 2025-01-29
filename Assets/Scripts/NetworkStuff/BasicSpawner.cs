@@ -18,26 +18,14 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
     public  NetworkRunner RunnerRef;
     private float _mouseY;
     private float _mouseX;
-    private bool _jump;
-    private bool _shoot;
-    private float _xMovement;
-    private float _zMovement; 
+    private bool _jump; 
     void Update() 
     {
         _mouseY = Input.GetAxis("Mouse X");
         _mouseX = Input.GetAxis("Mouse Y");
-        _xMovement = Input.GetAxis("Horizontal");
-        _zMovement = Input.GetAxis("Vertical");
-
-
-        if (Input.GetButtonDown("Fire1"))
+        if (Input.GetKeyDown(KeyCode.Space)) 
         {
-            _shoot = true;
-        }
-
-        if (Input.GetButtonDown("Jump"))
-        {
-            _jump = true;
+            _jump = true; 
         }
     }
    
@@ -113,25 +101,21 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
     {
         var data = new NetworkInputData();
 
-        if (_zMovement != 0)
-        {
-            data.Direction += Vector3.forward * _zMovement;
-        }
+        if (Input.GetKey(KeyCode.W))
+            data.direction += Vector3.forward;
 
-        if (_xMovement != 0)
-        {
-            data.Direction += Vector3.right * _xMovement;
-        }
+        if (Input.GetKey(KeyCode.S))
+            data.direction += Vector3.back;
 
-        if (_shoot)
+        if (Input.GetKey(KeyCode.A))
+            data.direction += Vector3.left; 
+
+        if (Input.GetKey(KeyCode.D))
+            data.direction += Vector3.right;
+        if (_jump) 
         {
-            _shoot = false; 
-            data.Fired = true;
-        }
-        if (_jump)
-        {
-            _jump = false;
-            data.Jump = true;
+            _jump = false; 
+            data.Jump = true; 
         }
         data.MouseY = _mouseY;
         data.MouseX = _mouseX; 
