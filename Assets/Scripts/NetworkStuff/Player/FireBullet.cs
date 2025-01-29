@@ -37,7 +37,7 @@ public class FireBullet : NetworkBehaviour
     }
     void Shoot(Vector3 pos, Vector3 dir) 
     {
-        if(Physics.Raycast(pos, dir, out RaycastHit hit, 30f, _ignoreLayer)) 
+        if(Physics.Raycast(pos, dir, out RaycastHit hit, 100f, ~_ignoreLayer)) 
         {
             try
             {
@@ -47,10 +47,6 @@ public class FireBullet : NetworkBehaviour
                     Debug.Log("Gegner getroffen!");
                     PlayerRef enemyPlayer = hit.collider.GetComponent<Health>().GetPlayer();
                     RPC_SendHitInfo(Spawner.RunnerRef, enemyPlayer, Spawner.RunnerRef.LocalPlayer, this);
-                }
-                else
-                {
-                    Debug.Log("Suicide is not allowed..."); 
                 }
             }
             catch
