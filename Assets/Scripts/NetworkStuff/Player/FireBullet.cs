@@ -14,14 +14,6 @@ public class FireBullet : NetworkBehaviour
     {
         Spawner = FindObjectOfType<BasicSpawner>(); 
     }
-
-    private void Update()
-    {
-        if(Input.GetButtonDown("Fire1")) 
-        {
-            _fireButtonPressed = true;
-        }
-    }
     // Update is called once per frame
     public override void FixedUpdateNetwork()
     {
@@ -29,10 +21,13 @@ public class FireBullet : NetworkBehaviour
         {
             return;
         }
-        if(_fireButtonPressed) 
+        if(GetInput(out NetworkInputData data)) 
         {
-            _fireButtonPressed = false;
-            Shoot(GunBarrel.position, transform.forward); 
+            if (data.Fired)
+            {
+                data.Fired = false; 
+                Shoot(GunBarrel.position, transform.forward); 
+            }
         }
     }
     void Shoot(Vector3 pos, Vector3 dir) 
@@ -51,6 +46,7 @@ public class FireBullet : NetworkBehaviour
             }
             catch
             {
+                Debug.Log(hit.collider.gameObject.name); 
             }
         }
         

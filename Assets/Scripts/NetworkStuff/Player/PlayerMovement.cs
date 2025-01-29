@@ -16,11 +16,15 @@ public class PlayerMovement : NetworkBehaviour
     }
     public override void FixedUpdateNetwork()
     {
+        if (HasInputAuthority == false)
+        {
+            return; 
+        }
         if (GetInput(out NetworkInputData data))
         {
-            data.direction.Normalize();
-            _cc.Move(_speed * TranslateDirectionToLocalSpace(data.direction) * Runner.DeltaTime);
-            if (data.Jump) 
+            data.Direction.Normalize();
+            _cc.Move(_speed * TranslateDirectionToLocalSpace(data.Direction) * Runner.DeltaTime);
+            if (data.Jump == true) 
             {
                 data.Jump = false; 
                 _cc.Jump(); 
