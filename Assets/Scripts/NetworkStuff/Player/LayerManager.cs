@@ -5,8 +5,6 @@ using Fusion;
 
 public class LayerManager : NetworkBehaviour
 {
-    [SerializeField] private LayerMask _layerSelf;
-    [SerializeField] private LayerMask _layerOther;
     [SerializeField] private Health _health;
 
     private bool _allreadyChecked = false;
