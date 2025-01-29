@@ -8,7 +8,7 @@ public class FireBullet : NetworkBehaviour
     [SerializeField] private NetworkPrefabRef _bulletPrefab;
     [SerializeField] private Transform GunBarrel; 
     [SerializeField] private LayerMask _ignoreLayer;
-    [SerializeField, Range(0, byte.MaxValue)] private byte _magSize  = 30;
+    [SerializeField] private byte _magSize  = 30;
     [SerializeField] private LineRenderer _lineRenderer; 
     [Networked] public byte AmmoInMag { get; private set; }
     public BasicSpawner Spawner { get; private set; }
@@ -43,10 +43,11 @@ public class FireBullet : NetworkBehaviour
         }
         if (AmmoInMag < _magSize && _reload)
         {
+            Debug.Log("press r to reload"); 
             _reload = false; 
             AmmoInMag = _magSize;
         }
-        if (_fireButtonPressed) 
+        if (_fireButtonPressed && AmmoInMag > 0) 
         {
             _canFire = false; 
             _fireButtonPressed = false;
@@ -63,7 +64,6 @@ public class FireBullet : NetworkBehaviour
     }
     void Shoot(Vector3 pos, Vector3 dir) 
     {
-        AmmoInMag--; 
         if(Physics.Raycast(pos, dir, out RaycastHit hit, 100f, ~_ignoreLayer)) 
         {
             try
@@ -92,7 +92,7 @@ public class FireBullet : NetworkBehaviour
         gunRef.Spawner.ErasePlayer(enemy); 
     }
     [Rpc(RpcSources.InputAuthority, RpcTargets.All, Channel = RpcChannel.Reliable)]
-    public static void RPC_VisualieShot(NetworkRunner runner, FireBullet gunRef, RpcInfo info = default) 
+    public static void RPC_VisualieShot(NetworkRunner runner, FireBullet gunRef, PlayerRef player,RpcInfo info = default) 
     {
         gunRef._lineRenderer.enabled = true; 
         gunRef._lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
@@ -103,7 +103,7 @@ public class FireBullet : NetworkBehaviour
         gunRef._lineRenderer.SetPosition(0, gunRef.GunBarrel.position);
         gunRef._lineRenderer.SetPosition(1, endPos);
         gunRef.AmmoInMag--;
-        Debug.Log(gunRef.AmmoInMag); 
+        Debug.Log(player + " Ammo left: " + gunRef.AmmoInMag); 
 
     }
     [Rpc(RpcSources.InputAuthority, RpcTargets.All, Channel = RpcChannel.Reliable)]
