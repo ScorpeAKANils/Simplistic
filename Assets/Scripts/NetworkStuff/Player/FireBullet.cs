@@ -7,7 +7,7 @@ public class FireBullet : NetworkBehaviour
     private bool _fireButtonPressed = false;
     [SerializeField] private NetworkPrefabRef _bulletPrefab;
     [SerializeField] private Transform GunBarrel; 
-    [SerializeField] private LayerMask _playerLayer;
+    [SerializeField] private LayerMask _ignoreLayer;
     [SerializeField] public LineRenderer LineRend;
     public BasicSpawner Spawner { get; private set; } 
     private void Start()
@@ -37,17 +37,24 @@ public class FireBullet : NetworkBehaviour
     }
     void Shoot(Vector3 pos, Vector3 dir) 
     {
-        if(Physics.Raycast(pos, dir, out RaycastHit hit, 30f /*, _playerLayer*/)) 
+        if(Physics.Raycast(pos, dir, out RaycastHit hit, 30f, _ignoreLayer)) 
         {
-            if(hit.collider.GetComponent<Health>() != null) //layer check randomly not working in if statemant, only as a layer in raycast as parameter, but than the raycast ignore all the other colliders. But Players shouldnt be able to shoot threw walls lmao 
+            try
             {
-                Debug.Log("Gegner getroffen!");
-                PlayerRef enemyPlayer = hit.collider.GetComponent<Health>().GetPlayer();
-                RPC_SendHitInfo(Spawner.RunnerRef, enemyPlayer, Spawner.RunnerRef.LocalPlayer, this);
+                var other = hit.collider.GetComponent<Health>();
+                if (other.GetPlayer() != Runner.LocalPlayer) //layer check randomly not working in if statemant, only as a layer in raycast as parameter, but than the raycast ignore all the other colliders. But Players shouldnt be able to shoot threw walls lmao 
+                {
+                    Debug.Log("Gegner getroffen!");
+                    PlayerRef enemyPlayer = hit.collider.GetComponent<Health>().GetPlayer();
+                    RPC_SendHitInfo(Spawner.RunnerRef, enemyPlayer, Spawner.RunnerRef.LocalPlayer, this);
+                }
+                else
+                {
+                    Debug.Log("Suicide is not allowed..."); 
+                }
             }
-            else
+            catch
             {
-                Debug.Log(hit.collider.gameObject.name);
             }
         }
         
