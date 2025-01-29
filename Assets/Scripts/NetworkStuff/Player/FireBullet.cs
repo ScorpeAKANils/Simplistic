@@ -32,7 +32,7 @@ public class FireBullet : NetworkBehaviour
         if(_fireButtonPressed) 
         {
             _fireButtonPressed = false;
-            Shoot(GunBarrel.position, transform.forward); 
+            Shoot(GunBarrel.position, GunBarrel.forward); 
         }
     }
     void Shoot(Vector3 pos, Vector3 dir) 
@@ -51,6 +51,7 @@ public class FireBullet : NetworkBehaviour
             }
             catch
             {
+                Debug.Log(hit.collider.gameObject); 
             }
         }
         
