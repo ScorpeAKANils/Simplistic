@@ -9,7 +9,8 @@ public class FireBullet : NetworkBehaviour
     [SerializeField] private Transform GunBarrel; 
     [SerializeField] private LayerMask _ignoreLayer;
     [SerializeField] private byte _magSize  = 30;
-    [SerializeField] private LineRenderer _lineRenderer; 
+    [SerializeField] private LineRenderer _lineRenderer;
+    [SerializeField] private TextMeshProUGUI _ammoHud; 
     [Networked] public byte AmmoInMag { get; private set; }
     public BasicSpawner Spawner { get; private set; }
     private bool _canFire = true;
@@ -19,6 +20,7 @@ public class FireBullet : NetworkBehaviour
     {
         Spawner = FindObjectOfType<BasicSpawner>();
         AmmoInMag = _magSize; 
+        _ammoHud.text = "Ammo: " + AmmoInMag.ToString() + "/" + _magSize;
 
     }
 
@@ -41,11 +43,11 @@ public class FireBullet : NetworkBehaviour
         {
             return;
         }
-        if (AmmoInMag < _magSize && _reload)
+        if (AmmoInMag < _magSize && _reload | AmmoInMag <= 0)
         {
-            Debug.Log("press r to reload"); 
             _reload = false; 
             AmmoInMag = _magSize;
+            _ammoHud.text = "Ammo: " + AmmoInMag.ToString() + "/" + _magSize;
         }
         if (_fireButtonPressed && AmmoInMag > 0) 
         {
@@ -81,7 +83,7 @@ public class FireBullet : NetworkBehaviour
                 Debug.Log(hit.collider.gameObject); 
             }
         }
-        
+        _ammoHud.text = "Ammo: " + AmmoInMag.ToString() + "/" + _magSize; 
     }
     [Rpc(RpcSources.InputAuthority, RpcTargets.All, Channel = RpcChannel.Reliable)]
     public static void RPC_SendHitInfo(NetworkRunner runner, PlayerRef enemy, PlayerRef self, FireBullet gunRef,  RpcInfo info = default)
