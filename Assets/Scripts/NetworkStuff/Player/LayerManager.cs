@@ -19,12 +19,12 @@ public class LayerManager : NetworkBehaviour
         }
         if (Runner.LocalPlayer == _health.GetPlayer())
         {
-            this.gameObject.layer = _layerSelf;
+            this.gameObject.layer = LayerMask.NameToLayer("Player");
             _allreadyChecked = true; 
         }
         else
         {
-            this.gameObject.layer = _layerOther;
+            this.gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
             _allreadyChecked = true; 
         }
     }
