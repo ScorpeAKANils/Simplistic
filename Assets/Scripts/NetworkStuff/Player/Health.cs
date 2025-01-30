@@ -27,10 +27,10 @@ public class Health : NetworkBehaviour
     {
         _healthBar = FindObjectOfType<PlayerHudTag>().GetComponentInChildren<Scrollbar>(); 
     }
-
-    private void Update()
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All, Channel = RpcChannel.Reliable)]
+    private void Rpc_UpdateHealthBar(PlayerRef p)
     {
-        if(Runner.LocalPlayer == GetPlayer())
+        if(Runner.LocalPlayer == p)
             _healthBar.value = _health; 
     }
     public void SetPlayerRef(PlayerRef player) 
@@ -52,6 +52,7 @@ public class Health : NetworkBehaviour
             _cc.enabled = true;
             Rpc_HealUp(); 
         }
+        Rpc_UpdateHealthBar(playerDamaged);
     }
     [Rpc(RpcSources.StateAuthority, RpcTargets.StateAuthority, Channel = RpcChannel.Reliable)]
     public void Rpc_HealUp()
