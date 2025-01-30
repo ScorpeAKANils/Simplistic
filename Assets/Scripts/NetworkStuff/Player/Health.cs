@@ -4,7 +4,7 @@ using UnityEngine.UI;
 public class Health : NetworkBehaviour
 {
     [Networked] private PlayerRef _player { get ; set;  }
-    private float _health { get; set; } = 50;
+    [Networked] private float _health { get; set; } = 50;
     private float _maxHealth = 50;
     [SerializeField] private LayerMask _bulletLayer;
     [SerializeField] private Scrollbar _healthBar;
@@ -33,23 +33,30 @@ public class Health : NetworkBehaviour
     {
         return _player; 
     }
-    [Rpc(RpcSources.All, RpcTargets.InputAuthority, Channel = RpcChannel.Reliable)]
-    public void Rpc_GetDamage(Vector3 respawnpos, Health health, float damage, PlayerRef playerDamaged, PlayerRef killer) 
+    public void GetDamage(Vector3 respawnpos, Health health, float damage, PlayerRef playerDamaged, PlayerRef killer) 
     {
-        if(Runner.LocalPlayer == playerDamaged) 
+        _health -= damage;
+        if(_health <= 0) 
         {
-            _health -= damage;
-            _healthBar.value = _health / _maxHealth;
+            StaticRpcHolder.Rpc_ShowKillFeed(Runner, killer, playerDamaged);
         }
-        if (_health <= 0)
+        Rpc_UpdatePlayerHud(playerDamaged, killer, respawnpos); 
+    }
+    [Rpc(RpcSources.All, RpcTargets.All, Channel = RpcChannel.Reliable)]
+    public void Rpc_UpdatePlayerHud(PlayerRef playerDamaged, PlayerRef killer, Vector3 respawnPos) 
+    {
+        if (Runner.LocalPlayer == playerDamaged)
         {
-            _cc.enabled = false;
-            transform.position = respawnpos;
-            _cc.enabled = true;
-            _health = _maxHealth;
             _healthBar.value = _health / _maxHealth;
-            StaticRpcHolder.Rpc_ShowKillFeed(Runner, killer, playerDamaged); 
+
+            if (_health <= 0)
+            {
+                _cc.enabled = false;
+                transform.position = respawnPos;
+                _cc.enabled = true;
+                _health = _maxHealth;
+                _healthBar.value = _health / _maxHealth;
+            }
         }
     }
-
 }
