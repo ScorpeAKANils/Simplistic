@@ -27,8 +27,10 @@ public class Health : NetworkBehaviour
     {
         if (_previusHealth != _health)
         {
+            _previusHealth = _health; 
             _health = _maxHealth;
             _healthBar.value = _health / _maxHealth;
+
         }
     }
     private void Start()
