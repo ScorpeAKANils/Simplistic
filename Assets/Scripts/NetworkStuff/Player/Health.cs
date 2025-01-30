@@ -4,7 +4,7 @@ using UnityEngine.UI;
 public class Health : NetworkBehaviour
 {
     [Networked] private PlayerRef _player { get ; set;  }
-    [Networked] private float _health { get; set; } = 50;
+    private float _health { get; set; } = 50;
     private float _maxHealth = 50; 
 
     [SerializeField] private LayerMask _bulletLayer;
