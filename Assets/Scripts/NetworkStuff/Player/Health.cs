@@ -36,9 +36,19 @@ public class Health : NetworkBehaviour
     [Rpc(RpcSources.All, RpcTargets.All, Channel = RpcChannel.Reliable)]
     public void Rpc_GetDamage(Vector3 respawnpos, Health health, float damage, PlayerRef playerDamaged, PlayerRef killer) 
     {
-            health._health -= damage;
-            health._healthBar.value = _health / _maxHealth;
-            if (health._health <= 0)
+            var players = FindObjectsOfType<Health>();
+             Health playerToKill = null; 
+             foreach(Health h in players) 
+             {
+                if(h.GetPlayer() == playerDamaged) 
+                {
+                    playerToKill = h;
+                    break; 
+                }
+             }
+            playerToKill._health -= damage;
+            playerToKill._healthBar.value = _health / _maxHealth;
+            if (playerToKill._health <= 0)
             {
                 _cc.enabled = false;
                 transform.position = respawnpos;
