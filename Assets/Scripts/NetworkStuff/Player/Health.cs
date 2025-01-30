@@ -58,7 +58,7 @@ public class Health : NetworkBehaviour
             Rpc_HealUp(); 
         }
     }
-    [Rpc(RpcSources.StateAuthority, RpcTargets.StateAuthority, Channel = RpcChannel.Reliable)]
+    [Rpc(RpcSources.StateAuthority, RpcTargets.InputAuthority, Channel = RpcChannel.Reliable)]
     public void Rpc_HealUp()
     {
         _health = _maxHealth;
