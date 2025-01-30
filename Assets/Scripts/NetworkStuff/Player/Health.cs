@@ -57,7 +57,7 @@ public class Health : NetworkBehaviour
             _healthBar.value = _health / _maxHealth;
         }
     }
-    [Rpc(RpcSources.All, RpcTargets.All, Channel = RpcChannel.Reliable)]
+    [Rpc(RpcSources.InputAuthority, RpcTargets.All, Channel = RpcChannel.Reliable)]
     public static void Rpc_UpdatePlayerHud(NetworkRunner runner, Health health, Vector3 respawnPos) 
     {
         health.UpdateHud(respawnPos); 
