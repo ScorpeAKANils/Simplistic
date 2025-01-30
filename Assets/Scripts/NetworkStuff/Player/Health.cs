@@ -30,16 +30,12 @@ public class Health : NetworkBehaviour
     {
         _player = player; 
     }
-    private void Update()
-    {
-
-    }
     public PlayerRef GetPlayer() 
     {
         return _player; 
     }
     [Rpc(RpcSources.All, RpcTargets.All, Channel = RpcChannel.Reliable)]
-    public void Rpc_GetDamage(Vector3 respawnpos,  float damage, PlayerRef playerDamaged) 
+    public void Rpc_GetDamage(Vector3 respawnpos,  float damage, PlayerRef playerDamaged, PlayerRef killer) 
     {
         if(Runner.LocalPlayer == playerDamaged) 
         {
@@ -52,7 +48,9 @@ public class Health : NetworkBehaviour
                 _cc.enabled = true;
                 _health = _maxHealth;
                 _healthBar.value = _health / _maxHealth;
+                StaticRpcHolder.Rpc_ShowKillFeed(Runner, killer, playerDamaged); 
             }
+
         }
 
 

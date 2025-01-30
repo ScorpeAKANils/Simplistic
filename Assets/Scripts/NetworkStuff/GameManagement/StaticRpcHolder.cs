@@ -5,11 +5,11 @@ using TMPro;
 using UnityEngine;
 
 public class StaticRpcHolder : NetworkBehaviour
-{
+{  
     [Rpc(RpcSources.InputAuthority, RpcTargets.All, Channel = RpcChannel.Reliable)]
     public static void RPC_SendHitInfo(NetworkRunner runner, PlayerRef enemy, PlayerRef self, FireBullet gunRef, RpcInfo info = default)
     {
-        gunRef.Spawner.ErasePlayer(enemy);
+        gunRef.Spawner.ErasePlayer(enemy, self);
     }
     [Rpc(RpcSources.InputAuthority, RpcTargets.All, Channel = RpcChannel.Reliable)]
     public static void RPC_VisualieShot(NetworkRunner runner, FireBullet gunRef, PlayerRef player, RpcInfo info = default)
@@ -27,13 +27,10 @@ public class StaticRpcHolder : NetworkBehaviour
     {
         gunRef.LineRenderer.enabled = false;
     }
-
-    public static void Rpc_ShowKillFeed(NetworkRunner runner, PlayerRef enemy, PlayerRef self, FireBullet gunRef) 
+    [Rpc(RpcSources.InputAuthority, RpcTargets.All, Channel = RpcChannel.Reliable)]
+    public static void Rpc_ShowKillFeed(NetworkRunner runner, PlayerRef enemy, PlayerRef self) 
     {
-        var Canvas = Instantiate(gunRef.KillFeed, Vector3.zero, Quaternion.identity);
-        var Text = Canvas.GetComponentInChildren<TextMeshProUGUI>();
-        Text.text = enemy.ToString() + " was killed by: " + self;
-        gunRef.StartCoroutine(TextLifeTime(Text, 1f));
+        KillFeedManager.ShowKillMessage(self, enemy); 
     }
     public static IEnumerator TextLifeTime(TextMeshProUGUI text, float duration)
     {
