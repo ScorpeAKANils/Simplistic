@@ -30,7 +30,8 @@ public class Health : NetworkBehaviour
 
     private void Update()
     {
-        _healthBar.value = _health; 
+        if(Runner.LocalPlayer == GetPlayer())
+            _healthBar.value = _health; 
     }
     public void SetPlayerRef(PlayerRef player) 
     {
