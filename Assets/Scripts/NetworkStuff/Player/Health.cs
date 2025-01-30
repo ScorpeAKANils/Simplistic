@@ -23,6 +23,16 @@ public class Health : NetworkBehaviour
         _previusHealth = _health; 
     }
 
+    private void Update()
+    {
+        if (_previusHealth != _health)
+        {
+            _previusHealth = _health; 
+            _health = _maxHealth;
+            _healthBar.value = _health / _maxHealth;
+
+        }
+    }
     private void Start()
     {
         _healthBar = FindObjectOfType<PlayerHudTag>().GetComponentInChildren<Scrollbar>(); 
@@ -39,12 +49,7 @@ public class Health : NetworkBehaviour
     {
 
         this._health -= damage;
-        if (Runner.LocalPlayer == playerDamaged)
-        {
-            _health = _maxHealth;
-            _healthBar.value = _health / _maxHealth;
-        }
-        if (_health <= 0) 
+        if(_health <= 0) 
         {
             StaticRpcHolder.Rpc_ShowKillFeed(Runner, killer, playerDamaged);
             _cc.enabled = false;
@@ -57,7 +62,5 @@ public class Health : NetworkBehaviour
     public void Rpc_HealUp()
     {
         _health = _maxHealth;
-        _health = _maxHealth;
-        _healthBar.value = _health / _maxHealth;
     }
 }
