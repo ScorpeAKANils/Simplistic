@@ -1,17 +1,22 @@
 using Fusion;
 using TMPro;
 using UnityEngine;
-using System.Collections; 
+using System.Collections;
 public class FireBullet : NetworkBehaviour
 {
     private bool _fireButtonPressed = false;
     [SerializeField] private NetworkPrefabRef _bulletPrefab;
-    [SerializeField] private Transform GunBarrel; 
+    [SerializeField] private Transform _gunBarrel;
     [SerializeField] private LayerMask _ignoreLayer;
-    [SerializeField] private byte _magSize  = 30;
+    [SerializeField] private byte _magSize = 30;
     [SerializeField] private LineRenderer _lineRenderer;
-    [SerializeField] private TextMeshProUGUI _ammoHud; 
-    [Networked] public byte AmmoInMag { get; private set; }
+    [SerializeField] private TextMeshProUGUI _ammoHud;
+    public LineRenderer LineRenderer { get { return _lineRenderer; } }
+    public TextMeshProUGUI AmmoHud { get { return _ammoHud; } }
+    public Transform GunBarrel { get { return _gunBarrel; } }
+    public GameObject KillFeed { get { return _killFeed; } }
+    [Networked] public byte AmmoInMag { get; set; }
+
     public BasicSpawner Spawner { get; private set; }
     [SerializeField] private GameObject _killFeed; 
     private bool _canFire = true;
@@ -23,7 +28,11 @@ public class FireBullet : NetworkBehaviour
         AmmoInMag = _magSize;
         _ammoHud = FindObjectOfType<PlayerHudTag>().GetComponentInChildren<TextMeshProUGUI>();
         _ammoHud.text = "Ammo: " + AmmoInMag.ToString() + "/" + _magSize;
-
+        _lineRenderer.enabled = false;
+        _lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
+        _lineRenderer.startColor = Color.red;
+        _lineRenderer.endColor = Color.red;
+        _lineRenderer.positionCount = 2;
     }
 
     private void Update()
@@ -49,21 +58,24 @@ public class FireBullet : NetworkBehaviour
         {
             _reload = false; 
             AmmoInMag = _magSize;
-            _ammoHud.text = "Ammo: " + AmmoInMag.ToString() + "/" + _magSize;
+            if (_ammoHud != null) 
+            {
+                _ammoHud.text = "Ammo: " + AmmoInMag.ToString() + "/" + _magSize; 
+            }
         }
         if (_fireButtonPressed && AmmoInMag > 0) 
         {
             _canFire = false; 
             _fireButtonPressed = false;
-            RPC_VisualieShot(Spawner.RunnerRef, this, Spawner.RunnerRef.LocalPlayer); 
-            Shoot(GunBarrel.position, GunBarrel.forward);
+            StaticRpcHolder.RPC_VisualieShot(Spawner.RunnerRef, this, Spawner.RunnerRef.LocalPlayer); 
+            Shoot(_gunBarrel.position, _gunBarrel.forward);
             StartCoroutine(FireCoolDown(0.1f)); 
         }
     }
     IEnumerator FireCoolDown(float time)
     {
         yield return new WaitForSeconds(time);
-        RPC_DisableDebugLine(Spawner.RunnerRef, this); 
+        StaticRpcHolder.RPC_DisableDebugLine(Spawner.RunnerRef, this); 
         _canFire = true; 
     }
     void Shoot(Vector3 pos, Vector3 dir) 
@@ -77,7 +89,7 @@ public class FireBullet : NetworkBehaviour
                 {
                     Debug.Log("Gegner getroffen!");
                     PlayerRef enemyPlayer = hit.collider.GetComponent<Health>().GetPlayer();
-                    RPC_SendHitInfo(Spawner.RunnerRef, enemyPlayer, Spawner.RunnerRef.LocalPlayer, this);
+                    StaticRpcHolder.RPC_SendHitInfo(Spawner.RunnerRef, enemyPlayer, Spawner.RunnerRef.LocalPlayer, this);
                 }
             }
             catch
@@ -86,40 +98,5 @@ public class FireBullet : NetworkBehaviour
             }
         }
         _ammoHud.text = "Ammo: " + AmmoInMag.ToString() + "/" + _magSize; 
-    }
-    [Rpc(RpcSources.InputAuthority, RpcTargets.All, Channel = RpcChannel.Reliable)]
-    public static void RPC_SendHitInfo(NetworkRunner runner, PlayerRef enemy, PlayerRef self, FireBullet gunRef,  RpcInfo info = default)
-    {
-        var Canvas = Instantiate(gunRef._killFeed, Vector3.zero, Quaternion.identity);
-        var Text = Canvas.GetComponentInChildren<TextMeshProUGUI>(); 
-        Text.text = enemy.ToString() + " was killed by: " + self;
-        gunRef.StartCoroutine(FireBullet.TextLifeTime( Text, 1f));  
-        gunRef.Spawner.ErasePlayer(enemy); 
-    }
-    [Rpc(RpcSources.InputAuthority, RpcTargets.All, Channel = RpcChannel.Reliable)]
-    public static void RPC_VisualieShot(NetworkRunner runner, FireBullet gunRef, PlayerRef player,RpcInfo info = default) 
-    {
-        gunRef._lineRenderer.enabled = true; 
-        gunRef._lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
-        gunRef._lineRenderer.startColor = Color.red;
-        gunRef._lineRenderer.endColor = Color.red;
-        gunRef._lineRenderer.positionCount = 2;
-        Vector3 endPos = gunRef.GunBarrel.position + (gunRef.GunBarrel.forward * 100f); 
-        gunRef._lineRenderer.SetPosition(0, gunRef.GunBarrel.position);
-        gunRef._lineRenderer.SetPosition(1, endPos);
-        gunRef.AmmoInMag--;
-        Debug.Log(player + " Ammo left: " + gunRef.AmmoInMag); 
-
-    }
-    [Rpc(RpcSources.InputAuthority, RpcTargets.All, Channel = RpcChannel.Reliable)]
-    public static void RPC_DisableDebugLine(NetworkRunner runner, FireBullet gunRef, RpcInfo info = default)
-    {
-        gunRef._lineRenderer.enabled = false; 
-    }
-
-    public static IEnumerator TextLifeTime(TextMeshProUGUI text, float duration) 
-    {
-        yield return new WaitForSeconds(duration);
-        Destroy(text); 
     }
 }

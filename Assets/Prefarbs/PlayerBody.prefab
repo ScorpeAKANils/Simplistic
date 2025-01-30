@@ -301,7 +301,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _bulletPrefab:
     RawGuidValue: cab44bb5df000394ab24d541e84382c7
-  GunBarrel: {fileID: 4022458691614968933}
+  _gunBarrel: {fileID: 4022458691614968933}
   _ignoreLayer:
     serializedVersion: 2
     m_Bits: 4
