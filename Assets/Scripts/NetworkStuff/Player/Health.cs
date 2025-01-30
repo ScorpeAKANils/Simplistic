@@ -11,7 +11,8 @@ public class Health : NetworkBehaviour
     private NetworkRunner _runnerRef;
     private bool _wasHit = false;
     private BasicSpawner _spawner;
-    private CharacterController _cc; 
+    private CharacterController _cc;
+    private float _previusHealth; 
     private Vector3 _spawnPos; 
 
     private void Awake()
@@ -19,8 +20,17 @@ public class Health : NetworkBehaviour
         _runnerRef = FindObjectOfType<NetworkRunner>();
         _spawnPos = transform.position; 
         _cc = this.GetComponent<CharacterController>();
+        _previusHealth = _health; 
     }
 
+    private void Update()
+    {
+        if (_previusHealth != _health)
+        {
+            _health = _maxHealth;
+            _healthBar.value = _health / _maxHealth;
+        }
+    }
     private void Start()
     {
         _healthBar = FindObjectOfType<PlayerHudTag>().GetComponentInChildren<Scrollbar>(); 
@@ -40,26 +50,11 @@ public class Health : NetworkBehaviour
         if(_health <= 0) 
         {
             StaticRpcHolder.Rpc_ShowKillFeed(Runner, killer, playerDamaged);
-        }
-        Rpc_UpdatePlayerHud(Runner, this, respawnpos); 
-    }
-
-    public void UpdateHud(Vector3 respawnPos)
-    {
-        _healthBar.value = _health / _maxHealth;
-
-        if (_health <= 0)
-        {
             _cc.enabled = false;
-            transform.position = respawnPos;
+            transform.position = respawnpos;
             _cc.enabled = true;
             _health = _maxHealth;
             _healthBar.value = _health / _maxHealth;
         }
-    }
-    [Rpc(RpcSources.InputAuthority, RpcTargets.All, Channel = RpcChannel.Reliable)]
-    public static void Rpc_UpdatePlayerHud(NetworkRunner runner, Health health, Vector3 respawnPos) 
-    {
-        health.UpdateHud(respawnPos); 
     }
 }
