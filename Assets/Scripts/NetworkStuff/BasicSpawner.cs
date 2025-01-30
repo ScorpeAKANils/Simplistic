@@ -154,11 +154,19 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
     public void OnReliableDataProgress(NetworkRunner runner, PlayerRef player, ReliableKey key, float progress) { }
     public Vector3 GetRandomPos()
     {
-        if (_runnerRef.IsServer) 
+        var players = FindObjectsOfType<PlayerMovement>(); 
+        foreach(Transform t in transforms) 
         {
-            _spawnIndex = UnityEngine.Random.Range(0, transforms.Count - 1);
+            foreach(var p in players) 
+            {
+                if((t.position-p.transform.position).sqrMagnitude > (30*30f)) 
+                {
+                    return t.position;
+                }
+            }
         }
-        return transforms[_spawnIndex].position;
+        int randomIndex = UnityEngine.Random.Range(0, transforms.Count-1);
+        return transforms[randomIndex].position; 
     }
 
 }
