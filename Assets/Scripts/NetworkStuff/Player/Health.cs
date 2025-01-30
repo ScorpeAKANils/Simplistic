@@ -48,15 +48,19 @@ public class Health : NetworkBehaviour
     public void GetDamage(Vector3 respawnpos, Health health, float damage, PlayerRef playerDamaged, PlayerRef killer) 
     {
 
-        _health -= damage;
+        this._health -= damage;
         if(_health <= 0) 
         {
             StaticRpcHolder.Rpc_ShowKillFeed(Runner, killer, playerDamaged);
             _cc.enabled = false;
             transform.position = respawnpos;
             _cc.enabled = true;
-            _health = _maxHealth;
-            _healthBar.value = _health / _maxHealth;
+            Rpc_HealUp(); 
         }
+    }
+    [Rpc(RpcSources.StateAuthority, RpcTargets.StateAuthority, Channel = RpcChannel.Reliable)]
+    public void Rpc_HealUp()
+    {
+        _health = _maxHealth;
     }
 }
