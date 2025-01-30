@@ -36,7 +36,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
     {
         if (_runnerRef.IsServer) 
         {
-            _playersHealths[player].Die(this); 
+            _playersHealths[player].GetDamage(this, 10f); 
         }
     }
     async void StartGame(GameMode mode)

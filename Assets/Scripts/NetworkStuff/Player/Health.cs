@@ -1,23 +1,24 @@
 using Fusion;
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class Health : NetworkBehaviour
 {
-    [SerializeField]
-    private LayerMask _bulletLayer;
+    [Networked] private PlayerRef _player { get ; set;  }
+    [Networked] private float _health { get; set; } = 50;
+    private float _maxHealth = 50; 
+
+    [SerializeField] private LayerMask _bulletLayer;
+    [SerializeField] private Scrollbar _healthBar;
     private NetworkRunner _runnerRef;
     private bool _wasHit = false;
     private BasicSpawner _spawner;
     private CharacterController _cc; 
-    [Networked]
-    private PlayerRef _player { get ; set;  }
     private Vector3 _spawnPos; 
 
     private void Awake()
     {
+ 
+        _healthBar.value = _health/_maxHealth;
         _runnerRef = FindObjectOfType<NetworkRunner>();
         _spawnPos = transform.position; 
         _cc = this.GetComponent<CharacterController>();
@@ -32,13 +33,18 @@ public class Health : NetworkBehaviour
         return _player; 
     }
 
-    public void Die(BasicSpawner s) 
+    public void GetDamage(BasicSpawner s, float damage) 
     {
-        Vector3 pos = s.GetRandomPos();
-        Debug.Log(pos);
-        _cc.enabled = false; 
-        transform.position = pos;
-        _cc.enabled = true;
+        _health -= damage;
+        _healthBar.value = _health / _maxHealth;
+        if (_health <= 0) 
+        {
+            Vector3 pos = s.GetRandomPos();
+            Debug.Log(pos);
+            _cc.enabled = false; 
+            transform.position = pos;
+            _cc.enabled = true;
+        }
 
     }
 
