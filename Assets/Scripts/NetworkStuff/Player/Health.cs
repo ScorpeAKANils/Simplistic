@@ -17,8 +17,6 @@ public class Health : NetworkBehaviour
 
     private void Awake()
     {
- 
-        _healthBar.value = _health/_maxHealth;
         _runnerRef = FindObjectOfType<NetworkRunner>();
         _spawnPos = transform.position; 
         _cc = this.GetComponent<CharacterController>();
