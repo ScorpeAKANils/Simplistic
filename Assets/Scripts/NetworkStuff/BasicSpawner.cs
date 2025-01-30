@@ -34,7 +34,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
    
     public void ErasePlayer(PlayerRef player, PlayerRef killer) 
     {
-        if (_runnerRef.IsServer) 
+        if(_runnerRef.IsServer) 
         {
             _playersHealths[player].Rpc_GetDamage(GetRandomPos(), _playersHealths[player], 10f, player, killer); 
         }

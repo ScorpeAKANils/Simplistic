@@ -33,30 +33,23 @@ public class Health : NetworkBehaviour
     {
         return _player; 
     }
-    [Rpc(RpcSources.All, RpcTargets.All, Channel = RpcChannel.Reliable)]
+    [Rpc(RpcSources.All, RpcTargets.InputAuthority, Channel = RpcChannel.Reliable)]
     public void Rpc_GetDamage(Vector3 respawnpos, Health health, float damage, PlayerRef playerDamaged, PlayerRef killer) 
     {
-            var players = FindObjectsOfType<Health>();
-             Health playerToKill = null; 
-             foreach(Health h in players) 
-             {
-                if(h.GetPlayer() == playerDamaged) 
-                {
-                    playerToKill = h;
-                    break; 
-                }
-             }
-            playerToKill._health -= damage;
-            playerToKill._healthBar.value = _health / _maxHealth;
-            if (playerToKill._health <= 0)
-            {
-                _cc.enabled = false;
-                transform.position = respawnpos;
-                _cc.enabled = true;
-                _health = _maxHealth;
-                _healthBar.value = _health / _maxHealth;
-                StaticRpcHolder.Rpc_ShowKillFeed(Runner, killer, playerDamaged); 
-            }
+        if(Runner.LocalPlayer == playerDamaged) 
+        {
+            _health -= damage;
+            _healthBar.value = _health / _maxHealth;
+        }
+        if (_health <= 0)
+        {
+            _cc.enabled = false;
+            transform.position = respawnpos;
+            _cc.enabled = true;
+            _health = _maxHealth;
+            _healthBar.value = _health / _maxHealth;
+            StaticRpcHolder.Rpc_ShowKillFeed(Runner, killer, playerDamaged); 
+        }
     }
 
 }
