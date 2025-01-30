@@ -36,7 +36,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
     {
         if (_runnerRef.IsServer) 
         {
-            _playersHealths[player].GetDamage(this, 10f); 
+            _playersHealths[player].Rpc_GetDamage(GetRandomPos(), 10f, player); 
         }
     }
     async void StartGame(GameMode mode)
