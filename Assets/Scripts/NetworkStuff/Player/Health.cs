@@ -4,7 +4,7 @@ using UnityEngine.UI;
 public class Health : NetworkBehaviour
 {
     [Networked] private PlayerRef _player { get ; set;  }
-    [Networked] private float _health { get; set; } = 50;
+    [Networked] private float _health { get; set; } = 50f; 
     private float _maxHealth = 50;
     [SerializeField] private LayerMask _bulletLayer;
     [SerializeField] private Scrollbar _healthBar;
@@ -26,37 +26,48 @@ public class Health : NetworkBehaviour
     private void Start()
     {
         _healthBar = FindObjectOfType<PlayerHudTag>().GetComponentInChildren<Scrollbar>(); 
+
     }
-    [Rpc(RpcSources.StateAuthority, RpcTargets.All, Channel = RpcChannel.Reliable)]
-    private void Rpc_UpdateHealthBar(PlayerRef p)
+    [Rpc(RpcSources.StateAuthority, RpcTargets.InputAuthority, Channel = RpcChannel.Reliable)]
+    public void Rpc_UpdateHealthBar(float health)
     {
-        if(Runner.LocalPlayer == p)
-            _healthBar.value = _health; 
+        var bar = FindObjectOfType<Scrollbar>(); 
+        bar.value = health / _maxHealth;
     }
+
     public void SetPlayerRef(PlayerRef player) 
     {
         _player = player; 
     }
+
     public PlayerRef GetPlayer() 
     {
         return _player; 
     }
-    public void GetDamage(Vector3 respawnpos, Health health, float damage, PlayerRef playerDamaged, PlayerRef killer) 
+    public float GetDamage(float damage) 
     {
         this._health -= damage;
-        if (_health <= 0) 
-        {
-            StaticRpcHolder.Rpc_ShowKillFeed(Runner, killer, playerDamaged);
-            _cc.enabled = false;
-            transform.position = respawnpos;
-            _cc.enabled = true;
-            Rpc_HealUp(); 
-        }
-        Rpc_UpdateHealthBar(playerDamaged);
+        return this._health; 
+    }
+
+    public float GetHealth() 
+    {
+        return _health; 
+    }
+
+    public void Die(Vector3 respawnpos, PlayerRef playerDamaged, PlayerRef killer) 
+    {
+        StaticRpcHolder.Rpc_ShowKillFeed(Runner, killer, playerDamaged);
+        _cc.enabled = false;
+        transform.position = respawnpos;
+        _cc.enabled = true;
+        Rpc_HealUp();
     }
     [Rpc(RpcSources.StateAuthority, RpcTargets.StateAuthority, Channel = RpcChannel.Reliable)]
     public void Rpc_HealUp()
     {
         _health = _maxHealth;
     }
+
+
 }

@@ -12,7 +12,8 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
     [SerializeField] private List<Transform> transforms = new();
     [SerializeField] private Camera _cam; 
     [Networked] int _spawnIndex { get; set; }
-    private Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new();
+
+    [SerializeField] private Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new();
     private Dictionary<PlayerRef, Health> _playersHealths = new(); 
     private NetworkRunner _runnerRef;
     public  NetworkRunner RunnerRef;
@@ -36,8 +37,20 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
     {
         if(_runnerRef.IsServer) 
         {
-            _playersHealths[player].GetDamage(GetRandomPos(), _playersHealths[player], 10f, player, killer); 
+            float playerHealth = _playersHealths[player].GetDamage(10f); 
+            if(playerHealth <= 0) 
+            {
+                _playersHealths[player].Die(GetRandomPos(), player, killer);
+                _playersHealths[player].Rpc_UpdateHealthBar(ReturnPlayerHealth(player));
+                return; 
+            }
+            _playersHealths[player].Rpc_UpdateHealthBar(ReturnPlayerHealth(player));
         }
+    }
+
+    public float ReturnPlayerHealth(PlayerRef player) 
+    {
+        return _playersHealths[player].GetHealth(); 
     }
     async void StartGame(GameMode mode)
     {
