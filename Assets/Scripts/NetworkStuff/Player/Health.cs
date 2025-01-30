@@ -24,8 +24,11 @@ public class Health : NetworkBehaviour
     public void SetPlayerRef(PlayerRef player) 
     {
         _player = player; 
-    } 
-
+    }
+    private void Update()
+    {
+        _healthBar.value = _health / _maxHealth;
+    }
     public PlayerRef GetPlayer() 
     {
         return _player; 
@@ -34,14 +37,14 @@ public class Health : NetworkBehaviour
     public void GetDamage(BasicSpawner s, float damage) 
     {
         _health -= damage;
-        _healthBar.value = _health / _maxHealth;
         if (_health <= 0) 
         {
             Vector3 pos = s.GetRandomPos();
             Debug.Log(pos);
-            _cc.enabled = false; 
-            transform.position = pos;
+            _cc.enabled = false;
+            transform.position = pos; 
             _cc.enabled = true;
+            _health -= damage;
         }
 
     }
