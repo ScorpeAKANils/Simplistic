@@ -20,7 +20,8 @@ public class FireBullet : NetworkBehaviour
     private void Start()
     {
         Spawner = FindObjectOfType<BasicSpawner>();
-        AmmoInMag = _magSize; 
+        AmmoInMag = _magSize;
+        _ammoHud = FindObjectOfType<PlayerHudTag>().GetComponentInChildren<TextMeshProUGUI>();
         _ammoHud.text = "Ammo: " + AmmoInMag.ToString() + "/" + _magSize;
 
     }

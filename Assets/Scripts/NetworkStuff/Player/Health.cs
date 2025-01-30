@@ -21,6 +21,11 @@ public class Health : NetworkBehaviour
         _spawnPos = transform.position; 
         _cc = this.GetComponent<CharacterController>();
     }
+
+    private void Start()
+    {
+        _healthBar = FindObjectOfType<PlayerHudTag>().GetComponentInChildren<Scrollbar>(); 
+    }
     public void SetPlayerRef(PlayerRef player) 
     {
         _player = player; 
