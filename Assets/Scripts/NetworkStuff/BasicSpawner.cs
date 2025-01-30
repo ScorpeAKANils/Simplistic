@@ -16,6 +16,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
     private Dictionary<PlayerRef, Health> _playersHealths = new(); 
     private NetworkRunner _runnerRef;
     public  NetworkRunner RunnerRef;
+    private Vector2 _inputMovement; 
     private float _mouseY;
     private float _mouseX;
     private bool _jump; 
@@ -23,6 +24,8 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
     {
         _mouseY = Input.GetAxis("Mouse X");
         _mouseX = Input.GetAxis("Mouse Y");
+        _inputMovement = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")); 
+
         if (Input.GetKeyDown(KeyCode.Space)) 
         {
             _jump = true; 
@@ -41,7 +44,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
         // Create the Fusion runner and let it know that we will be providing user input
         _runnerRef = gameObject.AddComponent<NetworkRunner>();
         _runnerRef.ProvideInput = true;
-        RunnerRef = _runnerRef; 
+        RunnerRef = _runnerRef;
         // Create the NetworkSceneInfo from the current scene
         var scene = SceneRef.FromIndex(SceneManager.GetActiveScene().buildIndex);
         var sceneInfo = new NetworkSceneInfo();
@@ -101,17 +104,16 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
     {
         var data = new NetworkInputData();
 
-        if (Input.GetKey(KeyCode.W))
-            data.direction += Vector3.forward;
+        if (Mathf.Abs(_inputMovement.y) > 0.02f)
+        {
+            data.direction += Vector3.forward * _inputMovement.y;
+        } 
 
-        if (Input.GetKey(KeyCode.S))
-            data.direction += Vector3.back;
+        if (Mathf.Abs(_inputMovement.x) > 0.02f)
+        {
+            data.direction += Vector3.right * _inputMovement.x;
+        }
 
-        if (Input.GetKey(KeyCode.A))
-            data.direction += Vector3.left; 
-
-        if (Input.GetKey(KeyCode.D))
-            data.direction += Vector3.right;
         if (_jump) 
         {
             _jump = false; 

@@ -42,7 +42,7 @@ namespace Fusion {
     public float gravity = -20.0f;
     public float jumpImpulse   = 8.0f;
     public float acceleration  = 10.0f;
-    public float braking       = 10.0f;
+    public float braking       = 30.0f;
     public float maxSpeed      = 2.0f;
     public float rotationSpeed = 15.0f;
 
@@ -94,8 +94,7 @@ namespace Fusion {
       if (direction == default) {
         horizontalVel = Vector3.Lerp(horizontalVel, default, braking * deltaTime);
       } else {
-        horizontalVel      = Vector3.ClampMagnitude(horizontalVel + direction * acceleration * deltaTime, maxSpeed);
-        //transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), rotationSpeed * Runner.DeltaTime);
+        horizontalVel = Vector3.ClampMagnitude(horizontalVel + direction * acceleration * deltaTime, maxSpeed);
       }
 
       moveVelocity.x = horizontalVel.x;
