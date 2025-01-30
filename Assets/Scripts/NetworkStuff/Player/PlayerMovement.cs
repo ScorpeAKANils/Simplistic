@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem; 
 public class PlayerMovement : NetworkBehaviour
 {
-    [SerializeField] private float _speed = 5f;
+    [SerializeField] private float _speed = 55f;
     
     private NetworkCharacterController _cc;
     private Vector3 _moveVector;
@@ -19,7 +19,7 @@ public class PlayerMovement : NetworkBehaviour
         if (GetInput(out NetworkInputData data))
         {
             data.direction.Normalize();
-            _cc.Move(_speed * TranslateDirectionToLocalSpace(data.direction) * Runner.DeltaTime);
+            _cc.Move(_speed * TranslateDirectionToLocalSpace(data.direction));
             if (data.Jump) 
             {
                 data.Jump = false; 
