@@ -35,28 +35,31 @@ public class Health : NetworkBehaviour
     }
     public void GetDamage(Vector3 respawnpos, Health health, float damage, PlayerRef playerDamaged, PlayerRef killer) 
     {
+
         _health -= damage;
         if(_health <= 0) 
         {
             StaticRpcHolder.Rpc_ShowKillFeed(Runner, killer, playerDamaged);
         }
-        Rpc_UpdatePlayerHud(playerDamaged, killer, respawnpos); 
+        Rpc_UpdatePlayerHud(Runner, this, respawnpos); 
+    }
+
+    public void UpdateHud(Vector3 respawnPos)
+    {
+        _healthBar.value = _health / _maxHealth;
+
+        if (_health <= 0)
+        {
+            _cc.enabled = false;
+            transform.position = respawnPos;
+            _cc.enabled = true;
+            _health = _maxHealth;
+            _healthBar.value = _health / _maxHealth;
+        }
     }
     [Rpc(RpcSources.All, RpcTargets.All, Channel = RpcChannel.Reliable)]
-    public void Rpc_UpdatePlayerHud(PlayerRef playerDamaged, PlayerRef killer, Vector3 respawnPos) 
+    public static void Rpc_UpdatePlayerHud(NetworkRunner runner, Health health, Vector3 respawnPos) 
     {
-        if (Runner.LocalPlayer == playerDamaged)
-        {
-            _healthBar.value = _health / _maxHealth;
-
-            if (_health <= 0)
-            {
-                _cc.enabled = false;
-                transform.position = respawnPos;
-                _cc.enabled = true;
-                _health = _maxHealth;
-                _healthBar.value = _health / _maxHealth;
-            }
-        }
+        health.UpdateHud(respawnPos); 
     }
 }
