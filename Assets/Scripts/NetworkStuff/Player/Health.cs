@@ -5,8 +5,7 @@ public class Health : NetworkBehaviour
 {
     [Networked] private PlayerRef _player { get ; set;  }
     private float _health { get; set; } = 50;
-    private float _maxHealth = 50; 
-
+    private float _maxHealth = 50;
     [SerializeField] private LayerMask _bulletLayer;
     [SerializeField] private Scrollbar _healthBar;
     private NetworkRunner _runnerRef;
@@ -34,7 +33,7 @@ public class Health : NetworkBehaviour
     {
         return _player; 
     }
-    [Rpc(RpcSources.All, RpcTargets.InputAuthority, Channel = RpcChannel.Reliable)]
+    [Rpc(RpcSources.All, RpcTargets.All, Channel = RpcChannel.Reliable)]
     public void Rpc_GetDamage(Vector3 respawnpos,  float damage, PlayerRef playerDamaged, PlayerRef killer) 
     {
             _health -= damage;
