@@ -27,7 +27,7 @@ public class StaticRpcHolder : NetworkBehaviour
     {
         gunRef.LineRenderer.enabled = false;
     }
-    [Rpc(RpcSources.InputAuthority, RpcTargets.All, Channel = RpcChannel.Reliable)]
+    [Rpc(RpcSources.All, RpcTargets.All, Channel = RpcChannel.Reliable)]
     public static void Rpc_ShowKillFeed(NetworkRunner runner, PlayerRef enemy, PlayerRef self) 
     {
         KillFeedManager.ShowKillMessage(self, enemy); 
