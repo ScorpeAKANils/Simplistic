@@ -23,18 +23,14 @@ public class Health : NetworkBehaviour
         _previusHealth = _health; 
     }
 
-    private void Update()
-    {
-        if (_previusHealth != _health)
-        {
-            _previusHealth = _health;
-            _health = _maxHealth;
-            _healthBar.value = _health / _maxHealth;
-        }
-    }
     private void Start()
     {
         _healthBar = FindObjectOfType<PlayerHudTag>().GetComponentInChildren<Scrollbar>(); 
+    }
+
+    private void Update()
+    {
+        _healthBar.value = _health; 
     }
     public void SetPlayerRef(PlayerRef player) 
     {
