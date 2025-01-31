@@ -46,6 +46,11 @@ public class MouseLook : NetworkBehaviour
         transform.Rotate(Vector3.up, _yRotation * _sensitivityY * Runner.DeltaTime * GetPingFactor()); 
     }
 
+    public override void Render()
+    {
+        MoveCamera(); 
+    }
+
     private float GetPingFactor() 
     {
         float latency = (float)Runner.GetPlayerRtt(Runner.LocalPlayer) * 1000f;
