@@ -170,18 +170,37 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
     public Vector3 GetRandomPos()
     {
         var players = FindObjectsOfType<PlayerMovement>();
-        int randomIndex = UnityEngine.Random.Range(0, transforms.Count - 1);
-        for(int i = randomIndex; i < transforms.Count - 1; i++) 
+        Vector3 bestPosition = Vector3.zero;
+        float maxMinDistance = 0f;
+
+        foreach (var t in transforms)
         {
-            foreach(var p in players) 
+            bool isFarEnough = true;
+            float minDistance = float.MaxValue;
+
+            foreach (var p in players)
             {
-                if ((transforms[i].position-p.transform.position).sqrMagnitude > (30*30f)) 
+                float sqrDist = (t.position - p.transform.position).sqrMagnitude;
+                if (sqrDist < (30 * 30f))
                 {
-                    return transforms[i].position;
+                    isFarEnough = false;
                 }
+                minDistance = Mathf.Min(minDistance, sqrDist);
+            }
+
+            if (isFarEnough)
+            {
+                return t.position;
+            }
+
+            if (minDistance > maxMinDistance)
+            {
+                maxMinDistance = minDistance;
+                bestPosition = t.position;
             }
         }
-        return transforms[randomIndex].position; 
+
+        return bestPosition;
     }
 
 }
