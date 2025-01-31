@@ -8,7 +8,7 @@
         "HitboxDefaultCapacity": 512,
         "CachedStaticCollidersSize": 64
     },
-    "EnqueueIncompleteSynchronousSpawns": false,
+    "EnqueueIncompleteSynchronousSpawns": true,
     "InvokeRenderInBatchMode": true,
     "NetworkIdIsObjectName": false,
     "HideNetworkObjectInactivityGuard": true,
@@ -20,14 +20,14 @@
         "SimulationUpdateTimeMode": 0,
         "PlayerCount": 10,
         "TickRateSelection": {
-            "Client": 64,
+            "Client": 120,
             "ServerIndex": 0,
             "ClientSendIndex": 1,
             "ServerSendIndex": 1
         }
     },
     "Network": {
-        "ConnectionTimeout": 10.0,
+        "ConnectionTimeout": 100.0,
         "ConnectionShutdownTime": 1.0,
         "ReliableDataTransferModes": 3
     },
@@ -39,7 +39,7 @@
         "EnableEncryption": false
     },
     "NetworkConditions": {
-        "Enabled": false,
+        "Enabled": true,
         "DelayShape": 0,
         "DelayMin": 0.15,
         "DelayMax": 0.15,
