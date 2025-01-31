@@ -20,22 +20,27 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
     public  NetworkRunner RunnerRef;
     private NetworkInputData _input = new NetworkInputData();
 
-    public void ErasePlayer(PlayerRef player, PlayerRef killer) 
+    public void ErasePlayer(PlayerRef player, PlayerRef killer)
     {
-        if(_runnerRef.IsServer) 
+        if (_runnerRef.IsServer)
         {
-            float playerHealth = _playersHealths[player].GetDamage(10f); 
-            if(playerHealth <= 0) 
+            float playerHealth = _playersHealths[player].GetDamage(10f);
+            if (playerHealth <= 0)
             {
                 _playersHealths[player].Die(GetRandomPos(), player, killer);
                 var kdPlayerDead = _playersHealths[player].GetComponent<KdManager>();
-                kdPlayerDead.Rpc_AddDeath();
-                kdPlayerDead.Rpc_UpdateKDWithoutSound(kdPlayerDead.GetKills(), kdPlayerDead.GetDeaths()); 
+                var kdManagers = FindObjectsOfType<KdManager>();
+                foreach (var kd in kdManagers)
+                {
+                    kd.Rpc_AddDeath(player);
+                }
                 var kdOther = _playersHealths[killer].GetComponent<KdManager>();
-                kdOther.Rpc_AddKill(); 
-                kdOther.Rpc_UpdateKDWithSound(kdOther.GetKills(), kdOther.GetDeaths());
+                foreach (var kd in kdManagers)
+                {
+                    kd.Rpc_AddKill(killer);
+                }
                 _playersHealths[player].Rpc_UpdateHealthBar(ReturnPlayerHealth(player));
-                return; 
+                return;
             }
             _playersHealths[player].Rpc_UpdateHealthBar(ReturnPlayerHealth(player));
         }
@@ -88,25 +93,36 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
         if (runner.IsServer)
-        { 
+        {
             Vector3 pos = GetRandomPos();
             NetworkObject networkPlayerObject = runner.Spawn(_playerPrefab, pos, Quaternion.identity, player);
-            // Keep track of the player avatars for easy access
+
             _spawnedCharacters.Add(player, networkPlayerObject);
             Health playerHealth = networkPlayerObject.GetComponent<Health>();
             _playersHealths.Add(player, playerHealth);
             playerHealth.SetPlayerRef(player);
-            playerHealth.InitHealth(); 
+            playerHealth.InitHealth();
+
+            var kdManagers = FindObjectsOfType<KdManager>(); 
+            foreach(var kd in kdManagers) 
+            {
+                foreach(var existingPlayer in _playersHealths.Values) 
+                {
+                    kd.Rpc_AddPlayerToScoreBoard(existingPlayer.GetPlayer()); 
+                    Debug.Log("Added: " + existingPlayer.GetPlayer()); 
+                }
+            }
         }
+
     }
 
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
     {
         if (_spawnedCharacters.TryGetValue(player, out NetworkObject networkObject))
         {
+        }
             runner.Despawn(networkObject);
             _spawnedCharacters.Remove(player);
-        }
     }
 
     public void Update()

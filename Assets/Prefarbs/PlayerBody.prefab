@@ -628,6 +628,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   KillSound: {fileID: 5821496255530928143}
   _kdText: {fileID: 0}
+  ScoreBoardObj: {fileID: 5422693224413735174, guid: 5ecfab70a454bd441833c5cd1517e4e3,
+    type: 3}
 --- !u!1 &8209102324072601242
 GameObject:
   m_ObjectHideFlags: 0
