@@ -27,7 +27,7 @@
         }
     },
     "Network": {
-        "ConnectionTimeout": 100.0,
+        "ConnectionTimeout": 10.0,
         "ConnectionShutdownTime": 1.0,
         "ReliableDataTransferModes": 3
     },
@@ -39,7 +39,7 @@
         "EnableEncryption": false
     },
     "NetworkConditions": {
-        "Enabled": true,
+        "Enabled": false,
         "DelayShape": 0,
         "DelayMin": 0.15,
         "DelayMax": 0.15,

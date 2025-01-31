@@ -3,6 +3,7 @@ using Fusion.Sockets;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 
@@ -17,22 +18,8 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
     private Dictionary<PlayerRef, Health> _playersHealths = new(); 
     private NetworkRunner _runnerRef;
     public  NetworkRunner RunnerRef;
-    private Vector2 _inputMovement; 
-    private float _mouseY;
-    private float _mouseX;
-    private bool _jump; 
-    void Update() 
-    {
-        _mouseY = Input.GetAxis("Mouse X");
-        _mouseX = Input.GetAxis("Mouse Y");
-        _inputMovement = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")); 
+    private NetworkInputData _input = new NetworkInputData();
 
-        if (Input.GetKeyDown(KeyCode.Space)) 
-        {
-            _jump = true; 
-        }
-    }
-   
     public void ErasePlayer(PlayerRef player, PlayerRef killer) 
     {
         if(_runnerRef.IsServer) 
@@ -41,6 +28,12 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
             if(playerHealth <= 0) 
             {
                 _playersHealths[player].Die(GetRandomPos(), player, killer);
+                var kdPlayerDead = _playersHealths[player].GetComponent<KdManager>();
+                kdPlayerDead.Rpc_AddDeath();
+                kdPlayerDead.Rpc_UpdateKDWithoutSound(kdPlayerDead.GetKills(), kdPlayerDead.GetDeaths()); 
+                var kdOther = _playersHealths[killer].GetComponent<KdManager>();
+                kdOther.Rpc_AddKill(); 
+                kdOther.Rpc_UpdateKDWithSound(kdOther.GetKills(), kdOther.GetDeaths());
                 _playersHealths[player].Rpc_UpdateHealthBar(ReturnPlayerHealth(player));
                 return; 
             }
@@ -55,7 +48,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
     async void StartGame(GameMode mode)
     {
         // Create the Fusion runner and let it know that we will be providing user input
-        _runnerRef = gameObject.AddComponent<NetworkRunner>();
+        _runnerRef = gameObject.GetComponent<NetworkRunner>();
         _runnerRef.ProvideInput = true;
         RunnerRef = _runnerRef;
         // Create the NetworkSceneInfo from the current scene
@@ -90,6 +83,8 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
             }
         }
     }
+
+
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
         if (runner.IsServer)
@@ -101,7 +96,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
             Health playerHealth = networkPlayerObject.GetComponent<Health>();
             _playersHealths.Add(player, playerHealth);
             playerHealth.SetPlayerRef(player);
-            Debug.Log(playerHealth.GetPlayer());
+            playerHealth.InitHealth(); 
         }
     }
 
@@ -113,29 +108,33 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
             _spawnedCharacters.Remove(player);
         }
     }
+
+    public void Update()
+    {
+        _input.Buttons.Set(MyButtons.Forward, Input.GetKey(KeyCode.W));
+        _input.Buttons.Set(MyButtons.Left, Input.GetKey(KeyCode.A));
+        _input.Buttons.Set(MyButtons.Backward, Input.GetKey(KeyCode.S));
+        _input.Buttons.Set(MyButtons.Right, Input.GetKey(KeyCode.D));
+        _input.Buttons.Set(MyButtons.Jump, Input.GetButton("Jump"));
+        _input.Buttons.Set(MyButtons.Shooting, Input.GetButton("Fire1"));
+
+        if (Cursor.lockState != CursorLockMode.Locked)
+            return;
+        Mouse mouse = Mouse.current;
+        if (mouse != null)
+        {
+            Vector2 mouseDelta = mouse.delta.ReadValue();
+            Vector2 lookRotationDelta = new(mouseDelta.y, mouseDelta.x);
+            _input.AimDirection += lookRotationDelta; 
+        }
+
+    }
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
-        var data = new NetworkInputData();
-
-        if (Mathf.Abs(_inputMovement.y) > 0.02f)
-        {
-            data.direction += Vector3.forward * _inputMovement.y;
-        } 
-
-        if (Mathf.Abs(_inputMovement.x) > 0.02f)
-        {
-            data.direction += Vector3.right * _inputMovement.x;
-        }
-
-        if (_jump) 
-        {
-            _jump = false; 
-            data.Jump = true; 
-        }
-        data.MouseY = _mouseY;
-        data.MouseX = _mouseX; 
-        input.Set(data);
+        input.Set(_input);
+        _input = default;
     }
+
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }
     public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason) { }
     public void OnConnectedToServer(NetworkRunner runner) { }
