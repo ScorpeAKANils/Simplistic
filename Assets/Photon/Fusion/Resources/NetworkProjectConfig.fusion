@@ -8,7 +8,7 @@
         "HitboxDefaultCapacity": 512,
         "CachedStaticCollidersSize": 64
     },
-    "EnqueueIncompleteSynchronousSpawns": false,
+    "EnqueueIncompleteSynchronousSpawns": true,
     "InvokeRenderInBatchMode": true,
     "NetworkIdIsObjectName": false,
     "HideNetworkObjectInactivityGuard": true,
@@ -20,7 +20,7 @@
         "SimulationUpdateTimeMode": 0,
         "PlayerCount": 10,
         "TickRateSelection": {
-            "Client": 64,
+            "Client": 120,
             "ServerIndex": 0,
             "ClientSendIndex": 1,
             "ServerSendIndex": 1

@@ -18,28 +18,36 @@ public class PlayerMovement : NetworkBehaviour
     {
         if (GetInput(out NetworkInputData data))
         {
-            data.direction.Normalize();
-            _cc.Move(_speed * TranslateDirectionToLocalSpace(data.direction));
-            if (data.Jump) 
+            _cc.Move(ReadInput(data) * _speed);
+
+            if (data.Buttons.IsSet(MyButtons.Jump)) 
             {
-                data.Jump = false; 
                 _cc.Jump(); 
             }
         }
     }
 
-    private Vector3 TranslateDirectionToLocalSpace(Vector3 dir) 
+    private Vector3 ReadInput(NetworkInputData data) 
     {
         Vector3 moveVector = Vector3.zero;
-        if(dir.z != 0) 
+        if(data.Buttons.IsSet(MyButtons.Forward)) 
         {
-            moveVector += transform.forward * dir.z;  
+            moveVector += transform.forward;  
+        } 
+        else if (data.Buttons.IsSet(MyButtons.Backward)) 
+        {
+            moveVector += transform.forward*-1;
         }
 
-        if(dir.x != 0)
+        if (data.Buttons.IsSet(MyButtons.Right))
         {
-            moveVector += transform.right * dir.x; 
+            moveVector += transform.right;
         }
+        else if (data.Buttons.IsSet(MyButtons.Left))
+        {
+            moveVector += transform.right * -1;
+        }
+
 
         return moveVector.normalized; 
 

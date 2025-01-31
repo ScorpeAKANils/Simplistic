@@ -4,7 +4,7 @@ using UnityEngine.UI;
 public class Health : NetworkBehaviour
 {
     [Networked] private PlayerRef _player { get ; set;  }
-    [Networked] private float _health { get; set; } = 50f; 
+    [Networked] private float _health { get; set; } 
     private float _maxHealth = 50;
     [SerializeField] private LayerMask _bulletLayer;
     [SerializeField] private Scrollbar _healthBar;
@@ -15,7 +15,7 @@ public class Health : NetworkBehaviour
     private float _previusHealth; 
     private Vector3 _spawnPos; 
 
-    private void Awake()
+    public override void Spawned()
     {
         _runnerRef = FindObjectOfType<NetworkRunner>();
         _spawnPos = transform.position; 
@@ -23,6 +23,11 @@ public class Health : NetworkBehaviour
         _previusHealth = _health; 
     }
 
+
+    public void InitHealth() 
+    {
+        _health = _maxHealth; 
+    }
     private void Start()
     {
         _healthBar = FindObjectOfType<PlayerHudTag>().GetComponentInChildren<Scrollbar>(); 
