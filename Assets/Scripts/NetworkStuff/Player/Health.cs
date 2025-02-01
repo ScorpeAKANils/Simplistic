@@ -67,7 +67,7 @@ public class Health : NetworkBehaviour
         this.GetComponent<SimpleKCC>().SetPosition(respawnpos);
         Rpc_HealUp();
     }
-    [Rpc(RpcSources.StateAuthority, RpcTargets.StateAuthority, Channel = RpcChannel.Reliable)]
+    [Rpc(RpcSources.All, RpcTargets.StateAuthority, Channel = RpcChannel.Reliable)]
     public void Rpc_HealUp()
     {
         _health = _maxHealth;
