@@ -12,7 +12,7 @@
     "InvokeRenderInBatchMode": true,
     "NetworkIdIsObjectName": false,
     "HideNetworkObjectInactivityGuard": true,
-    "AllowClientServerModesInWebGL": false,
+    "AllowClientServerModesInWebGL": true,
     "Simulation": {
         "InputDataWordCount": 0,
         "ReplicationFeatures": 1,
@@ -39,7 +39,7 @@
         "EnableEncryption": false
     },
     "NetworkConditions": {
-        "Enabled": false,
+        "Enabled": true,
         "DelayShape": 0,
         "DelayMin": 0.15,
         "DelayMax": 0.15,
