@@ -6,7 +6,6 @@ using UnityEngine;
 using System.Linq; 
 public class KdManager : NetworkBehaviour
 {
-
     [SerializeField] private AudioSource KillSound;
     [SerializeField] private TextMeshProUGUI _kdText;
     [SerializeField] private GameObject ScoreBoardObj; 
