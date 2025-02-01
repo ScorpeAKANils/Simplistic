@@ -107,7 +107,8 @@ GameObject:
   - component: {fileID: 5821496255530928143}
   - component: {fileID: 8125159522447726572}
   - component: {fileID: 1258091120750514204}
-  - component: {fileID: 570277128287089032}
+  - component: {fileID: 3477961735521475660}
+  - component: {fileID: 6262156532770345035}
   m_Layer: 6
   m_Name: PlayerBody
   m_TagString: Untagged
@@ -185,6 +186,7 @@ MonoBehaviour:
   - {fileID: 5011711113002730216}
   - {fileID: 8125159522447726572}
   - {fileID: 1258091120750514204}
+  - {fileID: 3477961735521475660}
   ForceRemoteRenderTimeframe: 0
 --- !u!114 &7645471081167716647
 MonoBehaviour:
@@ -554,7 +556,25 @@ MonoBehaviour:
     StepRequireGroundTarget: 0
     SnapDistance: 0.25
     SnapSpeed: 4
---- !u!114 &570277128287089032
+--- !u!114 &3477961735521475660
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5757040036998227561}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1039544458, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Config: 3
+  BroadRadius: 0
+  Offset: {x: 0, y: 0, z: 0}
+  GizmosColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  Hitboxes:
+  - {fileID: 6262156532770345035}
+--- !u!114 &6262156532770345035
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -569,10 +589,10 @@ MonoBehaviour:
   Type: 3
   SphereRadius: 0
   CapsuleRadius: 1
-  BoxExtents: {x: 1, y: 0.9, z: 1}
-  CapsuleExtents: 0
+  BoxExtents: {x: 0, y: 0, z: 0}
+  CapsuleExtents: 1
   Offset: {x: 0, y: 1, z: 0}
-  Root: {fileID: 0}
+  Root: {fileID: 3477961735521475660}
   GizmosColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!1 &7904523222590455754
 GameObject:

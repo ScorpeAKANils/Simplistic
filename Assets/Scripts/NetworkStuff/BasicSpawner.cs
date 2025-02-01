@@ -33,8 +33,7 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
             float playerHealth = _playersHealths[player].GetDamage(10f);
             if (playerHealth <= 0)
             {
-                _playersHealths[player].Die(GetRandomPos(), player, killer);
-                var kdPlayerDead = _playersHealths[player].GetComponent<KdManager>();
+                _playersHealths[player].Rpc_Die(GetRandomPos(), player, killer);
                 var kdManagers = FindObjectsOfType<KdManager>();
                 foreach (var kd in kdManagers)
                 {
