@@ -1,29 +1,30 @@
 using Fusion;
+using Fusion.Addons.SimpleKCC; 
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem; 
+using UnityEngine.InputSystem;
 public class PlayerMovement : NetworkBehaviour
 {
     [SerializeField] private float _speed = 55f;
-    
-    private NetworkCharacterController _cc;
+    private SimpleKCC _cc;
     private Vector3 _moveVector;
-    float yVel = 0f; 
+    private float _jumpImpulse = 4f;
 
     private void Awake()
     {
-        _cc = GetComponent<NetworkCharacterController>();
+        _cc = GetComponent<SimpleKCC>();
     }
     public override void FixedUpdateNetwork()
     {
         if (GetInput(out NetworkInputData data))
         {
-            _cc.Move(ReadInput(data) * _speed);
-
-            if (data.Buttons.IsSet(MyButtons.Jump)) 
+            _moveVector = ReadInput(data); 
+            float jump = 0;
+            if (data.Buttons.IsSet(MyButtons.Jump) && _cc.IsGrounded) 
             {
-                _cc.Jump(); 
+                jump = _jumpImpulse; 
             }
+            _cc.Move(_moveVector.normalized * _speed, jump); 
         }
     }
 

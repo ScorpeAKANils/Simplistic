@@ -127,21 +127,17 @@ public class FireBullet : NetworkBehaviour
     }
     void Shoot(Vector3 pos, Vector3 dir) 
     {
-        if(Physics.Raycast(pos, dir, out RaycastHit hit, 100f, ~_ignoreLayer)) 
+        if(Runner.LagCompensation.Raycast(pos, dir, 100f, this.GetComponent<NetworkObject>().InputAuthority, out LagCompensatedHit hit)) 
         {
             try
             {
-                var other = hit.collider.GetComponent<Health>();
-                if (other.GetPlayer() != Runner.LocalPlayer) //layer check randomly not working in if statemant, only as a layer in raycast as parameter, but than the raycast ignore all the other colliders. But Players shouldnt be able to shoot threw walls lmao 
-                {
                     Debug.Log("Gegner getroffen!");
-                    PlayerRef enemyPlayer = hit.collider.GetComponent<Health>().GetPlayer();
+                    PlayerRef enemyPlayer = hit.Hitbox.GetComponent<Health>().GetPlayer();
                     StaticRpcHolder.RPC_SendHitInfo(Spawner.RunnerRef, enemyPlayer, Spawner.RunnerRef.LocalPlayer, this);
-                }
             }
             catch
             {
-                Debug.Log(hit.collider.gameObject); 
+                Debug.Log("That wasnt a player!"); 
             }
         }
         _ammoHud.text = "Ammo: " + AmmoInMag.ToString() + "/" + _magSize; 

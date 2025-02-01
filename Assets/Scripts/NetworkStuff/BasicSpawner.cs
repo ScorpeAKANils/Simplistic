@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using TMPro; 
 
-public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
+public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCallbacks
 {
     [SerializeField] private NetworkPrefabRef _playerPrefab;
     [SerializeField] private List<Transform> transforms = new();
@@ -20,6 +20,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
     public  NetworkRunner RunnerRef;
     private NetworkInputData _input = new NetworkInputData();
     private TextMeshProUGUI _kdText;
+    private bool _resetInput;
 
     void Start()
     {
@@ -32,8 +33,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
             float playerHealth = _playersHealths[player].GetDamage(10f);
             if (playerHealth <= 0)
             {
-                _playersHealths[player].Die(GetRandomPos(), player, killer);
-                var kdPlayerDead = _playersHealths[player].GetComponent<KdManager>();
+                _playersHealths[player].Rpc_Die(GetRandomPos(), player, killer);
                 var kdManagers = FindObjectsOfType<KdManager>();
                 foreach (var kd in kdManagers)
                 {
@@ -57,9 +57,10 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
     }
     async void StartGame(GameMode mode)
     {
+        _runnerRef = GetComponent<NetworkRunner>(); 
         // Create the Fusion runner and let it know that we will be providing user input
-        _runnerRef = gameObject.GetComponent<NetworkRunner>();
-        _runnerRef.ProvideInput = true;
+        var networkEvents = this.gameObject.GetComponent<NetworkEvents>();
+        networkEvents.OnInput.AddListener(OnInput);
         RunnerRef = _runnerRef;
         // Create the NetworkSceneInfo from the current scene
         var scene = SceneRef.FromIndex(SceneManager.GetActiveScene().buildIndex);
@@ -130,13 +131,20 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
             _spawnedCharacters.Remove(player);
     }
 
-    public void Update()
+    void IBeforeUpdate.BeforeUpdate()
     {
         if (_runnerRef != null)
         {
                float pingRaw =  (float)_runnerRef.GetPlayerRtt(_runnerRef.LocalPlayer) * 1000;
             int ping = Mathf.RoundToInt(pingRaw);
             _kdText.text = ping.ToString(); 
+        }
+        if (Cursor.lockState != CursorLockMode.Locked)
+            return;
+        if (_resetInput)
+        {
+            _resetInput = false; 
+            _input = default;
         }
         _input.Buttons.Set(MyButtons.Forward, Input.GetKey(KeyCode.W));
         _input.Buttons.Set(MyButtons.Left, Input.GetKey(KeyCode.A));
@@ -145,13 +153,11 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
         _input.Buttons.Set(MyButtons.Jump, Input.GetButton("Jump"));
         _input.Buttons.Set(MyButtons.Shooting, Input.GetButton("Fire1"));
 
-        if (Cursor.lockState != CursorLockMode.Locked)
-            return;
         Mouse mouse = Mouse.current;
         if (mouse != null && mouse.delta.ReadValue().magnitude > 0.02f)
         {
             Vector2 mouseDelta = mouse.delta.ReadValue();
-            Vector2 lookRotationDelta = new(mouseDelta.y, mouseDelta.x);
+            Vector2 lookRotationDelta = new(-mouseDelta.y, mouseDelta.x);
             _input.AimDirection += lookRotationDelta; 
         }
 
@@ -159,7 +165,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
         input.Set(_input);
-        _input = default;
+        _resetInput = true; 
     }
 
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }

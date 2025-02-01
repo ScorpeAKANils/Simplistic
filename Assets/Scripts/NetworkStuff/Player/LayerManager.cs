@@ -15,15 +15,15 @@ public class LayerManager : NetworkBehaviour
         {
             return; 
         }
-        if (Runner.LocalPlayer == _health.GetPlayer())
-        {
-            this.gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
-            _allreadyChecked = true; 
-        }
-        else
-        {
-            this.gameObject.layer = LayerMask.NameToLayer("Player");
-            _allreadyChecked = true; 
-        }
+     //if (Runner.LocalPlayer == _health.GetPlayer())
+     //{
+     //    this.gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
+     //    _allreadyChecked = true; 
+     //}
+     //else
+     //{
+     //    this.gameObject.layer = LayerMask.NameToLayer("Player");
+     //    _allreadyChecked = true; 
+     //}
     }
 }
