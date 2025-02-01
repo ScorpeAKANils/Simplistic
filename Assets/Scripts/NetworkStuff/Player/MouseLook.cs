@@ -31,6 +31,10 @@ public class MouseLook : NetworkBehaviour
 
     public override void FixedUpdateNetwork()
     {
+        if (!HasInputAuthority)
+        {
+            return; 
+        }
         if (GetInput(out NetworkInputData data))
         {
             _xRotation -= (data.AimDirection.x + _bullet.GetXRecoile(data)) * (_sensitivityX / 2) * Runner.DeltaTime;
@@ -42,8 +46,8 @@ public class MouseLook : NetworkBehaviour
     private void MoveCamera() 
     {
         _xRotation = Mathf.Clamp(_xRotation, -80, 80);
-        _camTransform.localRotation = Quaternion.Euler(_xRotation * GetPingFactor(), 0, 0);
-        transform.Rotate(Vector3.up, _yRotation * _sensitivityY * Runner.DeltaTime * GetPingFactor()); 
+        _camTransform.localRotation = Quaternion.Euler(_xRotation, 0, 0);
+        transform.Rotate(Vector3.up, _yRotation * _sensitivityY * Runner.DeltaTime); 
     }
 
     public override void Render()

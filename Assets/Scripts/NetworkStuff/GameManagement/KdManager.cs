@@ -19,9 +19,7 @@ public class KdManager : NetworkBehaviour
     [Networked] int _deaths { get; set; }
     public override void Spawned () 
     {
-        _kdText = FindObjectOfType<KdTagText>().GetComponent<TextMeshProUGUI>();
         _spawner = FindObjectOfType<BasicSpawner>();
-        _kdText.text = "Kills: 0\nDeaths: 0"; 
     }
 
 
@@ -32,7 +30,7 @@ public class KdManager : NetworkBehaviour
     }
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Tab) && _scoreBoadIsShown == false)
+        if (Input.GetKeyDown(KeyCode.Tab) && _scoreBoadIsShown == false)
         { 
             _scoreBoadIsShown=true;
             ShowScoreBoard(); 
@@ -60,7 +58,7 @@ public class KdManager : NetworkBehaviour
             KillSound.Play();
         }
 
-        //Rpc_UpdateScoreboard(); // Scoreboard für alle Spieler aktualisieren
+        //Rpc_UpdateScoreboard(); // Scoreboard f?r alle Spieler aktualisieren
     }
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.All, Channel = RpcChannel.Reliable)]
@@ -75,7 +73,7 @@ public class KdManager : NetworkBehaviour
         newScore.deahts++;
         _playerScores[player] = newScore;
 
-        //Rpc_UpdateScoreboard(); // Scoreboard für alle Spieler aktualisieren
+        //Rpc_UpdateScoreboard(); // Scoreboard f?r alle Spieler aktualisieren
     }
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.All, Channel = RpcChannel.Reliable)]
@@ -86,7 +84,7 @@ public class KdManager : NetworkBehaviour
             _playerScores.Add(newPlayer, new PlayerScore()); 
         }
 
-        //Rpc_UpdateScoreboard(); // Neues Scoreboard für alle senden
+        //Rpc_UpdateScoreboard(); // Neues Scoreboard f?r alle senden
     }
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.All, Channel = RpcChannel.Reliable)]

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
-
+using TMPro; 
 
 public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
 {
@@ -19,7 +19,12 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
     private NetworkRunner _runnerRef;
     public  NetworkRunner RunnerRef;
     private NetworkInputData _input = new NetworkInputData();
+    private TextMeshProUGUI _kdText;
 
+    void Start()
+    {
+        _kdText = FindObjectOfType<KdTagText>().GetComponent<TextMeshProUGUI>();
+    }
     public void ErasePlayer(PlayerRef player, PlayerRef killer)
     {
         if (_runnerRef.IsServer)
@@ -127,6 +132,12 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
 
     public void Update()
     {
+        if (_runnerRef != null)
+        {
+               float pingRaw =  (float)_runnerRef.GetPlayerRtt(_runnerRef.LocalPlayer) * 1000;
+            int ping = Mathf.RoundToInt(pingRaw);
+            _kdText.text = ping.ToString(); 
+        }
         _input.Buttons.Set(MyButtons.Forward, Input.GetKey(KeyCode.W));
         _input.Buttons.Set(MyButtons.Left, Input.GetKey(KeyCode.A));
         _input.Buttons.Set(MyButtons.Backward, Input.GetKey(KeyCode.S));
@@ -137,7 +148,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
         if (Cursor.lockState != CursorLockMode.Locked)
             return;
         Mouse mouse = Mouse.current;
-        if (mouse != null)
+        if (mouse != null && mouse.delta.ReadValue().magnitude > 0.02f)
         {
             Vector2 mouseDelta = mouse.delta.ReadValue();
             Vector2 lookRotationDelta = new(mouseDelta.y, mouseDelta.x);
