@@ -107,6 +107,7 @@ GameObject:
   - component: {fileID: 5821496255530928143}
   - component: {fileID: 8125159522447726572}
   - component: {fileID: 1258091120750514204}
+  - component: {fileID: 570277128287089032}
   m_Layer: 6
   m_Name: PlayerBody
   m_TagString: Untagged
@@ -553,6 +554,26 @@ MonoBehaviour:
     StepRequireGroundTarget: 0
     SnapDistance: 0.25
     SnapSpeed: 4
+--- !u!114 &570277128287089032
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5757040036998227561}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1014831617, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Type: 3
+  SphereRadius: 0
+  CapsuleRadius: 1
+  BoxExtents: {x: 1, y: 0.9, z: 1}
+  CapsuleExtents: 0
+  Offset: {x: 0, y: 1, z: 0}
+  Root: {fileID: 0}
+  GizmosColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!1 &7904523222590455754
 GameObject:
   m_ObjectHideFlags: 0
