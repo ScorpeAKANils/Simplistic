@@ -1,11 +1,18 @@
 using Fusion;
 using UnityEngine;
 
+enum MyButtons 
+{
+    Forward, 
+    Backward, 
+    Left, 
+    Right, 
+    Jump, 
+    Shooting
+}
+
 public struct NetworkInputData : INetworkInput
 {
-    public Vector3 direction;
-    public float MouseY;
-    public float MouseX;
-    public bool Jump; 
-
+    public NetworkButtons Buttons;
+    public Vector2 AimDirection; 
 }
