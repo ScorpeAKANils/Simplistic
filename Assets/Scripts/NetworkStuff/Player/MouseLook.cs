@@ -33,10 +33,6 @@ public class MouseLook : NetworkBehaviour
 
     public override void FixedUpdateNetwork()
     {
-        if (!HasInputAuthority)
-        {
-            return; 
-        }
         MoveCamera(); 
     }
 
@@ -48,6 +44,12 @@ public class MouseLook : NetworkBehaviour
             _cc.AddLookRotation(data.AimDirection * _sensitivityY); 
             _camTransform.localRotation = Quaternion.Euler(_cc.GetLookRotation().x, 0, 0);
         }
+    }
+
+    public override void Render()
+    {
+        base.Render();
+        MoveCamera(); 
     }
 
     private void ToggleMouseState() 

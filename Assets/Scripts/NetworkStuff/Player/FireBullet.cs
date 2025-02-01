@@ -127,7 +127,7 @@ public class FireBullet : NetworkBehaviour
     }
     void Shoot(Vector3 pos, Vector3 dir) 
     {
-        if(Physics.Raycast(pos, dir, out RaycastHit hit, 100f, ~_ignoreLayer)) 
+        if(Runner.GetPhysicsScene().Raycast(pos, dir, out RaycastHit hit, 100f)) 
         {
             try
             {
