@@ -139,13 +139,13 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
             int ping = Mathf.RoundToInt(pingRaw);
             _kdText.text = ping.ToString(); 
         }
-        if (Cursor.lockState != CursorLockMode.Locked)
-            return;
         if (_resetInput)
         {
             _resetInput = false; 
             _input = default;
         }
+        if (Cursor.lockState != CursorLockMode.Locked)
+            return;
         _input.Buttons.Set(MyButtons.Forward, Input.GetKey(KeyCode.W));
         _input.Buttons.Set(MyButtons.Left, Input.GetKey(KeyCode.A));
         _input.Buttons.Set(MyButtons.Backward, Input.GetKey(KeyCode.S));

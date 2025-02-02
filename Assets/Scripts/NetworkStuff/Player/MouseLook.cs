@@ -6,33 +6,13 @@ using UnityEngine;
 
 public class MouseLook : NetworkBehaviour
 {
-    // Start is called before the first frame update
-    [SerializeField] private float _sensitivityX = 10f;
-    [SerializeField] private float _sensitivityY = 30f;
-    private bool _cursorLocked = false;
+    [SerializeField] private float _sensitivity = 30f;
     [SerializeField] private Transform _camTransform;
-    [SerializeField] private Transform _camPos; 
     [SerializeField] FireBullet _bullet;
-    [SerializeField] private SimpleKCC _cc; 
-    private float _xRotation;
-    private float _yRotation;
-    // Update is called once per frame
-
-    private void Start()
-    {
-        ToggleMouseState();
-    }
-
-    private void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.F)) 
-        {
-            ToggleMouseState(); 
-        }
-    }
+    [SerializeField] private SimpleKCC _cc;
 
     public override void FixedUpdateNetwork()
-    {
+    { 
         MoveCamera(); 
     }
 
@@ -40,9 +20,10 @@ public class MouseLook : NetworkBehaviour
     {
         if (GetInput(out NetworkInputData data))
         {
-            _xRotation -= (data.AimDirection.x + _bullet.GetXRecoile(data)) * (_sensitivityX / 2) * Runner.DeltaTime;
-            _cc.AddLookRotation(data.AimDirection * _sensitivityY); 
-            _camTransform.localRotation = Quaternion.Euler(_cc.GetLookRotation().x, 0, 0);
+            Vector2 mouseDir = data.AimDirection;
+            mouseDir.y += _bullet.GetYRecoile(data); 
+            _cc.AddLookRotation(mouseDir * _sensitivity); 
+            _camTransform.localRotation = Quaternion.Euler(_cc.GetLookRotation().x + _bullet.GetXRecoile(data), 0, 0);
         }
     }
 
@@ -50,18 +31,5 @@ public class MouseLook : NetworkBehaviour
     {
         base.Render();
         MoveCamera(); 
-    }
-
-    private void ToggleMouseState() 
-    {
-        if(_cursorLocked == false) 
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-        } else 
-        {
-            Cursor.lockState = CursorLockMode.None;
-        }
-        _cursorLocked = !_cursorLocked;
-        Cursor.visible = !_cursorLocked;
     }
 }
