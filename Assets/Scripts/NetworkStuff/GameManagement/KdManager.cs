@@ -12,7 +12,7 @@ public class KdManager : NetworkBehaviour
     private BasicSpawner _spawner;
     private Dictionary<PlayerRef, PlayerScore> _playerScores = new();
     private ScoreBoard _board;
-
+    private List<PlayerInfo> _sortedPlayer = new();
     private bool _scoreBoadIsShown = false; 
     [Networked] int _kills { get; set; }
     [Networked] int _deaths { get; set; }
@@ -32,6 +32,7 @@ public class KdManager : NetworkBehaviour
         if (Input.GetKeyDown(KeyCode.Tab) && _scoreBoadIsShown == false)
         { 
             _scoreBoadIsShown=true;
+            UpdateScoreboard(); 
             ShowScoreBoard(); 
         }
         else if (Input.GetKeyDown(KeyCode.Tab) && _scoreBoadIsShown == true)
@@ -57,7 +58,7 @@ public class KdManager : NetworkBehaviour
             KillSound.Play();
         }
 
-        //Rpc_UpdateScoreboard(); // Scoreboard f?r alle Spieler aktualisieren
+        Rpc_UpdateScoreboard();
     }
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.All, Channel = RpcChannel.Reliable)]
@@ -72,7 +73,7 @@ public class KdManager : NetworkBehaviour
         newScore.deahts++;
         _playerScores[player] = newScore;
 
-        //Rpc_UpdateScoreboard(); // Scoreboard f?r alle Spieler aktualisieren
+        Rpc_UpdateScoreboard();
     }
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.All, Channel = RpcChannel.Reliable)]
@@ -83,40 +84,58 @@ public class KdManager : NetworkBehaviour
             _playerScores.Add(newPlayer, new PlayerScore()); 
         }
 
-        //Rpc_UpdateScoreboard(); // Neues Scoreboard f?r alle senden
+        Rpc_UpdateScoreboard();
+    }
+
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All, Channel = RpcChannel.Reliable)]
+    public void Rpc_RemovePlayerToScoreBoard(PlayerRef playerToRemove)
+    {
+        if (!_playerScores.ContainsKey(playerToRemove))
+        {
+            _playerScores.Remove(playerToRemove); 
+        }
+
+        Rpc_UpdateScoreboard();
     }
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.All, Channel = RpcChannel.Reliable)]
     public void Rpc_UpdateScoreboard()
     {
-        UpdateScoreboardUI();
+        UpdateScoreboard();
     }
 
-    private void UpdateScoreboardUI()
+    private void UpdateScoreboard()
     {
-        ShowScoreBoard();
-    } 
-
-    public void ShowScoreBoard()
-    {
-        List<PlayerInfo> sortedPlayer = new();
-
+        _sortedPlayer.Clear();
         foreach (KeyValuePair<PlayerRef, PlayerScore> player in _playerScores)
         {
-            sortedPlayer.Add(new PlayerInfo(player.Key, player.Value));
+            _sortedPlayer.Add(new PlayerInfo(player.Key, player.Value));
         }
 
-        sortedPlayer.Sort((a, b) => b.score.kills.CompareTo(a.score.kills));
-        foreach (var player in sortedPlayer)
+        _sortedPlayer.Sort((a, b) => b.score.kills.CompareTo(a.score.kills));
+
+        if (_scoreBoadIsShown)
         {
-            Debug.Log($"Player {player.id} - Kills: {player.score.kills}");
+            ShowScoreBoard(true); 
         }
-        _board.transform.parent.gameObject.SetActive(true);
+    } 
+
+    public void ShowScoreBoard(bool allReadyActive = false)
+    {
+        if(!allReadyActive)
+            _board.transform.parent.gameObject.SetActive(true);
         int count = 0;
-        foreach (var item in sortedPlayer)
+        foreach (var item in _sortedPlayer)
         {
+            if (Runner.LocalPlayer == item.id)
+            {
+                _board.ScoreTextes[count].color = Color.yellow;
+            } else
+            {
+                _board.ScoreTextes[count].color = Color.white;
+            }
             _board.ScoreTextes[count].text = item.id.ToString() + " - " + item.score.kills.ToString() + " - " + item.score.deahts.ToString();
-            count++; 
+            count++;
         }
     }
 
