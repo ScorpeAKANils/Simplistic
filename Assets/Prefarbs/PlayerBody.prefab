@@ -271,10 +271,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4e366d5daf4fd747832fb94af81b346, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _sensitivityX: 0.1
-  _sensitivityY: 0.1
+  _sensitivity: 0.05
   _camTransform: {fileID: 5761836830940726770}
-  _camPos: {fileID: 0}
   _bullet: {fileID: 5005776768812998015}
   _cc: {fileID: 1258091120750514204}
 --- !u!114 &5011711113002730216
