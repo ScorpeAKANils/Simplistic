@@ -11,8 +11,8 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
 {
     [SerializeField] private NetworkPrefabRef _playerPrefab;
     [SerializeField] private List<Transform> transforms = new();
-    [SerializeField] private Camera _cam; 
-    [Networked] int _spawnIndex { get; set; }
+    [SerializeField] private Camera _cam;
+    private int _spawnIndex = 0; 
 
     [SerializeField] private Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new();
     private Dictionary<PlayerRef, Health> _playersHealths = new(); 
@@ -34,17 +34,17 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
             if (playerHealth <= 0)
             {
                 _playersHealths[player].Rpc_Die(GetRandomPos(), player, killer);
+                _playersHealths[player].InitHealth(); 
                 var kdManagers = FindObjectsOfType<KdManager>();
+                _playersHealths[player].Rpc_UpdateHealthBar(ReturnPlayerHealth(player));
                 foreach (var kd in kdManagers)
                 {
                     kd.Rpc_AddDeath(player);
                 }
-                var kdOther = _playersHealths[killer].GetComponent<KdManager>();
                 foreach (var kd in kdManagers)
                 {
                     kd.Rpc_AddKill(killer);
                 }
-                _playersHealths[player].Rpc_UpdateHealthBar(ReturnPlayerHealth(player));
                 return;
             }
             _playersHealths[player].Rpc_UpdateHealthBar(ReturnPlayerHealth(player));

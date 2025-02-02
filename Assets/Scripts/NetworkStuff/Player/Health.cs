@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class Health : NetworkBehaviour
 {
     [Networked] private PlayerRef _player { get; set; }
-    [Networked] private float _health { get; set; }
+    [Networked] private float _health { get; set; } 
     private float _maxHealth = 50;
     [SerializeField] private LayerMask _bulletLayer;
     [SerializeField] private Scrollbar _healthBar;
@@ -60,12 +60,11 @@ public class Health : NetworkBehaviour
     {
         return _health;
     }
-    [Rpc(RpcSources.StateAuthority, RpcTargets.InputAuthority, Channel=RpcChannel.Reliable)]
+    //[Rpc(RpcSources.StateAuthority, RpcTargets.InputAuthority, Channel=RpcChannel.Reliable)]
     public void Rpc_Die(Vector3 respawnpos, PlayerRef playerDamaged, PlayerRef killer) 
     {
         StaticRpcHolder.Rpc_ShowKillFeed(Runner, killer, playerDamaged);
         this.GetComponent<SimpleKCC>().SetPosition(respawnpos);
-        Rpc_HealUp();
     }
     [Rpc(RpcSources.StateAuthority, RpcTargets.InputAuthority, Channel = RpcChannel.Reliable)]
     public void Rpc_HealUp()
