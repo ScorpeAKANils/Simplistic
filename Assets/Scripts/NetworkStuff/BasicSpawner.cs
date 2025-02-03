@@ -50,8 +50,8 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
                     kd.Rpc_AddKill(attacker);
                 }
             }
+            _playersHealths[target].Rpc_UpdateHealthBar(newHealth);
         }
-        _playersHealths[target].Rpc_UpdateHealthBar(newHealth);
     }
     public float ReturnPlayerHealth(PlayerRef player) 
     {
