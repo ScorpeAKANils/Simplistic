@@ -173,9 +173,9 @@ public class FireBullet : NetworkBehaviour
         }
     }
 
-    [Rpc(RpcSources.InputAuthority, RpcTargets.Proxies, Channel = RpcChannel.Unreliable)]
+    [Rpc(RpcSources.InputAuthority, RpcTargets.All, Channel = RpcChannel.Reliable)]
     public void RPC_VisualieShot(FireBullet gunRef, PlayerRef p)
     {
-            gunRef.Audio.Play();
+        gunRef.Audio.Play();
     }
 }
