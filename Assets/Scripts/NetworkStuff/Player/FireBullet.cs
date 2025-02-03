@@ -101,7 +101,6 @@ public class FireBullet : NetworkBehaviour
             if (data.Buttons.IsSet(MyButtons.Shooting))
             {
                 _canFire = false;
-                Audio.Play();
                 _anim.SetTrigger("Shoot"); 
                 if (Runner.IsServer)
                 {
@@ -158,6 +157,7 @@ public class FireBullet : NetworkBehaviour
 
     void Shoot(Vector3 pos, Vector3 dir) 
     {
+        Audio.Play();
         RPC_VisualieShot(this, Runner.LocalPlayer);
         if (Runner.LagCompensation.Raycast(pos, dir, 100f, Runner.LocalPlayer, out LagCompensatedHit hit))
         { 
@@ -173,7 +173,7 @@ public class FireBullet : NetworkBehaviour
         }
     }
 
-    [Rpc(RpcSources.InputAuthority, RpcTargets.All, Channel = RpcChannel.Reliable)]
+    [Rpc(RpcSources.All, RpcTargets.All, Channel = RpcChannel.Reliable)]
     public void RPC_VisualieShot(FireBullet gunRef, PlayerRef p)
     {
         gunRef.Audio.Play();
