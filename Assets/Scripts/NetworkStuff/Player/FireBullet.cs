@@ -31,7 +31,7 @@ public class FireBullet : NetworkBehaviour
     [SerializeField] private byte _magSize = 30;
     [SerializeField] private LineRenderer _lineRenderer;
     [SerializeField] private TextMeshProUGUI _ammoHud;
-    [SerializeField] AudioSource _audio; 
+    [SerializeField] public AudioSource Audio; 
     [SerializeField] private List<RecoilDirY> _yPattern = new();
     [SerializeField] private List<RecoilDirX> _xPattern = new();
     [SerializeField] private Animator _anim; 
@@ -40,7 +40,7 @@ public class FireBullet : NetworkBehaviour
     public TextMeshProUGUI AmmoHud { get { return _ammoHud; } }
     public Transform GunBarrel { get { return _gunBarrel; } }
     public GameObject KillFeed { get { return _killFeed; } }
-    [Networked] public byte AmmoInMag { get; set; }
+    public byte AmmoInMag { get; set; }
     
     public BasicSpawner Spawner { get; private set; }
     [SerializeField] private GameObject _killFeed; 
@@ -54,11 +54,6 @@ public class FireBullet : NetworkBehaviour
         AmmoInMag = _magSize;
         _ammoHud = FindObjectOfType<PlayerHudTag>().GetComponentInChildren<TextMeshProUGUI>();
         _ammoHud.text = "Ammo: " + AmmoInMag.ToString() + "/" + _magSize;
-        _lineRenderer.enabled = false;
-        _lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
-        _lineRenderer.startColor = Color.red;
-        _lineRenderer.endColor = Color.red;
-        _lineRenderer.positionCount = 2;
     }
 
     public float GetXRecoile(NetworkInputData data)
@@ -81,7 +76,19 @@ public class FireBullet : NetworkBehaviour
         {
             _reload = true; 
         }
+
+        if (AmmoInMag < _magSize && _reload | AmmoInMag <= 0)
+        {
+            _reload = false;
+            AmmoInMag = _magSize;
+            if (_ammoHud != null)
+            {
+                _ammoHud.text = "Ammo: " + AmmoInMag.ToString() + "/" + _magSize;
+            }
+        }
     }
+
+    
     // Update is called once per frame
     public override void FixedUpdateNetwork()
     {
@@ -89,57 +96,86 @@ public class FireBullet : NetworkBehaviour
         {
             return;
         }
-        if (AmmoInMag < _magSize && _reload | AmmoInMag <= 0)
+        if (GetInput(out NetworkInputData data) && AmmoInMag > 0)
         {
-            _reload = false; 
-            AmmoInMag = _magSize;
-            if (_ammoHud != null) 
+            if (data.Buttons.IsSet(MyButtons.Shooting))
             {
-                _ammoHud.text = "Ammo: " + AmmoInMag.ToString() + "/" + _magSize; 
-            }
-        }
-        if (GetInput(out NetworkInputData data) && AmmoInMag > 0) 
-        {
-            if(data.Buttons.IsSet(MyButtons.Shooting)) 
-            {
-                _audio.Play();
-                _anim.SetTrigger("Shoot"); 
                 _canFire = false;
-                _fireButtonPressed = false;
-                StaticRpcHolder.RPC_VisualieShot(Spawner.RunnerRef, this, Spawner.RunnerRef.LocalPlayer);
-                Shoot(_gunBarrel.position, _gunBarrel.forward);
+                Audio.Play();
+                _anim.SetTrigger("Shoot"); 
+                if (Runner.IsServer)
+                {
+                    Shoot(_gunBarrel.position, _gunBarrel.forward);
+                }
+                else
+                {
+                    RPC_RequestShot(_gunBarrel.position, _gunBarrel.forward, Runner.LocalPlayer);
+                }
+                RPC_VisualieShot(this, Runner.LocalPlayer); 
+                AmmoInMag--;
+                _ammoHud.text = "Ammo: " + AmmoInMag.ToString() + "/" + _magSize;
                 StartCoroutine(FireCoolDown(0.2f));
             }
         }
-    }
-    IEnumerator FireCoolDown(float time)
-    {
-        yield return new WaitForSeconds(time);
-        StaticRpcHolder.RPC_DisableDebugLine(Spawner.RunnerRef, this); 
-        _canFire = true; 
-        if(patternIndex < _yPattern.Count-1 && patternIndex < _xPattern.Count - 1) 
-        {
-            patternIndex++; 
-        } else 
-        {
-            patternIndex = 0;  
         }
-    }
-    void Shoot(Vector3 pos, Vector3 dir) 
+
+        IEnumerator FireCoolDown(float time)
+        {
+              yield return new WaitForSeconds(time);
+              _canFire = true; 
+              if(patternIndex < _yPattern.Count-1 && patternIndex < _xPattern.Count - 1) 
+              {
+                  patternIndex++; 
+              } else 
+              {
+                  patternIndex = 0;  
+              }
+        }
+
+    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority, Channel = RpcChannel.Reliable)]
+    public void RPC_RequestShot(Vector3 pos, Vector3 dir, PlayerRef shooter)
     {
-        if(Runner.LagCompensation.Raycast(pos, dir, 100f, this.GetComponent<NetworkObject>().InputAuthority, out LagCompensatedHit hit)) 
+        if (Runner.LagCompensation.Raycast(pos, dir, 100f, shooter, out LagCompensatedHit hit))
         {
             try
             {
-                    Debug.Log("Gegner getroffen!");
-                    PlayerRef enemyPlayer = hit.Hitbox.GetComponent<Health>().GetPlayer();
-                    StaticRpcHolder.RPC_SendHitInfo(Spawner.RunnerRef, enemyPlayer, Spawner.RunnerRef.LocalPlayer, this);
+                PlayerRef enemyPlayer = hit.Hitbox.GetComponent<Health>().GetPlayer();
+                ApplyDamage(enemyPlayer, shooter);
             }
             catch
             {
-                Debug.Log("That wasnt a player!"); 
+
             }
         }
-        _ammoHud.text = "Ammo: " + AmmoInMag.ToString() + "/" + _magSize; 
+    }
+
+    public void ApplyDamage(PlayerRef enemyPlayer, PlayerRef attacker)
+    {
+        var spawner = FindObjectOfType<BasicSpawner>();
+        spawner.RPC_ApplyDamage(enemyPlayer, 10, attacker); 
+    }
+
+
+    void Shoot(Vector3 pos, Vector3 dir) 
+    {
+        if (Runner.LagCompensation.Raycast(pos, dir, 100f, Runner.LocalPlayer, out LagCompensatedHit hit))
+        { 
+            try
+            {
+                Debug.Log("Gegner getroffen!");
+                PlayerRef enemyPlayer = hit.Hitbox.GetComponent<Health>().GetPlayer();
+                ApplyDamage(enemyPlayer, Runner.LocalPlayer); 
+            }
+            catch
+            {
+            }
+        }
+    }
+
+    [Rpc(RpcSources.InputAuthority, RpcTargets.All, Channel = RpcChannel.Unreliable)]
+    public void RPC_VisualieShot(FireBullet gunRef, PlayerRef p)
+    {
+        if (Runner.LocalPlayer != p)
+            gunRef.Audio.Play();
     }
 }

@@ -26,31 +26,29 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
     {
         _kdText = FindObjectOfType<KdTagText>().GetComponent<TextMeshProUGUI>();
     }
-    public void ErasePlayer(PlayerRef player, PlayerRef killer)
+
+    //[Rpc(RpcSources.StateAuthority, RpcTargets.All, Channel = RpcChannel.Reliable)]
+    public void RPC_ApplyDamage(PlayerRef target, float damage, PlayerRef attacker)
     {
-        if (_runnerRef.IsServer)
+        if (_playersHealths.ContainsKey(target))
         {
-            float playerHealth = _playersHealths[player].GetDamage(10f);
-            if (playerHealth <= 0)
+            float newHealth = _playersHealths[target].GetDamage(damage);
+            _playersHealths[target].Rpc_UpdateHealthBar(newHealth);
+
+            if (newHealth <= 0)
             {
-                _playersHealths[player].Rpc_Die(GetRandomPos(), player, killer);
-                _playersHealths[player].InitHealth(); 
-                var kdManagers = FindObjectsOfType<KdManager>();
-                _playersHealths[player].Rpc_UpdateHealthBar(ReturnPlayerHealth(player));
-                foreach (var kd in kdManagers)
+                _playersHealths[target].Rpc_Die(GetRandomPos(), target, attacker);
+                _playersHealths[target].InitHealth();
+                _playersHealths[target].Rpc_UpdateHealthBar(newHealth);
+
+                foreach (var kd in FindObjectsOfType<KdManager>())
                 {
-                    kd.Rpc_AddDeath(player);
+                    kd.Rpc_AddDeath(target);
+                    kd.Rpc_AddKill(attacker);
                 }
-                foreach (var kd in kdManagers)
-                {
-                    kd.Rpc_AddKill(killer);
-                }
-                return;
             }
-            _playersHealths[player].Rpc_UpdateHealthBar(ReturnPlayerHealth(player));
         }
     }
-
     public float ReturnPlayerHealth(PlayerRef player) 
     {
         return _playersHealths[player].GetHealth(); 
