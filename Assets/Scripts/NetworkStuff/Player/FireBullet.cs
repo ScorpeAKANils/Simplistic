@@ -102,6 +102,7 @@ public class FireBullet : NetworkBehaviour
             {
                 _canFire = false;
                 Audio.Play();
+                RPC_VisualieShot(this, Runner.LocalPlayer); 
                 _anim.SetTrigger("Shoot"); 
                 if (Runner.IsServer)
                 {
@@ -111,10 +112,9 @@ public class FireBullet : NetworkBehaviour
                 {
                     RPC_RequestShot(_gunBarrel.position, _gunBarrel.forward, Runner.LocalPlayer);
                 }
-                RPC_VisualieShot(this, Runner.LocalPlayer); 
                 AmmoInMag--;
                 _ammoHud.text = "Ammo: " + AmmoInMag.ToString() + "/" + _magSize;
-                StartCoroutine(FireCoolDown(0.2f));
+                StartCoroutine(FireCoolDown(1f));
             }
         }
         }
@@ -172,7 +172,7 @@ public class FireBullet : NetworkBehaviour
         }
     }
 
-    [Rpc(RpcSources.InputAuthority, RpcTargets.All, Channel = RpcChannel.Unreliable)]
+    [Rpc(RpcSources.InputAuthority, RpcTargets.All, Channel = RpcChannel.Reliable)]
     public void RPC_VisualieShot(FireBullet gunRef, PlayerRef p)
     {
         if (Runner.LocalPlayer != p)
