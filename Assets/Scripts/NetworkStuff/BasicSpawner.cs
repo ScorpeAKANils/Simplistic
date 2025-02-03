@@ -30,16 +30,19 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
     //[Rpc(RpcSources.StateAuthority, RpcTargets.All, Channel = RpcChannel.Reliable)]
     public void RPC_ApplyDamage(PlayerRef target, float damage, PlayerRef attacker)
     {
+        if(Runner.IsServer == false | target == attacker) 
+        {
+            return; 
+        }
         if (_playersHealths.ContainsKey(target))
         {
+
             float newHealth = _playersHealths[target].GetDamage(damage);
-            _playersHealths[target].Rpc_UpdateHealthBar(newHealth);
 
             if (newHealth <= 0)
             {
                 _playersHealths[target].Rpc_Die(GetRandomPos(), target, attacker);
                 _playersHealths[target].InitHealth();
-                _playersHealths[target].Rpc_UpdateHealthBar(newHealth);
 
                 foreach (var kd in FindObjectsOfType<KdManager>())
                 {
@@ -48,6 +51,7 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
                 }
             }
         }
+        _playersHealths[target].Rpc_UpdateHealthBar(newHealth);
     }
     public float ReturnPlayerHealth(PlayerRef player) 
     {
