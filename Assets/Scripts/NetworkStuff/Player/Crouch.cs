@@ -1,4 +1,5 @@
 using Fusion;
+using Fusion.Addons.SimpleKCC;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,11 +8,12 @@ public class Crouch : NetworkBehaviour
 {
     private Vector3 _originalScale;
     private Vector3 _crouchScale;
-
+    private SimpleKCC _cc; 
     public override void Spawned()
     {
         _originalScale = transform.localScale;
         _crouchScale = _originalScale / 2; 
+        _cc = this.GetComponent<SimpleKCC>();
     }
 
     // Update is called once per frame
@@ -22,15 +24,21 @@ public class Crouch : NetworkBehaviour
             //crouch logic...
             if(data.Buttons.IsSet(MyButtons.Crouch)) 
             {
-                transform.localScale = _crouchScale; 
+                Rpc_SetScale(_crouchScale);
             } else 
             {
-                transform.localScale = _originalScale;
+                Rpc_SetScale(_originalScale);
             } 
         }
         else
         {
-            transform.localScale = _originalScale;
+            Rpc_SetScale(_originalScale);
         }
+    }
+
+    [Rpc(RpcSources.InputAuthority,RpcTargets.All)]
+    public void Rpc_SetScale(Vector3 scale) 
+    {
+        transform.localScale = scale;
     }
 }

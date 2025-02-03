@@ -621,8 +621,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0581a9f658c629f438080de9c4dd94a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _originalScale: {x: 0, y: 0, z: 0}
-  _crouchScale: {x: 0, y: 0, z: 0}
 --- !u!1 &7904523222590455754
 GameObject:
   m_ObjectHideFlags: 0
