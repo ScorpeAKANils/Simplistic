@@ -82,6 +82,7 @@ MonoBehaviour:
   Flags: 262145
   NestedObjects:
   - {fileID: 1039523555947081684}
+  - {fileID: 1558886166707914003}
   NetworkedBehaviours:
   - {fileID: 2489678084530421593}
   ForceRemoteRenderTimeframe: 0
@@ -179,6 +180,7 @@ MonoBehaviour:
   NestedObjects:
   - {fileID: 8487800994345831963}
   - {fileID: 1039523555947081684}
+  - {fileID: 1558886166707914003}
   NetworkedBehaviours:
   - {fileID: 7645471081167716647}
   - {fileID: 5005776768812998015}
@@ -863,6 +865,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 2549587303477303879}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 4b5510b840c490e44847203859628a8d,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1558886166707914003}
   m_SourcePrefab: {fileID: 100100000, guid: 4b5510b840c490e44847203859628a8d, type: 3}
 --- !u!4 &2747161333698116023 stripped
 Transform:
@@ -897,7 +903,7 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 1
+  MinDistance: 500
   MaxDistance: 500
   Pan2D: 0
   rolloffMode: 0
@@ -994,3 +1000,21 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1558886166707914003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3266288410896360205}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SortKey: 2886679420
+  ObjectInterest: 1
+  Flags: 262145
+  NestedObjects: []
+  NetworkedBehaviours: []
+  ForceRemoteRenderTimeframe: 0

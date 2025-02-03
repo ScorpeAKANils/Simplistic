@@ -128,7 +128,13 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
         {
         }
             runner.Despawn(networkObject);
-            _spawnedCharacters.Remove(player);
+        var kdManagers = FindObjectsOfType<KdManager>();
+        foreach (var kd in kdManagers)
+        {
+            kd.Rpc_RemovePlayerFromScoreBoard(player); 
+        }
+        _playersHealths.Remove(player); 
+        _spawnedCharacters.Remove(player);
     }
 
     void IBeforeUpdate.BeforeUpdate()

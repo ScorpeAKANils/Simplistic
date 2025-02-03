@@ -32,8 +32,9 @@ public class KdManager : NetworkBehaviour
         if (Input.GetKeyDown(KeyCode.Tab) && _scoreBoadIsShown == false)
         { 
             _scoreBoadIsShown=true;
-            UpdateScoreboard(); 
-            ShowScoreBoard(); 
+            _board.transform.parent.gameObject.SetActive(true);
+            UpdateScoreboard();
+            ShowScoreBoard(_sortedPlayer); 
         }
         else if (Input.GetKeyDown(KeyCode.Tab) && _scoreBoadIsShown == true)
         {
@@ -88,23 +89,22 @@ public class KdManager : NetworkBehaviour
     }
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.All, Channel = RpcChannel.Reliable)]
-    public void Rpc_RemovePlayerToScoreBoard(PlayerRef playerToRemove)
+    public void Rpc_RemovePlayerFromScoreBoard(PlayerRef playerToRemove)
     {
         if (!_playerScores.ContainsKey(playerToRemove))
         {
             _playerScores.Remove(playerToRemove); 
         }
-
-        Rpc_UpdateScoreboard();
+        Rpc_UpdateScoreboard(true);
     }
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.All, Channel = RpcChannel.Reliable)]
-    public void Rpc_UpdateScoreboard()
+    public void Rpc_UpdateScoreboard(bool clearScoreBoad = false)
     {
-        UpdateScoreboard();
+        UpdateScoreboard(clearScoreBoad);
     }
 
-    private void UpdateScoreboard()
+    private void UpdateScoreboard(bool clearScoreBoard = false)
     {
         _sortedPlayer.Clear();
         foreach (KeyValuePair<PlayerRef, PlayerScore> player in _playerScores)
@@ -116,21 +116,28 @@ public class KdManager : NetworkBehaviour
 
         if (_scoreBoadIsShown)
         {
-            ShowScoreBoard(true); 
+            ShowScoreBoard(_sortedPlayer, clearScoreBoard, true); 
         }
-    } 
+    }
 
-    public void ShowScoreBoard(bool allReadyActive = false)
+    public void ShowScoreBoard(List<PlayerInfo> players, bool clearScoreBoard = false, bool allReadyActive = false)
     {
-        if(!allReadyActive)
-            _board.transform.parent.gameObject.SetActive(true);
+        if (allReadyActive == false)
+        {
+            _board.transform.parent.gameObject.SetActive(true); 
+        }
+        if (clearScoreBoard)
+        {
+            ClearScoreBoard();
+        }
         int count = 0;
-        foreach (var item in _sortedPlayer)
+        foreach (var item in players)
         {
             if (Runner.LocalPlayer == item.id)
             {
                 _board.ScoreTextes[count].color = Color.yellow;
-            } else
+            }
+            else
             {
                 _board.ScoreTextes[count].color = Color.white;
             }
@@ -139,26 +146,20 @@ public class KdManager : NetworkBehaviour
         }
     }
 
+    public void ClearScoreBoard()
+    {
+        foreach (TextMeshProUGUI text in _board.ScoreTextes)
+        {
+            if (text.text != string.Empty)
+            {
+                text.text = string.Empty;
+                continue;
+            }
+            break;
+        }
+    }
     public void HideScoreBoard() 
     {
         _board.transform.parent.gameObject.SetActive(false); 
-    }
-}
-
-public struct PlayerScore 
-{
-    public int kills;
-    public int deahts;
-}
-
-public struct PlayerInfo 
-{
-    public PlayerRef id;
-    public PlayerScore score; 
-
-    public PlayerInfo(PlayerRef p, PlayerScore s) 
-    {
-        id = p;
-        score = s; 
     }
 }
