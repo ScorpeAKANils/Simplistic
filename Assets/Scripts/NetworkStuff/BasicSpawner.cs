@@ -160,6 +160,7 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
         _input.Buttons.Set(MyButtons.Right, Input.GetKey(KeyCode.D));
         _input.Buttons.Set(MyButtons.Jump, Input.GetButton("Jump"));
         _input.Buttons.Set(MyButtons.Shooting, Input.GetButton("Fire1"));
+        _input.Buttons.Set(MyButtons.Crouch, Input.GetButton("Crouch"));
 
         Mouse mouse = Mouse.current;
         if (mouse != null && mouse.delta.ReadValue().magnitude > 0.02f)
