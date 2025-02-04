@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor.Search;
 using UnityEngine;
 
 public class ItemPickUp : MonoBehaviour
@@ -26,6 +25,10 @@ public class ItemPickUp : MonoBehaviour
         {
             if((i.transform.position - this.transform.position).sqrMagnitude <= 1 && i._spawned == true) 
             {
+                if(_health.GetHealth() >= 50) 
+                {
+                    return; 
+                }
                 i.Item.OnInteract(_health.GetPlayer(), i); 
             }
         }

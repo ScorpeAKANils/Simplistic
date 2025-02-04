@@ -112,7 +112,7 @@ public class FireBullet : NetworkBehaviour
                 }
                 AmmoInMag--;
                 _ammoHud.text = "Ammo: " + AmmoInMag.ToString() + "/" + _magSize;
-                StartCoroutine(FireCoolDown(0.166f));
+                StartCoroutine(FireCoolDown(0.25f));
             }
         }
         }
