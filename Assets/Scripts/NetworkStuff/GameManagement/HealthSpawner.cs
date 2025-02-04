@@ -1,15 +1,20 @@
 using Fusion;
 using UnityEngine;
 
-public class HealthSpawner : SimulationBehaviour
+public class HealthSpawner : NetworkBehaviour
 {
     [SerializeField, Tooltip("Time for the next Health Pack to spawn in Seconds")] private float _spawnTime = 60;
-    [SerializeField] private NetworkPrefabRef _healthPack; 
+    [SerializeField] private NetworkPrefabRef _healthPack;
+    private NetworkRunner m_runner; 
     private float _currentTime = 60;
     private bool _spawned = false; 
-    public void Update()
+    public void Start() 
     {
-        if(Runner.IsServer == false | _spawned == true) 
+        m_runner = FindObjectOfType<NetworkRunner>(); 
+    }
+    public override void FixedUpdateNetwork()
+    {
+        if(m_runner.IsServer == false | _spawned == true) 
         {
             return; 
         }
@@ -23,8 +28,11 @@ public class HealthSpawner : SimulationBehaviour
 
     private void SpawnHealthPack() 
     {
-        _spawned = true;
-        _currentTime = 0; 
-        Runner.Spawn(_healthPack, this.transform.position, Quaternion.identity); 
+        if(m_runner.IsServer) 
+        {
+            _spawned = true;
+            _currentTime = 0; 
+            m_runner.Spawn(_healthPack, this.transform.position, Quaternion.identity); 
+        }
     }
 }
