@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class HealthPack : Item
 {
-    public override void OnInteract(PlayerRef player)
+    public override void OnInteract(PlayerRef player, ItemSpawner i)
     {
         Rpc_HealPlayer(player);
     }
