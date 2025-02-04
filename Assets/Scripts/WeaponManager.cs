@@ -7,19 +7,19 @@ public class WeaponManager : NetworkBehaviour
 {
     public List<FireBullet> _weapons = new();
     [Networked] public int CurrentWeapon { get; set; }
-    public int oldWeapon = 0; 
+    public int oldWeapon = 0;
 
-    public void ActivateWeapon(WeaponType weapon) 
+    public void ActivateWeapon(WeaponType weapon)
     {
-        for(int i = 0; i < _weapons.Count; i++) 
+        for (int i = 0; i < _weapons.Count; i++)
         {
-            if (i == (int)weapon) 
+            if (i == (int)weapon)
             {
-                _weapons[i].gameObject.SetActive(true);
+                Rpc_SetWeaponActive(i, true); 
             }
-            else 
+            else
             {
-                _weapons[i].gameObject.SetActive(false);
+                Rpc_SetWeaponActive(i, false);
             }
         }
     }
@@ -27,11 +27,17 @@ public class WeaponManager : NetworkBehaviour
     public override void FixedUpdateNetwork()
     {
         base.FixedUpdateNetwork();
-        if(oldWeapon != CurrentWeapon) 
+        if (oldWeapon != CurrentWeapon)
         {
-            oldWeapon = CurrentWeapon; 
-            ActivateWeapon((WeaponType)CurrentWeapon); 
+            oldWeapon = CurrentWeapon;
+            ActivateWeapon((WeaponType)CurrentWeapon);
         }
+    }
+
+    [Rpc(RpcSources.InputAuthority, RpcTargets.All)]
+    public void Rpc_SetWeaponActive(int weapon, bool val) 
+    {
+        _weapons[weapon].gameObject.SetActive(val);
     }
     public FireBullet GetWeapon(WeaponType weapon)
     {
