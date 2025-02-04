@@ -45,11 +45,11 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
                 _playersHealths[target].Rpc_Die(GetRandomPos(), target, attacker);
                 _playersHealths[target].InitHealth();
                 _playersHealths[target].Rpc_UpdateHealthBar(_playersHealths[target].GetHealth());
-                foreach (var kd in FindObjectsOfType<KdManager>())
-                {
-                    kd.Rpc_AddDeath(target);
-                    kd.Rpc_AddKill(attacker);
-                }
+               //foreach (var kd in FindObjectsOfType<KdManager>())
+               //{
+               //    kd.Rpc_AddDeath(target);
+               //    kd.Rpc_AddKill(attacker);
+               //}
             }
         }
     }
