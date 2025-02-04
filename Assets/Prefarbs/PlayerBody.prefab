@@ -285,7 +285,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _sensitivity: 0.05
   _camTransform: {fileID: 5761836830940726770}
-  _bullet: {fileID: 6750560298107990950}
+  _bullet:
+  - {fileID: 6750560298107990950}
+  - {fileID: 853071977118636490}
+  _wM: {fileID: 6195596081404704528}
   _cc: {fileID: 1258091120750514204}
 --- !u!114 &5011711113002730216
 MonoBehaviour:
@@ -826,7 +829,7 @@ PrefabInstance:
     - target: {fileID: 1930721255770883541, guid: c7a0efb3c2a24da4ea5d2dd7290493ee,
         type: 3}
       propertyPath: _range
-      value: 300
+      value: 500
       objectReference: {fileID: 0}
     - target: {fileID: 1930721255770883541, guid: c7a0efb3c2a24da4ea5d2dd7290493ee,
         type: 3}
@@ -846,7 +849,32 @@ PrefabInstance:
     - target: {fileID: 1930721255770883541, guid: c7a0efb3c2a24da4ea5d2dd7290493ee,
         type: 3}
       propertyPath: _recoilFactor
-      value: 30
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1930721255770883541, guid: c7a0efb3c2a24da4ea5d2dd7290493ee,
+        type: 3}
+      propertyPath: _xPattern.Array.data[0]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1930721255770883541, guid: c7a0efb3c2a24da4ea5d2dd7290493ee,
+        type: 3}
+      propertyPath: _xPattern.Array.data[1]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1930721255770883541, guid: c7a0efb3c2a24da4ea5d2dd7290493ee,
+        type: 3}
+      propertyPath: _xPattern.Array.data[2]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1930721255770883541, guid: c7a0efb3c2a24da4ea5d2dd7290493ee,
+        type: 3}
+      propertyPath: _xPattern.Array.data[3]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1930721255770883541, guid: c7a0efb3c2a24da4ea5d2dd7290493ee,
+        type: 3}
+      propertyPath: _xPattern.Array.data[4]
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3777411784221575240, guid: c7a0efb3c2a24da4ea5d2dd7290493ee,
         type: 3}

@@ -8,7 +8,8 @@ public class MouseLook : NetworkBehaviour
 {
     [SerializeField] private float _sensitivity = 30f;
     [SerializeField] private Transform _camTransform;
-    [SerializeField] FireBullet _bullet;
+    [SerializeField] private List<FireBullet> _bullet = new();
+    [SerializeField] private WeaponManager _wM;
     [SerializeField] private SimpleKCC _cc;
 
     public override void FixedUpdateNetwork()
@@ -21,9 +22,9 @@ public class MouseLook : NetworkBehaviour
         if (GetInput(out NetworkInputData data))
         {
             Vector2 mouseDir = data.AimDirection;
-            mouseDir.y += _bullet.GetYRecoile(data); 
+            mouseDir.y += _bullet[_wM.CurrentWeapon].GetYRecoile(data); 
             _cc.AddLookRotation(mouseDir * _sensitivity); 
-            _camTransform.localRotation = Quaternion.Euler(_cc.GetLookRotation().x + _bullet.GetXRecoile(data), 0, 0);
+            _camTransform.localRotation = Quaternion.Euler(_cc.GetLookRotation().x + _bullet[_wM.CurrentWeapon].GetXRecoile(data), 0, 0);
         }
     }
 
