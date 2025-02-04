@@ -19,6 +19,10 @@ public class Crouch : NetworkBehaviour
     // Update is called once per frame
     public override void FixedUpdateNetwork()
     {
+        if (HasInputAuthority == false) 
+        {
+            return; 
+        }
         if(GetInput(out NetworkInputData data)) 
         {
             //crouch logic...
