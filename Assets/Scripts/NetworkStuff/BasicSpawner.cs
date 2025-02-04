@@ -172,12 +172,13 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
 
     }
 
-    public void HealPlayer(PlayerRef player) 
+    public void HealPlayer(PlayerRef player, NetworkObject obj) 
     {
         if (Runner.IsServer) 
         {
             _playersHealths[player].InitHealth();
             _playersHealths[player].Rpc_UpdateHealthBar(_playersHealths[player].GetHealth());
+            Runner.Despawn(obj); 
         }
     }
     public void OnInput(NetworkRunner runner, NetworkInput input)

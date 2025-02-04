@@ -929,8 +929,8 @@ Light:
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 7785.8984
+  m_Color: {r: 0.5176471, g: 0.19607845, b: 0.023529414, a: 1}
+  m_Intensity: 4768.231
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -973,7 +973,7 @@ Light:
   m_LightShadowCasterMode: 2
   m_AreaSize: {x: 0.5, y: 0.5}
   m_BounceIntensity: 1
-  m_ColorTemperature: 6500
+  m_ColorTemperature: 4671
   m_UseColorTemperature: 1
   m_BoundingSphereOverride: {x: 1.02e-43, y: 6.3e-44, z: 1.3412e-41, w: 3269.9375}
   m_UseBoundingSphereOverride: 0
@@ -988,13 +988,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 157207112}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.09653342, y: 0.21144065, z: 0.009438896, w: 0.97256625}
+  m_LocalRotation: {x: -0.015128573, y: -0.5022714, z: 0.03360569, w: 0.8639243}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 10.59, y: 24.851, z: 3.452}
+  m_LocalEulerAnglesHint: {x: 0.437, y: -60.33, z: 4.202}
 --- !u!114 &157207115
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1007,7 +1007,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a68c43fe1f2a47cfa234b5eeaa98012, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Intensity: 7785.8984
+  m_Intensity: 4768.231
   m_EnableSpotReflector: 0
   m_LuxAtDistance: 1
   m_InnerSpotPercent: 0
@@ -1038,9 +1038,9 @@ MonoBehaviour:
   m_UseScreenSpaceShadows: 0
   m_InteractsWithSky: 1
   m_AngularDiameter: 2.5
-  m_FlareSize: 2
-  m_FlareTint: {r: 1, g: 1, b: 1, a: 1}
-  m_FlareFalloff: 4
+  m_FlareSize: 0.5
+  m_FlareTint: {r: 0.5188679, g: 0.19640228, b: 0.022027401, a: 1}
+  m_FlareFalloff: 1
   m_SurfaceTexture: {fileID: 0}
   m_SurfaceTint: {r: 1, g: 1, b: 1, a: 1}
   m_Distance: 1.5e+11
@@ -8499,6 +8499,7 @@ MonoBehaviour:
   _spawnTime: 60
   _itemPref:
     RawGuidValue: b4d53db2298917a4abeaf02e8b156130
+  __spawned: 0
   _Item: {fileID: 0}
 --- !u!4 &1891183437
 Transform:
