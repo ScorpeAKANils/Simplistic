@@ -33,8 +33,14 @@ public class WeaponManager : NetworkBehaviour
             ActivateWeapon((WeaponType)CurrentWeapon);
         }
     }
+    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
+    public void Rpc_SetWeaponState(int weapon, bool val)
+    {
+        Rpc_SetWeaponActive(weapon, true);
+    }
 
-    [Rpc(RpcSources.InputAuthority, RpcTargets.All)]
+
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
     public void Rpc_SetWeaponActive(int weapon, bool val) 
     {
         _weapons[weapon].gameObject.SetActive(val);
