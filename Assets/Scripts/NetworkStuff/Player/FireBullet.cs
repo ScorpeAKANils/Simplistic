@@ -22,10 +22,18 @@ public enum RecoilDirX
     Down_Strong = 3
 }
 
+public enum WeaponType 
+{
+    Protogun = 0, 
+    Sniper = 1
+} 
 public class FireBullet : NetworkBehaviour
 {
     private bool _fireButtonPressed = false;
     [SerializeField] private NetworkPrefabRef _bulletPrefab;
+    [SerializeField] private WeaponType _type; 
+    [SerializeField] private float _delayFireTime = 0.25f;
+    [SerializeField] private float _recoilFactor = 0.2f;
     [SerializeField] private Transform _gunBarrel;
     [SerializeField] private LayerMask _ignoreLayer;
     [SerializeField] private byte _magSize = 30;
@@ -34,7 +42,10 @@ public class FireBullet : NetworkBehaviour
     [SerializeField] public AudioSource Audio; 
     [SerializeField] private List<RecoilDirY> _yPattern = new();
     [SerializeField] private List<RecoilDirX> _xPattern = new();
-    [SerializeField] private Animator _anim; 
+    [SerializeField] private Animator _anim;
+    [Networked] public bool IsCollected { get; set; }
+    [SerializeField] private bool SetIsCollectedTrueAtStartUp = false;
+    private bool _weaponInUse = false;
     private int patternIndex = 0; 
     public LineRenderer LineRenderer { get { return _lineRenderer; } }
     public TextMeshProUGUI AmmoHud { get { return _ammoHud; } }
@@ -60,14 +71,14 @@ public class FireBullet : NetworkBehaviour
     {
         if (_xPattern == null | data.Buttons.IsSet(MyButtons.Shooting) == false)
             return 0;
-        return (float)_xPattern[patternIndex] * 0.2f; 
+        return (float)_xPattern[patternIndex] * _recoilFactor; 
     }
 
     public float GetYRecoile(NetworkInputData data)
     {
         if (_yPattern == null | data.Buttons.IsSet(MyButtons.Shooting) == false)
             return 0; 
-        return (float)_yPattern[patternIndex] * 0.2f;
+        return (float)_yPattern[patternIndex] * _recoilFactor;
     }
 
     private void Update()
@@ -112,7 +123,7 @@ public class FireBullet : NetworkBehaviour
                 }
                 AmmoInMag--;
                 _ammoHud.text = "Ammo: " + AmmoInMag.ToString() + "/" + _magSize;
-                StartCoroutine(FireCoolDown(0.25f));
+                StartCoroutine(FireCoolDown(_delayFireTime));
             }
         }
         }

@@ -183,6 +183,21 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
             i.Item = null; 
         }
     }
+
+    public void CollectGun(PlayerRef player, NetworkObject obj, ItemSpawner i, WeaponType type)
+    {
+        if (Runner.IsServer)
+        {
+            var playerWeaponManager = _playersHealths[player].GetComponent<WeaponManager>();
+            var weapon = playerWeaponManager.GetWeapon(type); 
+            weapon.IsCollected = true;
+            Health p = _playersHealths[player];
+            playerWeaponManager.CurrentWeapon = (int)type; 
+            Runner.Despawn(obj);
+            i._spawned = false;
+            i.Item = null;
+        }
+    }
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
         input.Set(_input);
