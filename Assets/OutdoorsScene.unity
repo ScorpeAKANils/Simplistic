@@ -17839,10 +17839,30 @@ PrefabInstance:
       propertyPath: m_Lightmapping
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 774038646132074302, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_Shadows.m_Type
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1626392118930179766, guid: 73040ce55b469c743a159560f8da5d47,
         type: 3}
       propertyPath: m_Intensity
       value: 3411.6194
+      objectReference: {fileID: 0}
+    - target: {fileID: 1626392118930179766, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_ShadowResolution.m_Level
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1626392118930179766, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_UseContactShadow.m_Override
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1626392118930179766, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_ShadowResolution.m_UseOverride
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2471148389452046190, guid: 73040ce55b469c743a159560f8da5d47,
         type: 3}
@@ -17852,6 +17872,11 @@ PrefabInstance:
     - target: {fileID: 2471148389452046190, guid: 73040ce55b469c743a159560f8da5d47,
         type: 3}
       propertyPath: m_Lightmapping
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2471148389452046190, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_Shadows.m_Type
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4495897899663965926, guid: 73040ce55b469c743a159560f8da5d47,
@@ -17859,6 +17884,21 @@ PrefabInstance:
       propertyPath: m_Intensity
       value: 3411.6194
       objectReference: {fileID: 0}
+    - target: {fileID: 4495897899663965926, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_ShadowResolution.m_Level
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4495897899663965926, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_UseContactShadow.m_Override
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4495897899663965926, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_ShadowResolution.m_UseOverride
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4935825972725518263, guid: 73040ce55b469c743a159560f8da5d47,
         type: 3}
       propertyPath: m_Intensity
@@ -17869,20 +17909,70 @@ PrefabInstance:
       propertyPath: m_Lightmapping
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4935825972725518263, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_Shadows.m_Type
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6065080699372871881, guid: 73040ce55b469c743a159560f8da5d47,
         type: 3}
       propertyPath: m_Intensity
       value: 3411.6194
+      objectReference: {fileID: 0}
+    - target: {fileID: 6065080699372871881, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_ShadowResolution.m_Level
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6065080699372871881, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_UseContactShadow.m_Override
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6065080699372871881, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_ShadowResolution.m_UseOverride
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6348940701696701495, guid: 73040ce55b469c743a159560f8da5d47,
         type: 3}
       propertyPath: m_Intensity
       value: 3411.6194
       objectReference: {fileID: 0}
+    - target: {fileID: 6348940701696701495, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_ShadowResolution.m_Level
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6348940701696701495, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_UseContactShadow.m_Override
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6348940701696701495, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_ShadowResolution.m_UseOverride
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6846949601162556364, guid: 73040ce55b469c743a159560f8da5d47,
         type: 3}
       propertyPath: m_Intensity
       value: 3411.6194
+      objectReference: {fileID: 0}
+    - target: {fileID: 6846949601162556364, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_ShadowResolution.m_Level
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6846949601162556364, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_UseContactShadow.m_Override
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6846949601162556364, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_ShadowResolution.m_UseOverride
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6876467636719888301, guid: 73040ce55b469c743a159560f8da5d47,
         type: 3}
@@ -17899,6 +17989,11 @@ PrefabInstance:
       propertyPath: m_Lightmapping
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6985696132843698449, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_Shadows.m_Type
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7772108219355146772, guid: 73040ce55b469c743a159560f8da5d47,
         type: 3}
       propertyPath: m_Intensity
@@ -17909,6 +18004,11 @@ PrefabInstance:
       propertyPath: m_Lightmapping
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7772108219355146772, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_Shadows.m_Type
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7837007394283711983, guid: 73040ce55b469c743a159560f8da5d47,
         type: 3}
       propertyPath: m_Intensity
@@ -17917,12 +18017,32 @@ PrefabInstance:
     - target: {fileID: 7837007394283711983, guid: 73040ce55b469c743a159560f8da5d47,
         type: 3}
       propertyPath: m_Lightmapping
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7837007394283711983, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_Shadows.m_Type
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8117387377023309423, guid: 73040ce55b469c743a159560f8da5d47,
         type: 3}
       propertyPath: m_Intensity
       value: 3411.6194
+      objectReference: {fileID: 0}
+    - target: {fileID: 8117387377023309423, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_ShadowResolution.m_Level
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8117387377023309423, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_UseContactShadow.m_Override
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8117387377023309423, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_ShadowResolution.m_UseOverride
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8317026971248398338, guid: 73040ce55b469c743a159560f8da5d47,
         type: 3}
@@ -34777,10 +34897,30 @@ PrefabInstance:
       propertyPath: m_Lightmapping
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 774038646132074302, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_Shadows.m_Type
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1626392118930179766, guid: 73040ce55b469c743a159560f8da5d47,
         type: 3}
       propertyPath: m_Intensity
       value: 3411.6194
+      objectReference: {fileID: 0}
+    - target: {fileID: 1626392118930179766, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_ShadowResolution.m_Level
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1626392118930179766, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_UseContactShadow.m_Override
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1626392118930179766, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_ShadowResolution.m_UseOverride
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2471148389452046190, guid: 73040ce55b469c743a159560f8da5d47,
         type: 3}
@@ -34790,6 +34930,11 @@ PrefabInstance:
     - target: {fileID: 2471148389452046190, guid: 73040ce55b469c743a159560f8da5d47,
         type: 3}
       propertyPath: m_Lightmapping
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2471148389452046190, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_Shadows.m_Type
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4495897899663965926, guid: 73040ce55b469c743a159560f8da5d47,
@@ -34797,6 +34942,21 @@ PrefabInstance:
       propertyPath: m_Intensity
       value: 3411.6194
       objectReference: {fileID: 0}
+    - target: {fileID: 4495897899663965926, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_ShadowResolution.m_Level
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4495897899663965926, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_UseContactShadow.m_Override
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4495897899663965926, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_ShadowResolution.m_UseOverride
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4935825972725518263, guid: 73040ce55b469c743a159560f8da5d47,
         type: 3}
       propertyPath: m_Intensity
@@ -34807,20 +34967,70 @@ PrefabInstance:
       propertyPath: m_Lightmapping
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4935825972725518263, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_Shadows.m_Type
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6065080699372871881, guid: 73040ce55b469c743a159560f8da5d47,
         type: 3}
       propertyPath: m_Intensity
       value: 3411.6194
+      objectReference: {fileID: 0}
+    - target: {fileID: 6065080699372871881, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_ShadowResolution.m_Level
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6065080699372871881, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_UseContactShadow.m_Override
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6065080699372871881, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_ShadowResolution.m_UseOverride
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6348940701696701495, guid: 73040ce55b469c743a159560f8da5d47,
         type: 3}
       propertyPath: m_Intensity
       value: 3411.6194
       objectReference: {fileID: 0}
+    - target: {fileID: 6348940701696701495, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_ShadowResolution.m_Level
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6348940701696701495, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_UseContactShadow.m_Override
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6348940701696701495, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_ShadowResolution.m_UseOverride
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6846949601162556364, guid: 73040ce55b469c743a159560f8da5d47,
         type: 3}
       propertyPath: m_Intensity
       value: 3411.6194
+      objectReference: {fileID: 0}
+    - target: {fileID: 6846949601162556364, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_ShadowResolution.m_Level
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6846949601162556364, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_UseContactShadow.m_Override
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6846949601162556364, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_ShadowResolution.m_UseOverride
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6876467636719888301, guid: 73040ce55b469c743a159560f8da5d47,
         type: 3}
@@ -34837,6 +35047,11 @@ PrefabInstance:
       propertyPath: m_Lightmapping
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6985696132843698449, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_Shadows.m_Type
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7772108219355146772, guid: 73040ce55b469c743a159560f8da5d47,
         type: 3}
       propertyPath: m_Intensity
@@ -34847,6 +35062,11 @@ PrefabInstance:
       propertyPath: m_Lightmapping
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7772108219355146772, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_Shadows.m_Type
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7837007394283711983, guid: 73040ce55b469c743a159560f8da5d47,
         type: 3}
       propertyPath: m_Intensity
@@ -34855,12 +35075,32 @@ PrefabInstance:
     - target: {fileID: 7837007394283711983, guid: 73040ce55b469c743a159560f8da5d47,
         type: 3}
       propertyPath: m_Lightmapping
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7837007394283711983, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_Shadows.m_Type
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8117387377023309423, guid: 73040ce55b469c743a159560f8da5d47,
         type: 3}
       propertyPath: m_Intensity
       value: 3411.6194
+      objectReference: {fileID: 0}
+    - target: {fileID: 8117387377023309423, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_ShadowResolution.m_Level
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8117387377023309423, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_UseContactShadow.m_Override
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8117387377023309423, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_ShadowResolution.m_UseOverride
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8317026971248398338, guid: 73040ce55b469c743a159560f8da5d47,
         type: 3}
@@ -48209,10 +48449,30 @@ PrefabInstance:
       propertyPath: m_Lightmapping
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 774038646132074302, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_Shadows.m_Type
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1626392118930179766, guid: 73040ce55b469c743a159560f8da5d47,
         type: 3}
       propertyPath: m_Intensity
       value: 3411.6194
+      objectReference: {fileID: 0}
+    - target: {fileID: 1626392118930179766, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_ShadowResolution.m_Level
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1626392118930179766, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_UseContactShadow.m_Override
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1626392118930179766, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_ShadowResolution.m_UseOverride
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2471148389452046190, guid: 73040ce55b469c743a159560f8da5d47,
         type: 3}
@@ -48222,6 +48482,11 @@ PrefabInstance:
     - target: {fileID: 2471148389452046190, guid: 73040ce55b469c743a159560f8da5d47,
         type: 3}
       propertyPath: m_Lightmapping
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2471148389452046190, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_Shadows.m_Type
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4495897899663965926, guid: 73040ce55b469c743a159560f8da5d47,
@@ -48229,6 +48494,21 @@ PrefabInstance:
       propertyPath: m_Intensity
       value: 3411.6194
       objectReference: {fileID: 0}
+    - target: {fileID: 4495897899663965926, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_ShadowResolution.m_Level
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4495897899663965926, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_UseContactShadow.m_Override
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4495897899663965926, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_ShadowResolution.m_UseOverride
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4935825972725518263, guid: 73040ce55b469c743a159560f8da5d47,
         type: 3}
       propertyPath: m_Intensity
@@ -48239,20 +48519,70 @@ PrefabInstance:
       propertyPath: m_Lightmapping
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4935825972725518263, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_Shadows.m_Type
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6065080699372871881, guid: 73040ce55b469c743a159560f8da5d47,
         type: 3}
       propertyPath: m_Intensity
       value: 3411.6194
+      objectReference: {fileID: 0}
+    - target: {fileID: 6065080699372871881, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_ShadowResolution.m_Level
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6065080699372871881, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_UseContactShadow.m_Override
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6065080699372871881, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_ShadowResolution.m_UseOverride
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6348940701696701495, guid: 73040ce55b469c743a159560f8da5d47,
         type: 3}
       propertyPath: m_Intensity
       value: 3411.6194
       objectReference: {fileID: 0}
+    - target: {fileID: 6348940701696701495, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_ShadowResolution.m_Level
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6348940701696701495, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_UseContactShadow.m_Override
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6348940701696701495, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_ShadowResolution.m_UseOverride
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6846949601162556364, guid: 73040ce55b469c743a159560f8da5d47,
         type: 3}
       propertyPath: m_Intensity
       value: 3411.6194
+      objectReference: {fileID: 0}
+    - target: {fileID: 6846949601162556364, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_ShadowResolution.m_Level
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6846949601162556364, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_UseContactShadow.m_Override
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6846949601162556364, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_ShadowResolution.m_UseOverride
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6876467636719888301, guid: 73040ce55b469c743a159560f8da5d47,
         type: 3}
@@ -48269,6 +48599,11 @@ PrefabInstance:
       propertyPath: m_Lightmapping
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6985696132843698449, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_Shadows.m_Type
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7772108219355146772, guid: 73040ce55b469c743a159560f8da5d47,
         type: 3}
       propertyPath: m_Intensity
@@ -48279,6 +48614,11 @@ PrefabInstance:
       propertyPath: m_Lightmapping
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7772108219355146772, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_Shadows.m_Type
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7837007394283711983, guid: 73040ce55b469c743a159560f8da5d47,
         type: 3}
       propertyPath: m_Intensity
@@ -48287,12 +48627,32 @@ PrefabInstance:
     - target: {fileID: 7837007394283711983, guid: 73040ce55b469c743a159560f8da5d47,
         type: 3}
       propertyPath: m_Lightmapping
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7837007394283711983, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_Shadows.m_Type
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8117387377023309423, guid: 73040ce55b469c743a159560f8da5d47,
         type: 3}
       propertyPath: m_Intensity
       value: 3411.6194
+      objectReference: {fileID: 0}
+    - target: {fileID: 8117387377023309423, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_ShadowResolution.m_Level
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8117387377023309423, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_UseContactShadow.m_Override
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8117387377023309423, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_ShadowResolution.m_UseOverride
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8317026971248398338, guid: 73040ce55b469c743a159560f8da5d47,
         type: 3}
@@ -66226,10 +66586,30 @@ PrefabInstance:
       propertyPath: m_Lightmapping
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 774038646132074302, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_Shadows.m_Type
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1626392118930179766, guid: 73040ce55b469c743a159560f8da5d47,
         type: 3}
       propertyPath: m_Intensity
       value: 3411.6194
+      objectReference: {fileID: 0}
+    - target: {fileID: 1626392118930179766, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_ShadowResolution.m_Level
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1626392118930179766, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_UseContactShadow.m_Override
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1626392118930179766, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_ShadowResolution.m_UseOverride
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2471148389452046190, guid: 73040ce55b469c743a159560f8da5d47,
         type: 3}
@@ -66239,6 +66619,11 @@ PrefabInstance:
     - target: {fileID: 2471148389452046190, guid: 73040ce55b469c743a159560f8da5d47,
         type: 3}
       propertyPath: m_Lightmapping
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2471148389452046190, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_Shadows.m_Type
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4495897899663965926, guid: 73040ce55b469c743a159560f8da5d47,
@@ -66246,6 +66631,21 @@ PrefabInstance:
       propertyPath: m_Intensity
       value: 3411.6194
       objectReference: {fileID: 0}
+    - target: {fileID: 4495897899663965926, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_ShadowResolution.m_Level
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4495897899663965926, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_UseContactShadow.m_Override
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4495897899663965926, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_ShadowResolution.m_UseOverride
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4935825972725518263, guid: 73040ce55b469c743a159560f8da5d47,
         type: 3}
       propertyPath: m_Intensity
@@ -66256,20 +66656,70 @@ PrefabInstance:
       propertyPath: m_Lightmapping
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4935825972725518263, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_Shadows.m_Type
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6065080699372871881, guid: 73040ce55b469c743a159560f8da5d47,
         type: 3}
       propertyPath: m_Intensity
       value: 3411.6194
+      objectReference: {fileID: 0}
+    - target: {fileID: 6065080699372871881, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_ShadowResolution.m_Level
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6065080699372871881, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_UseContactShadow.m_Override
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6065080699372871881, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_ShadowResolution.m_UseOverride
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6348940701696701495, guid: 73040ce55b469c743a159560f8da5d47,
         type: 3}
       propertyPath: m_Intensity
       value: 3411.6194
       objectReference: {fileID: 0}
+    - target: {fileID: 6348940701696701495, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_ShadowResolution.m_Level
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6348940701696701495, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_UseContactShadow.m_Override
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6348940701696701495, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_ShadowResolution.m_UseOverride
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6846949601162556364, guid: 73040ce55b469c743a159560f8da5d47,
         type: 3}
       propertyPath: m_Intensity
       value: 3411.6194
+      objectReference: {fileID: 0}
+    - target: {fileID: 6846949601162556364, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_ShadowResolution.m_Level
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6846949601162556364, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_UseContactShadow.m_Override
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6846949601162556364, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_ShadowResolution.m_UseOverride
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6876467636719888301, guid: 73040ce55b469c743a159560f8da5d47,
         type: 3}
@@ -66286,6 +66736,11 @@ PrefabInstance:
       propertyPath: m_Lightmapping
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6985696132843698449, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_Shadows.m_Type
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7772108219355146772, guid: 73040ce55b469c743a159560f8da5d47,
         type: 3}
       propertyPath: m_Intensity
@@ -66296,6 +66751,11 @@ PrefabInstance:
       propertyPath: m_Lightmapping
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7772108219355146772, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_Shadows.m_Type
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7837007394283711983, guid: 73040ce55b469c743a159560f8da5d47,
         type: 3}
       propertyPath: m_Intensity
@@ -66304,12 +66764,32 @@ PrefabInstance:
     - target: {fileID: 7837007394283711983, guid: 73040ce55b469c743a159560f8da5d47,
         type: 3}
       propertyPath: m_Lightmapping
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7837007394283711983, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_Shadows.m_Type
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8117387377023309423, guid: 73040ce55b469c743a159560f8da5d47,
         type: 3}
       propertyPath: m_Intensity
       value: 3411.6194
+      objectReference: {fileID: 0}
+    - target: {fileID: 8117387377023309423, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_ShadowResolution.m_Level
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8117387377023309423, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_UseContactShadow.m_Override
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8117387377023309423, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_ShadowResolution.m_UseOverride
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8317026971248398338, guid: 73040ce55b469c743a159560f8da5d47,
         type: 3}
