@@ -34,6 +34,8 @@ public class FireBullet : NetworkBehaviour
     [SerializeField] private WeaponType _type; 
     [SerializeField] private float _delayFireTime = 0.25f;
     [SerializeField] private float _recoilFactor = 0.2f;
+    [SerializeField] private float _damage = 10f;
+    [SerializeField] private float _range = 50f;
     [SerializeField] private Transform _gunBarrel;
     [SerializeField] private LayerMask _ignoreLayer;
     [SerializeField] private byte _magSize = 30;
@@ -145,12 +147,12 @@ public class FireBullet : NetworkBehaviour
     public void RPC_RequestShot(Vector3 pos, Vector3 dir, PlayerRef shooter)
     {
         RPC_VisualieShot(this, shooter);
-        if (Runner.LagCompensation.Raycast(pos, dir, 100f, shooter, out LagCompensatedHit hit))
+        if (Runner.LagCompensation.Raycast(pos, dir, _range, shooter, out LagCompensatedHit hit))
         {
             try
             {
                 PlayerRef enemyPlayer = hit.Hitbox.GetComponent<Health>().GetPlayer();
-                ApplyDamage(enemyPlayer, shooter);
+                ApplyDamage(enemyPlayer, shooter, _damage);
             }
             catch
             {
@@ -159,10 +161,10 @@ public class FireBullet : NetworkBehaviour
         }
     }
 
-    public void ApplyDamage(PlayerRef enemyPlayer, PlayerRef attacker)
+    public void ApplyDamage(PlayerRef enemyPlayer, PlayerRef attacker, float damage)
     {
         var spawner = FindObjectOfType<BasicSpawner>();
-        spawner.RPC_ApplyDamage(enemyPlayer, 10, attacker); 
+        spawner.RPC_ApplyDamage(enemyPlayer, damage, attacker); 
     }
 
 
@@ -170,13 +172,13 @@ public class FireBullet : NetworkBehaviour
     {
         Audio.Play();
         RPC_VisualieShot(this, Runner.LocalPlayer);
-        if (Runner.LagCompensation.Raycast(pos, dir, 100f, Runner.LocalPlayer, out LagCompensatedHit hit))
+        if (Runner.LagCompensation.Raycast(pos, dir, _range, Runner.LocalPlayer, out LagCompensatedHit hit))
         { 
             try
             {
                 Debug.Log("Gegner getroffen!");
                 PlayerRef enemyPlayer = hit.Hitbox.GetComponent<Health>().GetPlayer();
-                ApplyDamage(enemyPlayer, Runner.LocalPlayer); 
+                ApplyDamage(enemyPlayer, Runner.LocalPlayer, _damage); 
             }
             catch
             {

@@ -825,6 +825,16 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1930721255770883541, guid: c7a0efb3c2a24da4ea5d2dd7290493ee,
         type: 3}
+      propertyPath: _range
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 1930721255770883541, guid: c7a0efb3c2a24da4ea5d2dd7290493ee,
+        type: 3}
+      propertyPath: _damage
+      value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 1930721255770883541, guid: c7a0efb3c2a24da4ea5d2dd7290493ee,
+        type: 3}
       propertyPath: _gunBarrel
       value: 
       objectReference: {fileID: 4022458691614968933}
@@ -833,6 +843,11 @@ PrefabInstance:
       propertyPath: _lineRenderer
       value: 
       objectReference: {fileID: 6081798249784611255}
+    - target: {fileID: 1930721255770883541, guid: c7a0efb3c2a24da4ea5d2dd7290493ee,
+        type: 3}
+      propertyPath: _recoilFactor
+      value: 30
+      objectReference: {fileID: 0}
     - target: {fileID: 3777411784221575240, guid: c7a0efb3c2a24da4ea5d2dd7290493ee,
         type: 3}
       propertyPath: m_Name
@@ -1218,12 +1233,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f286aea54af509c41b916535f6cc0510, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DestroyWhenUsed: 0
   _bulletPrefab:
     RawGuidValue: cab44bb5df000394ab24d541e84382c7
   _type: 0
   _delayFireTime: 0.25
   _recoilFactor: 0.25
+  _damage: 10
+  _range: 50
   _gunBarrel: {fileID: 4022458691614968933}
   _ignoreLayer:
     serializedVersion: 2
