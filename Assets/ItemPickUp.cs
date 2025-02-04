@@ -24,7 +24,7 @@ public class ItemPickUp : MonoBehaviour
     {
         foreach(ItemSpawner i in _itemSpawner) 
         {
-            if((i.transform.position - this.transform.position).sqrMagnitude <= 1) 
+            if((i.transform.position - this.transform.position).sqrMagnitude <= 1 && i._spawned == true) 
             {
                 i.Item.OnInteract(_health.GetPlayer()); 
             }

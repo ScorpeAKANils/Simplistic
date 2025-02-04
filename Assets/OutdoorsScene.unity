@@ -8497,8 +8497,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _spawnTime: 60
-  _healthPack:
+  _itemPref:
     RawGuidValue: b4d53db2298917a4abeaf02e8b156130
+  _Item: {fileID: 0}
 --- !u!4 &1891183437
 Transform:
   m_ObjectHideFlags: 0

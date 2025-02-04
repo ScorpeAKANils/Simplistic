@@ -7,7 +7,7 @@ public class ItemSpawner : NetworkBehaviour
     [SerializeField] private NetworkPrefabRef _itemPref;
     private NetworkRunner m_runner; 
     private float _currentTime = 60;
-    [Networked] private bool _spawned { get; set; }
+    [Networked] public bool _spawned { get; set; }
     [Networked] public Item Item { get; set; } 
     public void Start() 
     {
