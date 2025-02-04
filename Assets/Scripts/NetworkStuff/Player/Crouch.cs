@@ -23,21 +23,21 @@ public class Crouch : NetworkBehaviour
         {
             return; 
         }
-        if(GetInput(out NetworkInputData data)) 
-        {
-            //crouch logic...
-            if(data.Buttons.IsSet(MyButtons.Crouch)) 
-            {
-                Rpc_SetScale(_crouchScale);
-            } else 
-            {
-                Rpc_SetScale(_originalScale);
-            } 
-        }
-        else
-        {
-            Rpc_SetScale(_originalScale);
-        }
+       //if(GetInput(out NetworkInputData data)) 
+       //{
+       //    //crouch logic...
+       //    if(data.Buttons.IsSet(MyButtons.Crouch)) 
+       //    {
+       //        Rpc_SetScale(_crouchScale);
+       //    } else 
+       //    {
+       //        Rpc_SetScale(_originalScale);
+       //    } 
+       //}
+       //else
+       //{
+       //    Rpc_SetScale(_originalScale);
+       //}
     }
 
     [Rpc(RpcSources.InputAuthority,RpcTargets.All)]
