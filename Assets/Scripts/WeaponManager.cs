@@ -24,6 +24,11 @@ public class WeaponManager : NetworkBehaviour
         }
     }
 
+    public FireBullet GetActiveWeapon() 
+    {
+        return _weapons[CurrentWeapon];     
+    }
+
     public override void FixedUpdateNetwork()
     {
         base.FixedUpdateNetwork();
@@ -32,7 +37,32 @@ public class WeaponManager : NetworkBehaviour
             oldWeapon = CurrentWeapon;
             ActivateWeapon((WeaponType)CurrentWeapon);
         }
+
+        for (int i = 0; i <= _weapons.Count-1; i++)
+        {
+            if (Input.GetKeyDown((KeyCode)((int)KeyCode.Alpha0 + i)))
+            {
+                    Rpc_InformOverWeaponChange(i); 
+            }
+        }
     }
+
+    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)] 
+    public void Rpc_InformOverWeaponChange(int newWeapon) 
+    {
+            Rpc_SetWeaponCurrent(newWeapon, this); 
+    }
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    public void Rpc_SetWeaponCurrent(int weapon, WeaponManager wM)
+    {
+        if (Runner.IsServer == false) 
+        {
+            return; 
+        }
+        if (wM._weapons[weapon].IsCollected | weapon == 0)
+            wM.CurrentWeapon = weapon; 
+    }
+
     [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
     public void Rpc_SetWeaponState(int weapon, bool val)
     {

@@ -26,8 +26,8 @@ public class SetCamera : SimulationBehaviour
             if(_playerRef.GetPlayer() == _spawner.RunnerRef.LocalPlayer && !_hasBeenPlaceced) 
             {
                 _hasBeenPlaceced = true; 
-                _camPos = _playerRef.GetComponentInChildren<TagCamPos>().transform; 
-                _cam = FindObjectOfType<Camera>();
+                _camPos = _playerRef.GetComponentInChildren<TagCamPos>().transform;
+                _cam = Camera.main; 
                 _cam.transform.position = _camPos.position; 
                 _cam.transform.transform.rotation = _camPos.rotation;
                 _cam.transform.parent = _camPos.transform; 

@@ -45,6 +45,7 @@ public class FireBullet : NetworkBehaviour
     [SerializeField] private List<RecoilDirY> _yPattern = new();
     [SerializeField] private List<RecoilDirX> _xPattern = new();
     [SerializeField] private Animator _anim;
+    public Animator Anim { get {  return _anim; } }
     [Networked] public bool IsCollected { get; set; }
     [SerializeField] private bool SetIsCollectedTrueAtStartUp = false;
     private bool _weaponInUse = false;

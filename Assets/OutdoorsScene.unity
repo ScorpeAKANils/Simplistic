@@ -31894,10 +31894,7 @@ MonoBehaviour:
   m_Script: {fileID: 1121114918}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Entries:
-  - id: 0
-    category: 0
-    gameObject: {fileID: 0}
+  m_Entries: []
 --- !u!4 &925867822
 Transform:
   m_ObjectHideFlags: 19
@@ -33199,7 +33196,7 @@ PrefabInstance:
     - target: {fileID: 5422693224413735174, guid: 5ecfab70a454bd441833c5cd1517e4e3,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5501493908612657830, guid: 5ecfab70a454bd441833c5cd1517e4e3,
         type: 3}
@@ -35744,7 +35741,7 @@ MonoBehaviour:
   useMultithreading: 1
   previousSelection: {fileID: 0}
   unloaded: 1
-  sceneChanging: 0
+  sceneChanging: 1
   waitForPrevious: 0
   previousVolume: {fileID: 0}
   optimizeForMixedLighting: 0
@@ -48474,6 +48471,16 @@ PrefabInstance:
       propertyPath: m_ShadowResolution.m_UseOverride
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1775665934719309144, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -20.099998
+      objectReference: {fileID: 0}
+    - target: {fileID: 1775665934719309144, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 3.833334
+      objectReference: {fileID: 0}
     - target: {fileID: 2471148389452046190, guid: 73040ce55b469c743a159560f8da5d47,
         type: 3}
       propertyPath: m_Intensity
@@ -48604,6 +48611,21 @@ PrefabInstance:
       propertyPath: m_Shadows.m_Type
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7181030990500249833, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -20.099998
+      objectReference: {fileID: 0}
+    - target: {fileID: 7181030990500249833, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 8.200001
+      objectReference: {fileID: 0}
+    - target: {fileID: 7181030990500249833, guid: 73040ce55b469c743a159560f8da5d47,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 3.833334
+      objectReference: {fileID: 0}
     - target: {fileID: 7772108219355146772, guid: 73040ce55b469c743a159560f8da5d47,
         type: 3}
       propertyPath: m_Intensity
@@ -48682,7 +48704,7 @@ PrefabInstance:
     - target: {fileID: 8317026971248398338, guid: 73040ce55b469c743a159560f8da5d47,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -17.624586
+      value: -17.25
       objectReference: {fileID: 0}
     - target: {fileID: 8317026971248398338, guid: 73040ce55b469c743a159560f8da5d47,
         type: 3}
@@ -53704,6 +53726,11 @@ PrefabInstance:
         type: 3}
       propertyPath: far clip plane
       value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 8061980525591163054, guid: c7cb3093eaf7a7348a77244dc45ba435,
+        type: 3}
+      propertyPath: m_TargetTexture
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 8061980525591163054, guid: c7cb3093eaf7a7348a77244dc45ba435,
         type: 3}

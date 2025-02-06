@@ -6,6 +6,7 @@ public class Aim : MonoBehaviour
 {
     [SerializeField] private float _normalFov = 90f;
     [SerializeField] private float _aimFov = 50f;
+    [SerializeField] private WeaponManager _wM;
     private bool _isAiming; 
     private Camera _cam; 
     void Start()
@@ -20,10 +21,12 @@ public class Aim : MonoBehaviour
         _isAiming = Input.GetButton("Fire2"); 
         if(_isAiming) 
         {
-            _cam.fieldOfView = _aimFov; 
+            _cam.fieldOfView = _aimFov;
+            _wM.GetActiveWeapon().Anim.SetBool("Aim", true);
         } else 
         {
             _cam.fieldOfView= _normalFov;
+            _wM.GetActiveWeapon().Anim.SetBool("Aim", false);
         }
     }
 }
