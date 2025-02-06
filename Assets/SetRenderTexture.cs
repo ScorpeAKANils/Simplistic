@@ -4,14 +4,17 @@ using UnityEngine;
 
 public class SetRenderTexture : MonoBehaviour
 {
-    [SerializeField] Camera _camera;
-    [SerializeField] RenderTexture _rTex; 
+    [SerializeField] private Camera _camera;
+    private Material _mat; 
+
     // Start is called before the first frame update
     void Start()
     {
-        //if (_camera != null && _rTex != null)
-        //{
-        //    _camera.targetTexture = _rTex;
-        //}
+        _mat = this.GetComponent<MeshRenderer>().material;
+        RenderTexture scopeEffect = new RenderTexture(256, 256, 16);
+        scopeEffect.Create();
+        _camera.targetTexture = scopeEffect;
+        _mat.mainTexture = scopeEffect;
+        this.GetComponent<MeshRenderer>().material = _mat; 
     }
 }

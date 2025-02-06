@@ -7,6 +7,7 @@ using UnityEngine;
 public class MouseLook : NetworkBehaviour
 {
     [SerializeField] private float _sensitivity = 30f;
+    [SerializeField] private float _sensitivityFactor = 1; 
     [SerializeField] private Transform _camTransform;
     [SerializeField] private List<FireBullet> _bullet = new();
     [SerializeField] private WeaponManager _wM;
@@ -23,9 +24,14 @@ public class MouseLook : NetworkBehaviour
         {
             Vector2 mouseDir = data.AimDirection;
             mouseDir.y += _bullet[_wM.CurrentWeapon].GetYRecoile(data); 
-            _cc.AddLookRotation(mouseDir * _sensitivity); 
+            _cc.AddLookRotation(mouseDir * (_sensitivity * _sensitivityFactor)); 
             _camTransform.localRotation = Quaternion.Euler(_cc.GetLookRotation().x + _bullet[_wM.CurrentWeapon].GetXRecoile(data), 0, 0);
         }
+    }
+
+    public void SetSensitivityFactor(float val) 
+    {
+        _sensitivityFactor = val; 
     }
 
     public override void Render()

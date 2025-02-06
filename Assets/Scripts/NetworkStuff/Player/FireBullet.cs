@@ -45,6 +45,7 @@ public class FireBullet : NetworkBehaviour
     [SerializeField] private List<RecoilDirY> _yPattern = new();
     [SerializeField] private List<RecoilDirX> _xPattern = new();
     [SerializeField] private Animator _anim;
+    [SerializeField] private bool _isFUllAutomatic = false; 
     public Animator Anim { get {  return _anim; } }
     [Networked] public bool IsCollected { get; set; }
     [SerializeField] private bool SetIsCollectedTrueAtStartUp = false;
@@ -73,18 +74,22 @@ public class FireBullet : NetworkBehaviour
 
     public float GetXRecoile(NetworkInputData data)
     {
-        if (_xPattern == null | data.Buttons.IsSet(MyButtons.Shooting) == false)
+        //if (_xPattern == null | _canFire == false)
             return 0;
-        return (float)_xPattern[patternIndex] * _recoilFactor; 
+        //return (float)_xPattern[patternIndex] * _recoilFactor; 
     }
 
     public float GetYRecoile(NetworkInputData data)
     {
-        if (_yPattern == null | data.Buttons.IsSet(MyButtons.Shooting) == false)
+        //if (_yPattern == null | _canFire == false)
             return 0; 
-        return (float)_yPattern[patternIndex] * _recoilFactor;
+        //return (float)_yPattern[patternIndex] * _recoilFactor;
     }
-
+    public void OnEnable()
+    {
+        _canFire = true;
+        //_ammoHud.text = "Ammo: " + AmmoInMag.ToString() + "/" + _magSize;
+    }
     private void Update()
     {
         if(Input.GetKeyDown(KeyCode.R)) 
@@ -107,26 +112,22 @@ public class FireBullet : NetworkBehaviour
     // Update is called once per frame
     public override void FixedUpdateNetwork()
     {
-        if (HasInputAuthority == false | _canFire == false) 
+        if (HasInputAuthority == false) 
         {
             return;
         }
-        Debug.Log($"[FixedUpdateNetwork] IsCollected: {IsCollected}");
 
         if (GetInput(out NetworkInputData data) && AmmoInMag > 0)
         {
-            if (data.Buttons.IsSet(MyButtons.Shooting))
+            if (data.Buttons.IsSet(MyButtons.Shooting) && _canFire)
             {
                 _canFire = false;
+                if (!_isFUllAutomatic) 
+                {
+                    data.Buttons.Set(MyButtons.Shooting, false);
+                }
                 _anim.SetTrigger("Shoot"); 
-                if (Runner.IsServer)
-                {
-                    Shoot(_gunBarrel.position, _gunBarrel.forward);
-                }
-                else
-                {
-                    RPC_RequestShot(_gunBarrel.position, _gunBarrel.forward, Runner.LocalPlayer);
-                }
+                Shoot(_gunBarrel.position, _gunBarrel.forward);
                 AmmoInMag--;
                 _ammoHud.text = "Ammo: " + AmmoInMag.ToString() + "/" + _magSize;
                 StartCoroutine(FireCoolDown(_delayFireTime));
@@ -147,50 +148,29 @@ public class FireBullet : NetworkBehaviour
               }
         }
 
-    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority, Channel = RpcChannel.Reliable, TickAligned = true)]
-    public void RPC_RequestShot(Vector3 pos, Vector3 dir, PlayerRef shooter)
-    {
-        RPC_VisualieShot(this, shooter);
-        if (Runner.LagCompensation.Raycast(pos, dir, _range, shooter, out LagCompensatedHit hit))
-        {
-            try
-            {
-                PlayerRef enemyPlayer = hit.Hitbox.GetComponent<Health>().GetPlayer();
-                ApplyDamage(enemyPlayer, shooter, _damage);
-            }
-            catch
-            {
-
-            }
-        }
-    }
-
-    public void ApplyDamage(PlayerRef enemyPlayer, PlayerRef attacker, float damage)
-    {
-        var spawner = FindObjectOfType<BasicSpawner>();
-        spawner.RPC_ApplyDamage(enemyPlayer, damage, attacker); 
-    }
-
-
     void Shoot(Vector3 pos, Vector3 dir) 
     {
-        Audio.Play();
-        RPC_VisualieShot(this, Runner.LocalPlayer);
-        if (Runner.LagCompensation.Raycast(pos, dir, _range, Runner.LocalPlayer, out LagCompensatedHit hit))
+        if (Runner.LagCompensation.Raycast(pos, dir, _range, Runner.LocalPlayer, out LagCompensatedHit hit, ~_ignoreLayer, HitOptions.IncludePhysX))
         { 
             try
             {
-                Debug.Log("Gegner getroffen!");
-                PlayerRef enemyPlayer = hit.Hitbox.GetComponent<Health>().GetPlayer();
-                ApplyDamage(enemyPlayer, Runner.LocalPlayer, _damage); 
+                Debug.Log(hit.Hitbox.gameObject.name); 
+                var playerHit = hit.Hitbox.GetComponent<Health>(); 
+                PlayerRef enemyPlayer = playerHit.GetPlayer();
+                playerHit.RPC_ApplyDamage(enemyPlayer, _damage, Runner.LocalPlayer); 
             }
             catch
             {
             }
         }
+        Audio.Play();
+        RPC_VisualieShot(this, Runner.LocalPlayer);
     }
-
-    [Rpc(RpcSources.All, RpcTargets.All, Channel = RpcChannel.Reliable)]
+    public void ResetCanFire() 
+    {
+        _canFire = true; 
+    }
+    [Rpc(RpcSources.All, RpcTargets.All, Channel = RpcChannel.Unreliable)]
     public void RPC_VisualieShot(FireBullet gunRef, PlayerRef p)
     {
         gunRef.Audio.Play();

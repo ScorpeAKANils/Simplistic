@@ -26,33 +26,6 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
     {
         _kdText = FindObjectOfType<KdTagText>().GetComponent<TextMeshProUGUI>();
     }
-
-    public void RPC_ApplyDamage(PlayerRef target, float damage, PlayerRef attacker)
-    {
-        if(Runner.IsServer == false | target == attacker) 
-        {
-            return; 
-        }
-        if (_playersHealths.ContainsKey(target))
-        {
-
-            float newHealth = _playersHealths[target].GetDamage(damage);
-            _playersHealths[target].Rpc_UpdateHealthBar(newHealth);
-
-            if (newHealth <= 0)
-            {
-                _playersHealths[target].GetComponent<WeaponManager>().ResetWeaponCollectionStatus(); 
-                _playersHealths[target].Die(GetRandomPos(), target, attacker);
-                _playersHealths[target].InitHealth();
-                _playersHealths[target].Rpc_UpdateHealthBar(_playersHealths[target].GetHealth());
-                foreach (var kd in FindObjectsOfType<KdManager>())
-                {
-                    kd.Rpc_AddDeath(target);
-                    kd.Rpc_AddKill(attacker);
-                }
-            }
-        }
-    }
     public float ReturnPlayerHealth(PlayerRef player) 
     {
         return _playersHealths[player].GetHealth(); 
@@ -161,7 +134,7 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
         _input.Buttons.Set(MyButtons.Backward, Input.GetKey(KeyCode.S));
         _input.Buttons.Set(MyButtons.Right, Input.GetKey(KeyCode.D));
         _input.Buttons.Set(MyButtons.Jump, Input.GetButton("Jump"));
-        _input.Buttons.Set(MyButtons.Shooting, Input.GetButtonDown("Fire1"));
+        _input.Buttons.Set(MyButtons.Shooting, Input.GetButton("Fire1"));
         _input.Buttons.Set(MyButtons.Crouch, Input.GetButton("Crouch"));
 
         Mouse mouse = Mouse.current;
@@ -208,7 +181,7 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
 
     public static void SetIsCollectedTrue_Static()
     {
-        _wM._weapons[_weaponType].IsCollected = true;
+        _wM.Weapons[_weaponType].IsCollected = true;
     }
 
 

@@ -7,7 +7,6 @@ public class ItemSpawner : NetworkBehaviour
     [SerializeField] private NetworkPrefabRef _itemPref;
     private NetworkRunner m_runner; 
     private float _currentTime = 60;
-    [SerializeField] private Vector3 SpawnWeaponAt; 
     [Networked] public bool _spawned { get; set; }
     [Networked] public Item Item { get; set; } 
     public void Start() 
@@ -18,7 +17,6 @@ public class ItemSpawner : NetworkBehaviour
     public override void Spawned()
     {
         base.Spawned();
-        SpawnWeaponAt = transform.position; 
     }
     public override void FixedUpdateNetwork()
     {
@@ -40,7 +38,7 @@ public class ItemSpawner : NetworkBehaviour
         {
             _spawned = true;
             _currentTime = 0; 
-            var healthPack = m_runner.Spawn(_itemPref, SpawnWeaponAt, Quaternion.identity);
+            var healthPack = m_runner.Spawn(_itemPref, transform.position, Quaternion.identity);
             Item = healthPack.GetComponent<Item>(); 
         }
     }
