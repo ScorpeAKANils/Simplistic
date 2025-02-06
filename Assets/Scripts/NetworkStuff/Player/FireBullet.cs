@@ -62,6 +62,7 @@ public class FireBullet : NetworkBehaviour
     public bool CanFire { get { return _canFire; } }
     private bool _reload;
 
+
     private void Start()
     {
         Spawner = FindObjectOfType<BasicSpawner>();
@@ -110,6 +111,8 @@ public class FireBullet : NetworkBehaviour
         {
             return;
         }
+        Debug.Log($"[FixedUpdateNetwork] IsCollected: {IsCollected}");
+
         if (GetInput(out NetworkInputData data) && AmmoInMag > 0)
         {
             if (data.Buttons.IsSet(MyButtons.Shooting))

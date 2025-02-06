@@ -61,7 +61,7 @@ public class Health : NetworkBehaviour
         return _health;
     }
     //[Rpc(RpcSources.StateAuthority, RpcTargets.InputAuthority, Channel=RpcChannel.Reliable)]
-    public void Rpc_Die(Vector3 respawnpos, PlayerRef playerDamaged, PlayerRef killer) 
+    public void Die(Vector3 respawnpos, PlayerRef playerDamaged, PlayerRef killer) 
     {
         StaticRpcHolder.Rpc_ShowKillFeed(Runner, killer, playerDamaged);
         this.GetComponent<SimpleKCC>().SetPosition(respawnpos);

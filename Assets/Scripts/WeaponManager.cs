@@ -7,6 +7,7 @@ public class WeaponManager : NetworkBehaviour
 {
     public List<FireBullet> _weapons = new();
     [Networked] public int CurrentWeapon { get; set; }
+    [Networked, Capacity(2)] public NetworkDictionary<WeaponType, bool> WeaponsCollectionStatus => default; 
     public int oldWeapon = 0;
 
     public void ActivateWeapon(WeaponType weapon)
@@ -27,6 +28,16 @@ public class WeaponManager : NetworkBehaviour
     public FireBullet GetActiveWeapon() 
     {
         return _weapons[CurrentWeapon];     
+    }
+
+    public void ResetWeaponCollectionStatus() 
+    {
+        CurrentWeapon = 0; 
+        //i = 1, beause the basic gun is always collected.  
+        for(int i = 1; i <= _weapons.Count-1; i++) 
+        {
+            WeaponsCollectionStatus.Set((WeaponType)i, false); 
+        }
     }
 
     public override void FixedUpdateNetwork()
@@ -59,7 +70,7 @@ public class WeaponManager : NetworkBehaviour
         {
             return; 
         }
-        if (wM._weapons[weapon].IsCollected | weapon == 0)
+        if (wM.WeaponsCollectionStatus[(WeaponType)weapon] == true | weapon == 0)
             wM.CurrentWeapon = weapon; 
     }
 
@@ -78,11 +89,5 @@ public class WeaponManager : NetworkBehaviour
     public FireBullet GetWeapon(WeaponType weapon)
     {
         return _weapons[(int)weapon]; 
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

@@ -737,6 +737,12 @@ MonoBehaviour:
   - {fileID: 6750560298107990950}
   - {fileID: 853071977118636490}
   _CurrentWeapon: 0
+  _WeaponsCollectionStatus:
+    _items:
+    - Key: 0
+      Value: 1
+    - Key: 1
+      Value: 0
   oldWeapon: 0
 --- !u!1 &7904523222590455754
 GameObject:
@@ -1557,7 +1563,8 @@ PrefabInstance:
       propertyPath: volumeLayerMask.m_Bits
       value: 512
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4018167785610187986, guid: c6d6714a78e6e8e4aaca488db3968124, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 4138089835797245354, guid: c6d6714a78e6e8e4aaca488db3968124,

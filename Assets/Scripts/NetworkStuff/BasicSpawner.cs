@@ -27,7 +27,6 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
         _kdText = FindObjectOfType<KdTagText>().GetComponent<TextMeshProUGUI>();
     }
 
-    //[Rpc(RpcSources.StateAuthority, RpcTargets.All, Channel = RpcChannel.Reliable)]
     public void RPC_ApplyDamage(PlayerRef target, float damage, PlayerRef attacker)
     {
         if(Runner.IsServer == false | target == attacker) 
@@ -42,7 +41,8 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
 
             if (newHealth <= 0)
             {
-                _playersHealths[target].Rpc_Die(GetRandomPos(), target, attacker);
+                _playersHealths[target].GetComponent<WeaponManager>().ResetWeaponCollectionStatus(); 
+                _playersHealths[target].Die(GetRandomPos(), target, attacker);
                 _playersHealths[target].InitHealth();
                 _playersHealths[target].Rpc_UpdateHealthBar(_playersHealths[target].GetHealth());
                 foreach (var kd in FindObjectsOfType<KdManager>())
@@ -57,6 +57,8 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
     {
         return _playersHealths[player].GetHealth(); 
     }
+
+    //AFK KAFEE SCHISS BALLERT
     async void StartGame(GameMode mode)
     {
         _runnerRef = GetComponent<NetworkRunner>(); 
@@ -183,16 +185,16 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
             i.Item = null; 
         }
     }
-
+    static int _weaponType;
+    static WeaponManager _wM; 
     public void CollectGun(PlayerRef player, NetworkObject obj, ItemSpawner i, WeaponType type)
     {
         if (Runner.IsServer)
         {
-            var playerWeaponManager = _playersHealths[player].GetComponent<WeaponManager>();
-            var weapon = playerWeaponManager.GetWeapon(type); 
-            weapon.IsCollected = true;
+            _wM = _playersHealths[player].GetComponent<WeaponManager>();
+            _wM.WeaponsCollectionStatus.Set(type, true);  
             Health p = _playersHealths[player];
-            playerWeaponManager.CurrentWeapon = (int)type; 
+            _wM.CurrentWeapon = (int)type; 
             Runner.Despawn(obj);
             i._spawned = false;
             i.Item = null;
@@ -203,6 +205,12 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
         input.Set(_input);
         _resetInput = true; 
     }
+
+    public static void SetIsCollectedTrue_Static()
+    {
+        _wM._weapons[_weaponType].IsCollected = true;
+    }
+
 
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }
     public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason) { }
