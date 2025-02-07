@@ -5,25 +5,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
-using TMPro; 
+using TMPro;
+using Fusion.Addons.SimpleKCC;
 
 public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCallbacks
 {
     [SerializeField] private NetworkPrefabRef _playerPrefab;
     [SerializeField] private List<Transform> transforms = new();
     [SerializeField] private Camera _cam;
-    private int _spawnIndex = 0; 
-
+    private Vector2Accumulator _accumulator = new Vector2Accumulator(0.02f, true);
     [SerializeField] private Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new();
     private Dictionary<PlayerRef, Health> _playersHealths = new(); 
     private NetworkRunner _runnerRef;
     public  NetworkRunner RunnerRef;
     private NetworkInputData _input = new NetworkInputData();
     private TextMeshProUGUI _kdText;
-    private bool _resetInput;
+    public static int PlayerCount = 0; 
 
     void Start()
     {
+        Application.targetFrameRate = 60; 
         _kdText = FindObjectOfType<KdTagText>().GetComponent<TextMeshProUGUI>();
     }
     public float ReturnPlayerHealth(PlayerRef player) 
@@ -31,7 +32,6 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
         return _playersHealths[player].GetHealth(); 
     }
 
-    //AFK KAFEE SCHISS BALLERT
     async void StartGame(GameMode mode)
     {
         _runnerRef = GetComponent<NetworkRunner>(); 
@@ -85,7 +85,7 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
             _playersHealths.Add(player, playerHealth);
             playerHealth.SetPlayerRef(player);
             playerHealth.InitHealth();
-
+            PlayerCount++; 
             var kdManagers = FindObjectsOfType<KdManager>(); 
             foreach(var kd in kdManagers) 
             {
@@ -101,9 +101,14 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
 
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
     {
+        if(runner.IsServer == false)
+        {
+            return; 
+        }
         if (_spawnedCharacters.TryGetValue(player, out NetworkObject networkObject))
         {
         }
+        PlayerCount--; 
             runner.Despawn(networkObject);
         var kdManagers = FindObjectsOfType<KdManager>();
         foreach (var kd in kdManagers)
@@ -122,11 +127,11 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
             int ping = Mathf.RoundToInt(pingRaw);
             _kdText.text = ping.ToString(); 
         }
-        if (_resetInput)
-        {
-            _resetInput = false; 
-            _input = default;
-        }
+      //if (_resetInput)
+      //{
+      //    _resetInput = false; 
+      //    _input = default;
+      //}
         if (Cursor.lockState != CursorLockMode.Locked)
             return;
         _input.Buttons.Set(MyButtons.Forward, Input.GetKey(KeyCode.W));
@@ -142,6 +147,7 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
         {
             Vector2 mouseDelta = mouse.delta.ReadValue();
             Vector2 lookRotationDelta = new(-mouseDelta.y, mouseDelta.x);
+            _accumulator.Accumulate(lookRotationDelta *(5f/60));
             _input.AimDirection += lookRotationDelta; 
         }
 
@@ -152,7 +158,7 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
         if (Runner.IsServer) 
         {
             _playersHealths[player].InitHealth();
-            _playersHealths[player].Rpc_UpdateHealthBar(_playersHealths[player].GetHealth());
+            _playersHealths[player].UpdateHealthBar();
             Runner.Despawn(obj);
             i._spawned = false;
             i.Item = null; 
@@ -175,8 +181,8 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
     }
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
+        _input.AimDirection = _accumulator.ConsumeTickAligned(runner); 
         input.Set(_input);
-        _resetInput = true; 
     }
 
     public static void SetIsCollectedTrue_Static()

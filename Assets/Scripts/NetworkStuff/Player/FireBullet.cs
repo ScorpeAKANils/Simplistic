@@ -29,7 +29,6 @@ public enum WeaponType
 } 
 public class FireBullet : NetworkBehaviour
 {
-    private bool _fireButtonPressed = false;
     [SerializeField] private NetworkPrefabRef _bulletPrefab;
     [SerializeField] private WeaponType _type; 
     [SerializeField] private float _delayFireTime = 0.25f;
@@ -48,8 +47,6 @@ public class FireBullet : NetworkBehaviour
     [SerializeField] private bool _isFUllAutomatic = false; 
     public Animator Anim { get {  return _anim; } }
     [Networked] public bool IsCollected { get; set; }
-    [SerializeField] private bool SetIsCollectedTrueAtStartUp = false;
-    private bool _weaponInUse = false;
     private int patternIndex = 0; 
     public LineRenderer LineRenderer { get { return _lineRenderer; } }
     public TextMeshProUGUI AmmoHud { get { return _ammoHud; } }
@@ -62,7 +59,7 @@ public class FireBullet : NetworkBehaviour
     private bool _canFire = true;
     public bool CanFire { get { return _canFire; } }
     private bool _reload;
-
+    private bool _isShooting;
 
     private void Start()
     {
@@ -74,16 +71,16 @@ public class FireBullet : NetworkBehaviour
 
     public float GetXRecoile(NetworkInputData data)
     {
-        //if (_xPattern == null | _canFire == false)
+        if (_xPattern == null | (_isShooting == false))
             return 0;
-        //return (float)_xPattern[patternIndex] * _recoilFactor; 
+        return (float)_xPattern[patternIndex] * _recoilFactor; 
     }
 
     public float GetYRecoile(NetworkInputData data)
     {
-        //if (_yPattern == null | _canFire == false)
+        if (_yPattern == null | _isShooting == false)
             return 0; 
-        //return (float)_yPattern[patternIndex] * _recoilFactor;
+        return (float)_yPattern[patternIndex] * _recoilFactor;
     }
     public void OnEnable()
     {
@@ -121,22 +118,31 @@ public class FireBullet : NetworkBehaviour
         {
             if (data.Buttons.IsSet(MyButtons.Shooting) && _canFire)
             {
-                _canFire = false;
+                _isShooting = true;
+                Shoot(_gunBarrel.position, _gunBarrel.forward);
                 if (!_isFUllAutomatic) 
                 {
                     data.Buttons.Set(MyButtons.Shooting, false);
                 }
                 _anim.SetTrigger("Shoot"); 
-                Shoot(_gunBarrel.position, _gunBarrel.forward);
                 AmmoInMag--;
                 _ammoHud.text = "Ammo: " + AmmoInMag.ToString() + "/" + _magSize;
                 StartCoroutine(FireCoolDown(_delayFireTime));
             }
+            else
+            {
+                _isShooting = false;
+            }
+        }
+        else 
+        {
+            _isShooting = false; 
         }
         }
 
         IEnumerator FireCoolDown(float time)
         {
+              _canFire = false; 
               yield return new WaitForSeconds(time);
               _canFire = true; 
               if(patternIndex < _yPattern.Count-1 && patternIndex < _xPattern.Count - 1) 

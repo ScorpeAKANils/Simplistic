@@ -15,15 +15,15 @@
     "AllowClientServerModesInWebGL": true,
     "Simulation": {
         "InputDataWordCount": 0,
-        "ReplicationFeatures": 1,
-        "InputTransferMode": 0,
+        "ReplicationFeatures": 0,
+        "InputTransferMode": 2,
         "SimulationUpdateTimeMode": 0,
         "PlayerCount": 7,
         "TickRateSelection": {
             "Client": 120,
             "ServerIndex": 0,
-            "ClientSendIndex": 0,
-            "ServerSendIndex": 0
+            "ClientSendIndex": 1,
+            "ServerSendIndex": 1
         }
     },
     "Network": {

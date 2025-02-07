@@ -19,13 +19,13 @@ public class KdManager : NetworkBehaviour
     public override void Spawned () 
     {
         _spawner = FindObjectOfType<BasicSpawner>();
+        _board = FindObjectOfType<ScoreBoard>();
+        _board.transform.parent.gameObject.SetActive(false);
     }
 
 
     private void Start()
     {
-        _board = FindObjectOfType<ScoreBoard>();
-        _board.transform.parent.gameObject.SetActive(false);
     }
     private void Update()
     {

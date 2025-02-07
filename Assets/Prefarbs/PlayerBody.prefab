@@ -258,7 +258,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   _healthBar: {fileID: 0}
-  _wM: {fileID: 0}
+  _wM: {fileID: 6195596081404704528}
+  _cc: {fileID: 1258091120750514204}
 --- !u!114 &8187123393072754438
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -676,7 +677,7 @@ MonoBehaviour:
     - Key: 0
       Value: 1
     - Key: 1
-      Value: 0
+      Value: 1
   oldWeapon: 0
 --- !u!1 &7904523222590455754
 GameObject:
@@ -965,6 +966,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7797824973886048458, guid: c7a0efb3c2a24da4ea5d2dd7290493ee,
         type: 3}
+      propertyPath: Priority
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7797824973886048458, guid: c7a0efb3c2a24da4ea5d2dd7290493ee,
+        type: 3}
       propertyPath: MaxDistance
       value: 1500
       objectReference: {fileID: 0}
@@ -1175,7 +1181,7 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 75
+  MaxDistance: 1000
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0
@@ -1305,10 +1311,10 @@ MonoBehaviour:
   _bulletPrefab:
     RawGuidValue: cab44bb5df000394ab24d541e84382c7
   _type: 0
-  _delayFireTime: 0.25
+  _delayFireTime: 0.4
   _recoilFactor: 0.25
-  _damage: 10
-  _range: 50
+  _damage: 20
+  _range: 500
   _gunBarrel: {fileID: 4022458691614968933}
   _ignoreLayer:
     serializedVersion: 2
@@ -1490,6 +1496,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5636065490780206827, guid: c6d6714a78e6e8e4aaca488db3968124,
         type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5636065490780206827, guid: c6d6714a78e6e8e4aaca488db3968124,
+        type: 3}
       propertyPath: clearColorMode
       value: 0
       objectReference: {fileID: 0}
@@ -1563,7 +1574,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _zoomFovs:
-  - 20
+  - 15
   - 10
   - 5
   - 2
