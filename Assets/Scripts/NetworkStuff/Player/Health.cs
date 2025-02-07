@@ -96,14 +96,14 @@ public class Health : NetworkBehaviour
         {
             _wM.ResetWeaponCollectionStatus();
             Die(_spawner.GetRandomPos(), target, attacker);
-            foreach (KdManager kd in _kdManager)
-            {
-                if(Runner.IsServer) 
-                {
-                    kd.Rpc_AddDeath(target);
-                    kd.Rpc_AddKill(attacker);
-                }
-            }
+           //foreach (KdManager kd in _kdManager)
+           //{
+           //    if(kd.HasStateAuthority) 
+           //    {
+           //        kd.Rpc_AddDeath(target);
+           //        kd.Rpc_AddKill(attacker);
+           //    }
+           //}
         }
     }
 }

@@ -147,7 +147,7 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
         {
             Vector2 mouseDelta = mouse.delta.ReadValue();
             Vector2 lookRotationDelta = new(-mouseDelta.y, mouseDelta.x);
-            _accumulator.Accumulate(lookRotationDelta *(5f/60));
+            _accumulator.Accumulate(lookRotationDelta *(10f/60));
             _input.AimDirection += lookRotationDelta; 
         }
 
@@ -221,7 +221,7 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
             foreach (var p in players)
             {
                 float sqrDist = (t.position - p.transform.position).sqrMagnitude;
-                if (sqrDist < (30 * 30f))
+                if (sqrDist < (100 * 100))
                 {
                     isFarEnough = false;
                 }

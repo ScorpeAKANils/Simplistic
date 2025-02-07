@@ -170,7 +170,7 @@ public class FireBullet : NetworkBehaviour
             }
         }
         Audio.Play();
-        RPC_VisualieShot(this, Runner.LocalPlayer);
+        //RPC_VisualieShot(this, Runner.LocalPlayer);
     }
     public void ResetCanFire() 
     {

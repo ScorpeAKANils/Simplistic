@@ -285,7 +285,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4e366d5daf4fd747832fb94af81b346, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _sensitivity: 0.05
   _sensitivityFactor: 1
   _camTransform: {fileID: 5761836830940726770}
   _bullet:
@@ -424,8 +423,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _normalFov: 90
   _aimFov:
-  - 60
-  - 40
+  - 45
+  - 30
   _wM: {fileID: 6195596081404704528}
   _mL: {fileID: 7265498075871173010}
 --- !u!82 &5821496255530928143
@@ -532,7 +531,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5757040036998227561}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7513d24a3e51610499b0bcdfdcdbf61a, type: 3}
   m_Name: 
@@ -1311,7 +1310,7 @@ MonoBehaviour:
   _bulletPrefab:
     RawGuidValue: cab44bb5df000394ab24d541e84382c7
   _type: 0
-  _delayFireTime: 0.4
+  _delayFireTime: 0.166
   _recoilFactor: 0.25
   _damage: 20
   _range: 500
@@ -1328,7 +1327,6 @@ MonoBehaviour:
   _anim: {fileID: 2549587303477303879}
   _isFUllAutomatic: 0
   _IsCollected: 0
-  SetIsCollectedTrueAtStartUp: 0
   _killFeed: {fileID: 1557998782564583438, guid: 5c420f507c1bf9b4894059f0299fc7a3,
     type: 3}
 --- !u!1001 &5230725509534898407
@@ -1574,11 +1572,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _zoomFovs:
-  - 15
   - 10
+  - 7.5
   - 5
-  - 2
-  - 1
+  - 2.5
+  - 1.25
   _cam: {fileID: 5023064047708035922}
 --- !u!1 &8880628238516232590 stripped
 GameObject:
