@@ -970,9 +970,25 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7797824973886048458, guid: c7a0efb3c2a24da4ea5d2dd7290493ee,
         type: 3}
-      propertyPath: MaxDistance
-      value: 1500
+      propertyPath: m_Volume
+      value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7797824973886048458, guid: c7a0efb3c2a24da4ea5d2dd7290493ee,
+        type: 3}
+      propertyPath: MaxDistance
+      value: 5000
+      objectReference: {fileID: 0}
+    - target: {fileID: 7797824973886048458, guid: c7a0efb3c2a24da4ea5d2dd7290493ee,
+        type: 3}
+      propertyPath: rolloffMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7797824973886048458, guid: c7a0efb3c2a24da4ea5d2dd7290493ee,
+        type: 3}
+      propertyPath: OutputAudioMixerGroup
+      value: 
+      objectReference: {fileID: 24300002, guid: a45bfdf1ff88e40b0aa46989dac0a2b9,
+        type: 2}
     - target: {fileID: 7797824973886048458, guid: c7a0efb3c2a24da4ea5d2dd7290493ee,
         type: 3}
       propertyPath: panLevelCustomCurve.m_Curve.Array.data[0].value
@@ -1171,18 +1187,18 @@ AudioSource:
     type: 2}
   m_audioClip: {fileID: 8300000, guid: a764377339b869e459f5e53fb9258f73, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.5
+  m_Volume: 1
   m_Pitch: 1
   Loop: 0
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
-  Priority: 128
+  Priority: 0
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 1000
+  MaxDistance: 5000
   Pan2D: 0
-  rolloffMode: 0
+  rolloffMode: 1
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -1365,7 +1381,7 @@ PrefabInstance:
     - target: {fileID: 946537676642354101, guid: c6d6714a78e6e8e4aaca488db3968124,
         type: 3}
       propertyPath: m_CullingMask.m_Bits
-      value: 255
+      value: 1775
       objectReference: {fileID: 0}
     - target: {fileID: 1394229623689140104, guid: c6d6714a78e6e8e4aaca488db3968124,
         type: 3}
@@ -1525,7 +1541,7 @@ PrefabInstance:
     - target: {fileID: 5636065490780206827, guid: c6d6714a78e6e8e4aaca488db3968124,
         type: 3}
       propertyPath: volumeLayerMask.m_Bits
-      value: 4294967295
+      value: 2031
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 4018167785610187986, guid: c6d6714a78e6e8e4aaca488db3968124, type: 3}

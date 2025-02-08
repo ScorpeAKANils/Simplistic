@@ -170,15 +170,15 @@ public class FireBullet : NetworkBehaviour
             }
         }
         Audio.Play();
-        //RPC_VisualieShot(this, Runner.LocalPlayer);
+        RPC_VisualizeShot();
     }
     public void ResetCanFire() 
     {
         _canFire = true; 
     }
     [Rpc(RpcSources.All, RpcTargets.All, Channel = RpcChannel.Unreliable)]
-    public void RPC_VisualieShot(FireBullet gunRef, PlayerRef p)
+    public void RPC_VisualizeShot()
     {
-        gunRef.Audio.Play();
+        Audio.Play();
     }
 }

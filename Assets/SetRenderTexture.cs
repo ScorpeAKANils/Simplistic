@@ -11,7 +11,7 @@ public class SetRenderTexture : MonoBehaviour
     void Start()
     {
         _mat = this.GetComponent<MeshRenderer>().material;
-        RenderTexture scopeEffect = new RenderTexture(256, 256, 16);
+        RenderTexture scopeEffect = new RenderTexture(128, 128, 8);
         scopeEffect.Create();
         _camera.targetTexture = scopeEffect;
         _mat.mainTexture = scopeEffect;

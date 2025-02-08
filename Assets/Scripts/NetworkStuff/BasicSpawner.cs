@@ -18,13 +18,13 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
     private Dictionary<PlayerRef, Health> _playersHealths = new(); 
     private NetworkRunner _runnerRef;
     public  NetworkRunner RunnerRef;
+    private bool _resetInput;
     private NetworkInputData _input = new NetworkInputData();
     private TextMeshProUGUI _kdText;
     public static int PlayerCount = 0; 
 
     void Start()
     {
-        Application.targetFrameRate = 60; 
         _kdText = FindObjectOfType<KdTagText>().GetComponent<TextMeshProUGUI>();
     }
     public float ReturnPlayerHealth(PlayerRef player) 
@@ -127,11 +127,16 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
             int ping = Mathf.RoundToInt(pingRaw);
             _kdText.text = ping.ToString(); 
         }
-      //if (_resetInput)
-      //{
-      //    _resetInput = false; 
-      //    _input = default;
-      //}
+        
+        if (_resetInput)
+        
+        {
+        
+            _resetInput = false; 
+        
+            _input = default;
+        
+        }
         if (Cursor.lockState != CursorLockMode.Locked)
             return;
         _input.Buttons.Set(MyButtons.Forward, Input.GetKey(KeyCode.W));
@@ -147,7 +152,7 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
         {
             Vector2 mouseDelta = mouse.delta.ReadValue();
             Vector2 lookRotationDelta = new(-mouseDelta.y, mouseDelta.x);
-            _accumulator.Accumulate(lookRotationDelta *(10f/60));
+            _accumulator.Accumulate(lookRotationDelta *(40f/60));
             _input.AimDirection += lookRotationDelta; 
         }
 
@@ -183,6 +188,7 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
     {
         _input.AimDirection = _accumulator.ConsumeTickAligned(runner); 
         input.Set(_input);
+        _resetInput = true; 
     }
 
     public static void SetIsCollectedTrue_Static()
