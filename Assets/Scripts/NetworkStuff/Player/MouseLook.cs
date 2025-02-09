@@ -22,9 +22,10 @@ public class MouseLook : NetworkBehaviour
         if (GetInput(out NetworkInputData data))
         {
             Vector2 mouseDir = data.AimDirection;
-            mouseDir.y += _bullet[_wM.CurrentWeapon].GetYRecoile(data); 
+            mouseDir.y += _bullet[_wM.CurrentWeapon].GetYRecoile(data);
+            mouseDir.x -= _bullet[_wM.CurrentWeapon].GetXRecoile(data); 
             _cc.AddLookRotation(mouseDir * _sensitivityFactor); 
-            _camTransform.localRotation = Quaternion.Euler(_cc.GetLookRotation().x + _bullet[_wM.CurrentWeapon].GetXRecoile(data), 0, 0);
+            _camTransform.localRotation = Quaternion.Euler(_cc.GetLookRotation().x, 0, 0);
         }
     }
 

@@ -25,6 +25,7 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
 
     void Start()
     {
+        Application.targetFrameRate = 60; 
         _kdText = FindObjectOfType<KdTagText>().GetComponent<TextMeshProUGUI>();
     }
     public float ReturnPlayerHealth(PlayerRef player) 
@@ -152,8 +153,8 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
         {
             Vector2 mouseDelta = mouse.delta.ReadValue();
             Vector2 lookRotationDelta = new(-mouseDelta.y, mouseDelta.x);
-            _accumulator.Accumulate(lookRotationDelta *(25*Time.deltaTime));
-            _input.AimDirection += lookRotationDelta; 
+            _accumulator.Accumulate(lookRotationDelta * (25 * Runner.DeltaTime));
+            //_input.AimDirection += lookRotationDelta; 
         }
 
     }
