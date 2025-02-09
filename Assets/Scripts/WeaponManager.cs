@@ -35,10 +35,10 @@ public class WeaponManager : NetworkBehaviour
     {
         CurrentWeapon = 0; 
         //i = 1, beause the basic gun is always collected.  
-       //for(int i = 1; i <= Weapons.Count-1; i++) 
-       //{
-       //    WeaponsCollectionStatus.Set((WeaponType)i, false); 
-       //}
+        for(int i = 1; i <= Weapons.Count-1; i++) 
+        {
+            WeaponsCollectionStatus.Set((WeaponType)i, false); 
+        }
     }
 
     public override void FixedUpdateNetwork()

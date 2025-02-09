@@ -152,7 +152,7 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
         {
             Vector2 mouseDelta = mouse.delta.ReadValue();
             Vector2 lookRotationDelta = new(-mouseDelta.y, mouseDelta.x);
-            _accumulator.Accumulate(lookRotationDelta *(40f/60));
+            _accumulator.Accumulate(lookRotationDelta *(25*Time.deltaTime));
             _input.AimDirection += lookRotationDelta; 
         }
 

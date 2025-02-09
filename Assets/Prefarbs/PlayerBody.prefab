@@ -531,7 +531,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5757040036998227561}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7513d24a3e51610499b0bcdfdcdbf61a, type: 3}
   m_Name: 
@@ -677,7 +677,7 @@ MonoBehaviour:
     - Key: 0
       Value: 1
     - Key: 1
-      Value: 1
+      Value: 0
   oldWeapon: 0
 --- !u!1 &7904523222590455754
 GameObject:
@@ -1377,7 +1377,7 @@ PrefabInstance:
     - target: {fileID: 946537676642354101, guid: c6d6714a78e6e8e4aaca488db3968124,
         type: 3}
       propertyPath: m_OcclusionCulling
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 946537676642354101, guid: c6d6714a78e6e8e4aaca488db3968124,
         type: 3}
