@@ -13,6 +13,7 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
     [SerializeField] private NetworkPrefabRef _playerPrefab;
     [SerializeField] private List<Transform> transforms = new();
     [SerializeField] private Camera _cam;
+    [SerializeField] private KdManager kdManager; 
     private Vector2Accumulator _accumulator = new Vector2Accumulator(0.02f, true);
     [SerializeField] private Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new();
     private Dictionary<PlayerRef, Health> _playersHealths = new(); 
@@ -87,15 +88,7 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
             playerHealth.SetPlayerRef(player);
             playerHealth.InitHealth();
             PlayerCount++; 
-            var kdManagers = FindObjectsOfType<KdManager>(); 
-            foreach(var kd in kdManagers) 
-            {
-                foreach(var existingPlayer in _playersHealths.Values) 
-                {
-                    kd.Rpc_AddPlayerToScoreBoard(existingPlayer.GetPlayer()); 
-                    Debug.Log("Added: " + existingPlayer.GetPlayer()); 
-                }
-            }
+            KdManager.Instance.AddPlayerToScoreBoard(player); 
         }
 
     }
@@ -114,7 +107,7 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
         var kdManagers = FindObjectsOfType<KdManager>();
         foreach (var kd in kdManagers)
         {
-            kd.Rpc_RemovePlayerFromScoreBoard(player); 
+            kd.RemovePlayerFromScoreBoard(player); 
         }
         _playersHealths.Remove(player); 
         _spawnedCharacters.Remove(player);
@@ -149,11 +142,11 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
         _input.Buttons.Set(MyButtons.Crouch, Input.GetButton("Crouch"));
 
         Mouse mouse = Mouse.current;
-        if (mouse != null && mouse.delta.ReadValue().magnitude > 0.02f)
+        if (mouse != null)
         {
             Vector2 mouseDelta = mouse.delta.ReadValue();
             Vector2 lookRotationDelta = new(-mouseDelta.y, mouseDelta.x);
-            _accumulator.Accumulate(lookRotationDelta * (25 * Runner.DeltaTime));
+            _accumulator.Accumulate(lookRotationDelta * (7.5f * Runner.DeltaTime));
             //_input.AimDirection += lookRotationDelta; 
         }
 

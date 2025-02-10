@@ -6,26 +6,31 @@ using UnityEngine;
 using System.Linq; 
 public class KdManager : NetworkBehaviour
 {
+
+    public static KdManager Instance; 
     [SerializeField] private AudioSource KillSound;
     [SerializeField] private TextMeshProUGUI _kdText;
-    [SerializeField] private GameObject ScoreBoardObj; 
+    
     private BasicSpawner _spawner;
-    private Dictionary<PlayerRef, PlayerScore> _playerScores = new();
-    private ScoreBoard _board;
+    [Networked, Capacity(7)]private NetworkDictionary<PlayerRef, PlayerScore> _playerScores => default;
+    [SerializeField] private ScoreBoard _board;
     private List<PlayerInfo> _sortedPlayer = new();
-    private bool _scoreBoadIsShown = false; 
-    [Networked] int _kills { get; set; }
-    [Networked] int _deaths { get; set; }
-    public override void Spawned () 
-    {
-        _spawner = FindObjectOfType<BasicSpawner>();
-        _board = FindObjectOfType<ScoreBoard>();
-        _board.transform.parent.gameObject.SetActive(false);
-    }
-
+    private bool _scoreBoadIsShown = false;
 
     private void Start()
     {
+    }
+
+    private void Awake()
+    {
+        if(Instance == null) 
+        {
+            Instance = this; 
+        } else 
+        {
+            Destroy(this.gameObject); 
+        }
+        _board.transform.parent.gameObject.SetActive(false);
     }
     private void Update()
     {
@@ -42,8 +47,7 @@ public class KdManager : NetworkBehaviour
             HideScoreBoard(); 
         }
     }
-    [Rpc(RpcSources.StateAuthority, RpcTargets.All, Channel = RpcChannel.Reliable)]
-    public void Rpc_AddKill(PlayerRef player)
+    public void AddKill(PlayerRef player)
     {
         if (!_playerScores.ContainsKey(player))
         {
@@ -52,18 +56,11 @@ public class KdManager : NetworkBehaviour
 
         PlayerScore newScore = _playerScores[player];
         newScore.kills++;
-        _playerScores[player] = newScore;
-
-        if (Runner.LocalPlayer == player)
-        {
-            KillSound.Play();
-        }
-
-        Rpc_UpdateScoreboard();
+        _playerScores.Set(player, newScore);
+        UpdateScoreboard();
     }
 
-    [Rpc(RpcSources.StateAuthority, RpcTargets.All, Channel = RpcChannel.Reliable)]
-    public void Rpc_AddDeath(PlayerRef player)
+    public void AddDeath(PlayerRef player)
     {
         if (!_playerScores.ContainsKey(player))
         {
@@ -72,36 +69,27 @@ public class KdManager : NetworkBehaviour
 
         PlayerScore newScore = _playerScores[player];
         newScore.deahts++;
-        _playerScores[player] = newScore;
+        _playerScores.Set(player, newScore);
 
-        Rpc_UpdateScoreboard();
+        UpdateScoreboard();
     }
 
-    [Rpc(RpcSources.StateAuthority, RpcTargets.All, Channel = RpcChannel.Reliable)]
-    public void Rpc_AddPlayerToScoreBoard(PlayerRef newPlayer)
+    public void AddPlayerToScoreBoard(PlayerRef newPlayer)
     {
         if (!_playerScores.ContainsKey(newPlayer))
         {
             _playerScores.Add(newPlayer, new PlayerScore()); 
         }
-
-        Rpc_UpdateScoreboard();
+        UpdateScoreboard();
     }
 
-    [Rpc(RpcSources.StateAuthority, RpcTargets.All, Channel = RpcChannel.Reliable)]
-    public void Rpc_RemovePlayerFromScoreBoard(PlayerRef playerToRemove)
+    public void RemovePlayerFromScoreBoard(PlayerRef playerToRemove)
     {
         if (!_playerScores.ContainsKey(playerToRemove))
         {
             _playerScores.Remove(playerToRemove); 
         }
-        Rpc_UpdateScoreboard(true);
-    }
-
-    [Rpc(RpcSources.StateAuthority, RpcTargets.All, Channel = RpcChannel.Reliable)]
-    public void Rpc_UpdateScoreboard(bool clearScoreBoad = false)
-    {
-        UpdateScoreboard(clearScoreBoad);
+        UpdateScoreboard(true);
     }
 
     private void UpdateScoreboard(bool clearScoreBoard = false)

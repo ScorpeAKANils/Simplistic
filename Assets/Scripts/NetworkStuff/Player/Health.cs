@@ -7,18 +7,19 @@ using System.Collections.Generic;
 public class Health : NetworkBehaviour
 {
     [Networked] private PlayerRef _player { get; set; }
-    [Networked] private float _health { get; set; } 
+    [Networked] private float _health { get; set; }
+    [Networked] private bool _isDead { get; set; } = false; 
     [Networked] private PlayerRef _playerLastHitBy { get; set; }
     
     [SerializeField] private LayerMask _bulletLayer;
     [SerializeField] private Scrollbar _healthBar;
     [SerializeField] private WeaponManager _wM; 
-    [SerializeField]private SimpleKCC _cc;
+    [SerializeField] private SimpleKCC _cc;
+    [SerializeField] private KdManager _kdManager; 
     
     private float _maxHealth = 50;
     private BasicSpawner _spawner;
     private int _playerCount = 0;
-    private List<KdManager> _kdManager = new(); 
     public override void Spawned()
     {
         _spawner = FindObjectOfType<BasicSpawner>();
@@ -43,7 +44,7 @@ public class Health : NetworkBehaviour
         if (_playerCount != BasicSpawner.PlayerCount) 
         {
             _playerCount = BasicSpawner.PlayerCount;
-            _kdManager = FindObjectsOfType<KdManager>().ToList(); 
+            //_kdManager = FindObjectsOfType<KdManager>().ToList(); 
         }
     }
     public void UpdateHealthBar()
@@ -71,6 +72,7 @@ public class Health : NetworkBehaviour
         _cc.SetPosition(respawnPos);
         InitHealth();
         StaticRpcHolder.Rpc_ShowKillFeed(Runner, killer, playerDamaged);
+        Rpc_SetIsDead(); 
     }
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.InputAuthority, Channel = RpcChannel.Reliable)]
@@ -79,31 +81,43 @@ public class Health : NetworkBehaviour
         _health = _maxHealth;
     }
 
-    [Rpc(RpcSources.All, RpcTargets.StateAuthority, Channel = RpcChannel.Reliable)]
-    public void RPC_ApplyDamage(PlayerRef target, float damage, PlayerRef attacker)
+    public void DealDamage(PlayerRef target, float damage, PlayerRef attacker)
     {
-        if (Runner.IsServer == false | target == attacker)
+        if(target == attacker | _health < 0) 
         {
-            return;
+            return; 
         }
- 
-        if (_health > 0) 
+        float health = _health; 
+        if ((health-damage) <= 0) 
         {
-             _playerLastHitBy = attacker;
-             _health -= damage;
+            Rpc_Die(attacker);
+        } else 
+        {
+            health -= damage;
+            Rpc_SetHealth(health, attacker); 
         }
-        if (_health <= 0)
+    }
+
+    [Rpc(RpcSources.All, RpcTargets.StateAuthority, Channel = RpcChannel.Reliable, TickAligned = true)]
+    private void Rpc_SetHealth(float health, PlayerRef attacker) 
+    {
+        _health = health;
+    }
+    [Rpc(RpcSources.All, RpcTargets.StateAuthority, Channel = RpcChannel.Reliable, TickAligned = true)]
+    public void Rpc_Die(PlayerRef attacker) 
+    {
+        if(_isDead == false) 
         {
+            _isDead = true; 
             _wM.ResetWeaponCollectionStatus();
-            Die(_spawner.GetRandomPos(), target, attacker);
-           //foreach (KdManager kd in _kdManager)
-           //{
-           //    if(kd.HasStateAuthority) 
-           //    {
-           //        kd.Rpc_AddDeath(target);
-           //        kd.Rpc_AddKill(attacker);
-           //    }
-           //}
+            Die(_spawner.GetRandomPos(), _player, attacker);
+            KdManager.Instance.AddDeath(_player);
+            KdManager.Instance.AddKill(attacker);
         }
+    }
+    [Rpc(RpcSources.All, RpcTargets.StateAuthority, Channel = RpcChannel.Reliable, TickAligned = false)]
+    public void Rpc_SetIsDead() 
+    {
+        _isDead = false;
     }
 }

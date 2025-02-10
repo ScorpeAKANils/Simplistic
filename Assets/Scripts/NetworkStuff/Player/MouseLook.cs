@@ -24,7 +24,7 @@ public class MouseLook : NetworkBehaviour
             Vector2 mouseDir = data.AimDirection;
             mouseDir.y += _bullet[_wM.CurrentWeapon].GetYRecoile(data);
             mouseDir.x -= _bullet[_wM.CurrentWeapon].GetXRecoile(data); 
-            _cc.AddLookRotation(mouseDir * _sensitivityFactor); 
+            _cc.AddLookRotation(mouseDir, -89f, 89f); 
             _camTransform.localRotation = Quaternion.Euler(_cc.GetLookRotation().x, 0, 0);
         }
     }
@@ -34,9 +34,9 @@ public class MouseLook : NetworkBehaviour
         _sensitivityFactor = val; 
     }
 
-    public override void Render()
-    {
-        base.Render();
-        MoveCamera(); 
-    }
+   public override void Render()
+   {
+       base.Render();
+       MoveCamera(); 
+   }
 }

@@ -29,6 +29,7 @@ public enum WeaponType
 } 
 public class FireBullet : NetworkBehaviour
 {
+
     [SerializeField] private NetworkPrefabRef _bulletPrefab;
     [SerializeField] private WeaponType _type; 
     [SerializeField] private float _delayFireTime = 0.25f;
@@ -44,7 +45,8 @@ public class FireBullet : NetworkBehaviour
     [SerializeField] private List<RecoilDirY> _yPattern = new();
     [SerializeField] private List<RecoilDirX> _xPattern = new();
     [SerializeField] private Animator _anim;
-    [SerializeField] private bool _isFUllAutomatic = false; 
+    [SerializeField] private bool _isFUllAutomatic = false;
+    [SerializeField] private GameObject _hitMarker;
     public Animator Anim { get {  return _anim; } }
     [Networked] public bool IsCollected { get; set; }
     private int patternIndex = 0; 
@@ -64,11 +66,11 @@ public class FireBullet : NetworkBehaviour
     private void Start()
     {
         Spawner = FindObjectOfType<BasicSpawner>();
+        _hitMarker = GameObject.FindObjectOfType<HitmarkerTag>().gameObject;
         AmmoInMag = _magSize;
         _ammoHud = FindObjectOfType<PlayerHudTag>().GetComponentInChildren<TextMeshProUGUI>();
         _ammoHud.text = "Ammo: " + AmmoInMag.ToString() + "/" + _magSize;
     }
-
     public float GetXRecoile(NetworkInputData data)
     {
         if (_xPattern == null | (_isShooting == false))
@@ -85,6 +87,8 @@ public class FireBullet : NetworkBehaviour
     public void OnEnable()
     {
         _canFire = true;
+        if (_hitMarker == null)
+            _hitMarker = GameObject.FindObjectOfType<HitmarkerTag>().gameObject;
         //_ammoHud.text = "Ammo: " + AmmoInMag.ToString() + "/" + _magSize;
     }
     private void Update()
@@ -163,7 +167,8 @@ public class FireBullet : NetworkBehaviour
                 Debug.Log(hit.Hitbox.gameObject.name); 
                 var playerHit = hit.Hitbox.GetComponent<Health>(); 
                 PlayerRef enemyPlayer = playerHit.GetPlayer();
-                playerHit.RPC_ApplyDamage(enemyPlayer, _damage, Runner.LocalPlayer); 
+                playerHit.DealDamage(enemyPlayer, _damage, Runner.LocalPlayer);
+                StartCoroutine(ActivateHitmarker()); 
             }
             catch
             {
@@ -180,5 +185,12 @@ public class FireBullet : NetworkBehaviour
     public void RPC_VisualizeShot()
     {
         Audio.Play();
+    }
+
+    IEnumerator ActivateHitmarker() 
+    {
+        _hitMarker.SetActive(true);
+        yield return new WaitForSeconds(0.1f);
+        _hitMarker.SetActive(false); 
     }
 }

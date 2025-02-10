@@ -1,11 +1,11 @@
 using Fusion; 
-public struct PlayerScore
+public struct PlayerScore : INetworkStruct
 {
     public int kills;
     public int deahts;
 }
 
-public struct PlayerInfo
+public struct PlayerInfo : INetworkStruct
 {
     public PlayerRef id;
     public PlayerScore score;
