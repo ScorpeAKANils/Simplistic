@@ -31,7 +31,6 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
     void Start()
     {
         Application.targetFrameRate = 60; 
-        //_kdText = FindObjectOfType<KdTagText>().GetComponent<TextMeshProUGUI>();
     }
     public float ReturnPlayerHealth(PlayerRef player) 
     {
@@ -46,11 +45,12 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
         networkEvents.OnInput.AddListener(OnInput);
         RunnerRef = _runnerRef;
         // Create the NetworkSceneInfo from the current scene
-        var scene = SceneRef.FromPath(_sceneToLoad);
+        int sceneIndex = SceneUtility.GetBuildIndexByScenePath(_sceneToLoad);
+        var scene = SceneRef.FromIndex(sceneIndex);
         var sceneInfo = new NetworkSceneInfo();
         if (scene.IsValid)
         {
-            sceneInfo.AddSceneRef(scene, LoadSceneMode.Single);
+            sceneInfo.AddSceneRef(scene, LoadSceneMode.Additive);
         }
 
         // Start or join (depends on gamemode) a session with a specific name
@@ -71,7 +71,10 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
         {
             Vector3 pos = GetRandomPos();
             NetworkObject networkPlayerObject = runner.Spawn(_playerPrefab, pos, Quaternion.identity, player);
-
+            if (_kdText == null)
+            {
+                _kdText = FindObjectOfType<KdTagText>().GetComponent<TextMeshProUGUI>();
+            }
             _spawnedCharacters.Add(player, networkPlayerObject);
             Health playerHealth = networkPlayerObject.GetComponent<Health>();
             _playersHealths.Add(player, playerHealth);
@@ -109,7 +112,10 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
         {
                float pingRaw =  (float)_runnerRef.GetPlayerRtt(_runnerRef.LocalPlayer) * 1000;
             int ping = Mathf.RoundToInt(pingRaw);
-            //_kdText.text = ping.ToString(); 
+            if(_kdText != null) 
+            {
+                _kdText.text = ping.ToString(); 
+            }
         }
         
         if (_resetInput)

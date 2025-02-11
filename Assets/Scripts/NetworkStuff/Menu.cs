@@ -43,7 +43,7 @@ public class Menu : MonoBehaviour
 
     public void JoinGame()
     {
-        if (_roomNameCreateGame.text != string.Empty)
+        if (_roomNameJoinGame.text != string.Empty)
         {
             _serverManager.RoomName = _roomNameJoinGame.text;
             _serverManager.StartGame(Fusion.GameMode.Client);
