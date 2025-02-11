@@ -79,37 +79,22 @@ public class Health : NetworkBehaviour
 
     public void DealDamage(PlayerRef target, float damage, PlayerRef attacker)
     {
-        if(target == attacker) 
+        if(_health <= 0 | attacker == target) 
         {
-            Debug.LogError("Spieler hat sich vor Verwirrung selbst verletzt"); 
             return; 
         }
-
-        if(_health <= 0) 
+        if((_health- damage)<= 0) 
         {
-            Debug.Log("Spieler ist bereits tot(client)"); 
+            HandlePlayerDeath(attacker);
         }
-        float health = _health - damage;
-        Debug.Log("Spieler erleidet schaden auf dem Client"); 
-        if (health <= 0) 
+        _health -= damage; 
+        if(_health <= 0)
         {
-            Debug.Log("Message an Server: Gegner tot!");
-            Rpc_Die(attacker);
-        } else 
-        {
-            Debug.Log("Message an Server: Gegner erleidet Schaden!");
-            Rpc_SetHealth(health); 
+            HandlePlayerDeath(attacker);
         }
     }
 
-    [Rpc(RpcSources.All, RpcTargets.StateAuthority, Channel = RpcChannel.Unreliable, TickAligned = true)]
-    private void Rpc_SetHealth(float health) 
-    {
-        Debug.Log("Health wird auf dem Server Geupdatet");
-        _health = health;
-    }
-    [Rpc(RpcSources.All, RpcTargets.StateAuthority, Channel = RpcChannel.U, TickAligned = true)]
-    public void Rpc_Die(PlayerRef attacker) 
+    public void HandlePlayerDeath(PlayerRef attacker) 
     {
         _wM.ResetWeaponCollectionStatus();
         Die(_spawner.GetRandomPos(), _player, attacker);

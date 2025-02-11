@@ -48,15 +48,17 @@ public class FireBullet : NetworkBehaviour
     [SerializeField] private Animator _anim;
     [SerializeField] private bool _isFUllAutomatic = false;
     [SerializeField] private GameObject _hitMarker;
+    [SerializeField] private Health _health; 
     private int enemyHitCounter = 0; 
     public Animator Anim { get {  return _anim; } }
     [Networked] public bool IsCollected { get; set; }
+    [Networked] private bool _playerFiresGun { get; set; } 
     private int patternIndex = 0; 
     public LineRenderer LineRenderer { get { return _lineRenderer; } }
     public TextMeshProUGUI AmmoHud { get { return _ammoHud; } }
     public Transform GunBarrel { get { return _gunBarrel; } }
     public GameObject KillFeed { get { return _killFeed; } }
-    public byte AmmoInMag { get; set; }
+    [Networked] public byte AmmoInMag { get; set; }
     
     public BasicSpawner Spawner { get; private set; }
     [SerializeField] private GameObject _killFeed; 
@@ -115,36 +117,43 @@ public class FireBullet : NetworkBehaviour
     // Update is called once per frame
     public override void FixedUpdateNetwork()
     {
-        if (HasInputAuthority == false) 
+        if (Runner.IsServer) 
         {
-            return;
+             if (GetInput(out NetworkInputData data) && AmmoInMag > 0)
+             {
+                 if (data.Buttons.IsSet(MyButtons.Shooting) && _canFire)
+                 {
+                     _playerFiresGun = true;
+                     _isShooting = true;
+                     Shoot(_gunBarrel.position, _gunBarrel.forward);
+                     if (!_isFUllAutomatic) 
+                     {
+                         data.Buttons.Set(MyButtons.Shooting, false);
+                     } 
+                     AmmoInMag--;
+                     _ammoHud.text = "Ammo: " + AmmoInMag.ToString() + "/" + _magSize;
+                     StartCoroutine(FireCoolDown(_delayFireTime));
+                 }
+                 else
+                 {
+                     _isShooting = false;
+                     _playerFiresGun = false; 
+                 }
+             }
+             else 
+             {
+                 _isShooting = false;
+                 _playerFiresGun = false;
+             }
         }
-
-        if (GetInput(out NetworkInputData data) && AmmoInMag > 0)
-        {
-            if (data.Buttons.IsSet(MyButtons.Shooting) && _canFire)
-            {
-                _isShooting = true;
-                Shoot(_gunBarrel.position, _gunBarrel.forward);
-                if (!_isFUllAutomatic) 
-                {
-                    data.Buttons.Set(MyButtons.Shooting, false);
-                }
-                _anim.SetTrigger("Shoot"); 
-                AmmoInMag--;
-                _ammoHud.text = "Ammo: " + AmmoInMag.ToString() + "/" + _magSize;
-                StartCoroutine(FireCoolDown(_delayFireTime));
-            }
-            else
-            {
-                _isShooting = false;
-            }
-        }
-        else 
-        {
-            _isShooting = false; 
-        }
-        }
+       //if (_playerFiresGun) 
+       //{
+       //    _anim.SetTrigger("Shoot");
+       //    AmmoInMag--;
+       //    _ammoHud.text = "Ammo: " + AmmoInMag.ToString() + "/" + _magSize;
+       //    StartCoroutine(FireCoolDown(_delayFireTime));
+       //}
+    }
 
         IEnumerator FireCoolDown(float time)
         {
@@ -174,11 +183,8 @@ public class FireBullet : NetworkBehaviour
                 return; 
             }
             PlayerRef target = playerHit.GetPlayer();
-            playerHit.DealDamage(target, _damage, Runner.LocalPlayer);
-            Debug.Log("reffer"); 
+            playerHit.DealDamage(target, _damage, _health.GetPlayer());
         }
-        Audio.Play();
-        RPC_VisualizeShot();
     }
     public void ResetCanFire() 
     {
