@@ -79,13 +79,15 @@ public class Health : NetworkBehaviour
 
     public void DealDamage(PlayerRef target, float damage, PlayerRef attacker)
     {
-        if(_health <= 0 | attacker == target) 
+        if(attacker == target) 
         {
+            Debug.LogError("Play hit him self"); 
             return; 
         }
         if((_health- damage)<= 0) 
         {
             HandlePlayerDeath(attacker);
+            return; 
         }
         _health -= damage; 
         if(_health <= 0)
