@@ -37,6 +37,17 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
         return _playersHealths[player].GetHealth(); 
     }
 
+
+    public void LoadNewScene(string path) 
+    {
+        int sceneIndex = SceneUtility.GetBuildIndexByScenePath(path);
+        var scene = SceneRef.FromIndex(sceneIndex);
+        var sceneInfo = new NetworkSceneInfo();
+        if (scene.IsValid)
+        {
+            sceneInfo.AddSceneRef(scene, LoadSceneMode.Additive);
+        }
+    } 
     public async void StartGame(GameMode mode)
     {
         _runnerRef = GetComponent<NetworkRunner>(); 

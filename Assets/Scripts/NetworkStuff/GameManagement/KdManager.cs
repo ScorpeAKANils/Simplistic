@@ -62,8 +62,25 @@ public class KdManager : NetworkBehaviour
 
     public int GetMVPKills() 
     {
-        return _sortedPlayer[0].score.kills; 
+        if (_sortedPlayer.Count > 0) 
+        {
+            return _sortedPlayer[0].score.kills; 
+        } else 
+        {
+            return 0; 
+        }
     }
+
+    public PlayerRef GetMVP()
+    {
+        if (_sortedPlayer.Count > 0) 
+        { 
+            return _sortedPlayer[0].id;
+        } else 
+        {
+            return new PlayerRef(); 
+        }
+    } 
     public void AddDeath(PlayerRef player)
     {
         if (!_playerScores.ContainsKey(player))
