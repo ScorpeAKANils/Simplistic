@@ -7,13 +7,15 @@ using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using TMPro;
 using Fusion.Addons.SimpleKCC;
+using System.Linq;
 
 public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCallbacks
 {
     [SerializeField] private NetworkPrefabRef _playerPrefab;
-    [SerializeField] private List<Transform> transforms = new();
+    [SerializeField] private List<SpawnPosTag> transforms = new();
     [SerializeField] private Camera _cam;
-    [SerializeField] private KdManager kdManager; 
+    [SerializeField] private KdManager kdManager;
+    [SerializeField] private string _sceneToLoad; 
     private Vector2Accumulator _accumulator = new Vector2Accumulator(0.02f, true);
     [SerializeField] private Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new();
     private Dictionary<PlayerRef, Health> _playersHealths = new(); 
@@ -22,19 +24,21 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
     private bool _resetInput;
     private NetworkInputData _input = new NetworkInputData();
     private TextMeshProUGUI _kdText;
-    public static int PlayerCount = 0; 
+    public static int PlayerCount = 0;
+
+    public string RoomName = string.Empty; 
 
     void Start()
     {
         Application.targetFrameRate = 60; 
-        _kdText = FindObjectOfType<KdTagText>().GetComponent<TextMeshProUGUI>();
+        //_kdText = FindObjectOfType<KdTagText>().GetComponent<TextMeshProUGUI>();
     }
     public float ReturnPlayerHealth(PlayerRef player) 
     {
         return _playersHealths[player].GetHealth(); 
     }
 
-    async void StartGame(GameMode mode)
+    public async void StartGame(GameMode mode)
     {
         _runnerRef = GetComponent<NetworkRunner>(); 
         // Create the Fusion runner and let it know that we will be providing user input
@@ -42,37 +46,23 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
         networkEvents.OnInput.AddListener(OnInput);
         RunnerRef = _runnerRef;
         // Create the NetworkSceneInfo from the current scene
-        var scene = SceneRef.FromIndex(SceneManager.GetActiveScene().buildIndex);
+        var scene = SceneRef.FromPath(_sceneToLoad);
         var sceneInfo = new NetworkSceneInfo();
         if (scene.IsValid)
         {
-            sceneInfo.AddSceneRef(scene, LoadSceneMode.Additive);
+            sceneInfo.AddSceneRef(scene, LoadSceneMode.Single);
         }
 
         // Start or join (depends on gamemode) a session with a specific name
         await _runnerRef.StartGame(new StartGameArgs()
         {
             GameMode = mode,
-            SessionName = "TestRoom",
+            SessionName = RoomName,
             Scene = scene,
             SceneManager = gameObject.AddComponent<NetworkSceneManagerDefault>()
         });
     }
 
-    private void OnGUI()
-    {
-        if (_runnerRef == null)
-        {
-            if (GUI.Button(new Rect(0, 0, 200, 40), "Host"))
-            {
-                StartGame(GameMode.Host);
-            }
-            if (GUI.Button(new Rect(0, 40, 200, 40), "Join"))
-            {
-                StartGame(GameMode.Client);
-            }
-        }
-    }
 
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
@@ -119,7 +109,7 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
         {
                float pingRaw =  (float)_runnerRef.GetPlayerRtt(_runnerRef.LocalPlayer) * 1000;
             int ping = Mathf.RoundToInt(pingRaw);
-            _kdText.text = ping.ToString(); 
+            //_kdText.text = ping.ToString(); 
         }
         
         if (_resetInput)
@@ -209,6 +199,10 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
     public void OnReliableDataProgress(NetworkRunner runner, PlayerRef player, ReliableKey key, float progress) { }
     public Vector3 GetRandomPos()
     {
+        if(transforms.Count <= 0) 
+        {
+            transforms = FindObjectsOfType<SpawnPosTag>().ToList<SpawnPosTag>();
+        }
         var players = FindObjectsOfType<PlayerMovement>();
         Vector3 bestPosition = Vector3.zero;
         float maxMinDistance = 0f;
@@ -220,7 +214,7 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
 
             foreach (var p in players)
             {
-                float sqrDist = (t.position - p.transform.position).sqrMagnitude;
+                float sqrDist = (t.transform.position - p.transform.position).sqrMagnitude;
                 if (sqrDist < (100 * 100))
                 {
                     isFarEnough = false;
@@ -230,13 +224,13 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
 
             if (isFarEnough)
             {
-                return t.position;
+                return t.transform.position;
             }
 
             if (minDistance > maxMinDistance)
             {
                 maxMinDistance = minDistance;
-                bestPosition = t.position;
+                bestPosition = t.transform.position;
             }
         }
 

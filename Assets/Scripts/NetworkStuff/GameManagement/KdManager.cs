@@ -60,6 +60,10 @@ public class KdManager : NetworkBehaviour
         UpdateScoreboard();
     }
 
+    public int GetMVPKills() 
+    {
+        return _sortedPlayer[0].score.kills; 
+    }
     public void AddDeath(PlayerRef player)
     {
         if (!_playerScores.ContainsKey(player))
