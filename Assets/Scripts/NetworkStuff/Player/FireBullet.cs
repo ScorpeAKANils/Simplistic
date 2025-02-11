@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 public enum RecoilDirY 
 {
     Right_Weak = 1,
@@ -47,6 +48,7 @@ public class FireBullet : NetworkBehaviour
     [SerializeField] private Animator _anim;
     [SerializeField] private bool _isFUllAutomatic = false;
     [SerializeField] private GameObject _hitMarker;
+    private int enemyHitCounter = 0; 
     public Animator Anim { get {  return _anim; } }
     [Networked] public bool IsCollected { get; set; }
     private int patternIndex = 0; 
@@ -146,33 +148,34 @@ public class FireBullet : NetworkBehaviour
 
         IEnumerator FireCoolDown(float time)
         {
-              _canFire = false; 
-              yield return new WaitForSeconds(time);
-              _canFire = true; 
-              if(patternIndex < _yPattern.Count-1 && patternIndex < _xPattern.Count - 1) 
-              {
-                  patternIndex++; 
-              } else 
-              {
-                  patternIndex = 0;  
-              }
+             _canFire = false; 
+             yield return new WaitForSeconds(time);
+             _canFire = true; 
+             if(patternIndex < _yPattern.Count-1 && patternIndex < _xPattern.Count - 1) 
+             {
+                 patternIndex++; 
+             } else 
+             {
+                 patternIndex = 0;  
+             }
         }
 
     void Shoot(Vector3 pos, Vector3 dir) 
     {
         if (Runner.LagCompensation.Raycast(pos, dir, _range, Runner.LocalPlayer, out LagCompensatedHit hit, ~_ignoreLayer, HitOptions.IncludePhysX))
-        { 
-            try
+        {
+            Health playerHit = null; 
+            try 
             {
-                Debug.Log(hit.Hitbox.gameObject.name); 
-                var playerHit = hit.Hitbox.GetComponent<Health>(); 
-                PlayerRef enemyPlayer = playerHit.GetPlayer();
-                playerHit.DealDamage(enemyPlayer, _damage, Runner.LocalPlayer);
-                StartCoroutine(ActivateHitmarker()); 
-            }
+                playerHit = hit.Hitbox.GetComponent<Health>(); 
+            } 
             catch
             {
+                return; 
             }
+            PlayerRef target = playerHit.GetPlayer();
+            playerHit.DealDamage(target, _damage, Runner.LocalPlayer);
+            Debug.Log("reffer"); 
         }
         Audio.Play();
         RPC_VisualizeShot();

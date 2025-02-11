@@ -8,10 +8,7 @@ public class Health : NetworkBehaviour
 {
     [Networked] private PlayerRef _player { get; set; }
     [Networked] private float _health { get; set; }
-    [Networked] private bool _isDead { get; set; } = false; 
-    [Networked] private PlayerRef _playerLastHitBy { get; set; }
     
-    [SerializeField] private LayerMask _bulletLayer;
     [SerializeField] private Scrollbar _healthBar;
     [SerializeField] private WeaponManager _wM; 
     [SerializeField] private SimpleKCC _cc;
@@ -72,7 +69,6 @@ public class Health : NetworkBehaviour
         _cc.SetPosition(respawnPos);
         InitHealth();
         StaticRpcHolder.Rpc_ShowKillFeed(Runner, killer, playerDamaged);
-        Rpc_SetIsDead(); 
     }
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.InputAuthority, Channel = RpcChannel.Reliable)]
@@ -83,41 +79,41 @@ public class Health : NetworkBehaviour
 
     public void DealDamage(PlayerRef target, float damage, PlayerRef attacker)
     {
-        if(target == attacker | _health < 0) 
+        if(target == attacker) 
         {
+            Debug.LogError("Spieler hat sich vor Verwirrung selbst verletzt"); 
             return; 
         }
-        float health = _health; 
-        if ((health-damage) <= 0) 
+
+        if(_health <= 0) 
         {
+            Debug.Log("Spieler ist bereits tot(client)"); 
+        }
+        float health = _health - damage;
+        Debug.Log("Spieler erleidet schaden auf dem Client"); 
+        if (health <= 0) 
+        {
+            Debug.Log("Message an Server: Gegner tot!");
             Rpc_Die(attacker);
         } else 
         {
-            health -= damage;
-            Rpc_SetHealth(health, attacker); 
+            Debug.Log("Message an Server: Gegner erleidet Schaden!");
+            Rpc_SetHealth(health); 
         }
     }
 
-    [Rpc(RpcSources.All, RpcTargets.StateAuthority, Channel = RpcChannel.Reliable, TickAligned = true)]
-    private void Rpc_SetHealth(float health, PlayerRef attacker) 
+    [Rpc(RpcSources.All, RpcTargets.StateAuthority, Channel = RpcChannel.Unreliable, TickAligned = true)]
+    private void Rpc_SetHealth(float health) 
     {
+        Debug.Log("Health wird auf dem Server Geupdatet");
         _health = health;
     }
-    [Rpc(RpcSources.All, RpcTargets.StateAuthority, Channel = RpcChannel.Reliable, TickAligned = true)]
+    [Rpc(RpcSources.All, RpcTargets.StateAuthority, Channel = RpcChannel.U, TickAligned = true)]
     public void Rpc_Die(PlayerRef attacker) 
     {
-        if(_isDead == false) 
-        {
-            _isDead = true; 
-            _wM.ResetWeaponCollectionStatus();
-            Die(_spawner.GetRandomPos(), _player, attacker);
-            KdManager.Instance.AddDeath(_player);
-            KdManager.Instance.AddKill(attacker);
-        }
-    }
-    [Rpc(RpcSources.All, RpcTargets.StateAuthority, Channel = RpcChannel.Reliable, TickAligned = false)]
-    public void Rpc_SetIsDead() 
-    {
-        _isDead = false;
+        _wM.ResetWeaponCollectionStatus();
+        Die(_spawner.GetRandomPos(), _player, attacker);
+        KdManager.Instance.AddDeath(_player);
+        KdManager.Instance.AddKill(attacker);
     }
 }
