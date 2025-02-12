@@ -10,7 +10,8 @@ enum MyButtons
     Jump, 
     Shooting, 
     Crouch, 
-    Slide
+    Slide,
+    ShowScoreBoard
 }
 
 public struct NetworkInputData : INetworkInput

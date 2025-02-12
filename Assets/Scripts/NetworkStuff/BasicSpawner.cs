@@ -12,6 +12,8 @@ using System.Linq;
 public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCallbacks
 {
     [SerializeField] private NetworkPrefabRef _playerPrefab;
+    [SerializeField] private NetworkPrefabRef _roundManager;
+    [SerializeField] private NetworkPrefabRef _kdManager; 
     [SerializeField] private List<SpawnPosTag> transforms = new();
     [SerializeField] private Camera _cam;
     [SerializeField] private KdManager kdManager;
@@ -24,7 +26,7 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
     private bool _resetInput;
     private NetworkInputData _input = new NetworkInputData();
     private TextMeshProUGUI _kdText;
-    public static int PlayerCount = 0;
+    public int PlayerCount = 0; 
 
     public string RoomName = string.Empty; 
 
@@ -45,7 +47,7 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
         var sceneInfo = new NetworkSceneInfo();
         if (scene.IsValid)
         {
-            sceneInfo.AddSceneRef(scene, LoadSceneMode.Additive);
+            sceneInfo.AddSceneRef(scene, LoadSceneMode.Single);
         }
     } 
     public async void StartGame(GameMode mode)
@@ -63,7 +65,6 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
         {
             sceneInfo.AddSceneRef(scene, LoadSceneMode.Additive);
         }
-
         // Start or join (depends on gamemode) a session with a specific name
         await _runnerRef.StartGame(new StartGameArgs()
         {
@@ -91,8 +92,20 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
             _playersHealths.Add(player, playerHealth);
             playerHealth.SetPlayerRef(player);
             playerHealth.InitHealth();
-            PlayerCount++; 
-            KdManager.Instance.AddPlayerToScoreBoard(player); 
+            PlayerCount++;
+            Debug.Log(PlayerCount); 
+            if(PlayerCount == 2) 
+            {
+                runner.Spawn(_kdManager, transform.position, Quaternion.identity);
+                runner.Spawn(_roundManager, transform.position, Quaternion.identity);
+                foreach(var r in runner.ActivePlayers) 
+                {
+                    KdManager.Instance.AddPlayerToScoreBoard(r); 
+                }
+            } else if(PlayerCount > 2) 
+            {
+                KdManager.Instance.AddPlayerToScoreBoard(player);
+            }
         }
 
     }
@@ -147,6 +160,7 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
         _input.Buttons.Set(MyButtons.Jump, Input.GetButton("Jump"));
         _input.Buttons.Set(MyButtons.Shooting, Input.GetButton("Fire1"));
         _input.Buttons.Set(MyButtons.Crouch, Input.GetButton("Crouch"));
+        _input.Buttons.Set(MyButtons.ShowScoreBoard, Input.GetKey(KeyCode.Tab)); 
 
         Mouse mouse = Mouse.current;
         if (mouse != null)

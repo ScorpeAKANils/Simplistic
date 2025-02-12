@@ -6,7 +6,6 @@ using UnityEngine;
 
 public class DeathMatchManager : NetworkBehaviour
 {
-    [SerializeField] TextMeshProUGUI _leadingPlayerTxt;
     [SerializeField] TextMeshProUGUI _timeTxt;
     public float RoundDurationInSeconds = 600f;
     [HideInInspector, Networked] public PlayerRef Winner { get; set; }
@@ -15,25 +14,31 @@ public class DeathMatchManager : NetworkBehaviour
     [SerializeField] private KdManager kdManager;
 
     [Networked] private float _timePassed { get; set; }
-    private bool _spawned = false; 
-    private void Start()
+    [Networked] private bool _spawned { get; set; }
+    public static DeathMatchManager Instance; 
+    private void Awake()
     {
-        DontDestroyOnLoad(gameObject); 
-    }
-
-    public override void Spawned()
-    {
-        base.Spawned();
-        _spawned = true; 
-    }
-    void Update()
-    {
-        if(_spawned == false) 
+        if(Instance == null) 
         {
+            Instance = this; 
+            DontDestroyOnLoad(gameObject);
+        }
+        else 
+        {
+            Destroy(this.gameObject); 
+        }
+    }
+    public void Update()
+    {
+        if (kdManager == null)
+        {
+            kdManager = FindObjectOfType<KdManager>();
             return; 
         }
-        _leadingPlayerTxt.text = "Leading Player: " + kdManager.GetMVP().ToString();
-        _timeTxt.text = TimeLeft(); 
+        _timeTxt.text = TimeLeft();
+    }
+    public override void FixedUpdateNetwork()
+    {
         if(Runner.IsServer == false) 
         {
             return; 
@@ -41,9 +46,7 @@ public class DeathMatchManager : NetworkBehaviour
         _timePassed += Runner.DeltaTime; 
         if(_timePassed >= RoundDurationInSeconds | kdManager.GetMVPKills()>=KillLimit) 
         {
-            var server = FindObjectOfType<BasicSpawner>();
-            Winner = kdManager.GetMVP();
-            server.LoadNewScene("Assets/EndScreen.unity"); 
+            Runner.LoadScene("EndScreen", loadSceneMode: UnityEngine.SceneManagement.LoadSceneMode.Single, setActiveOnLoad: true); 
         }
     }
 

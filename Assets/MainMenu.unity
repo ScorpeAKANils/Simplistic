@@ -1658,6 +1658,26 @@ PrefabInstance:
       propertyPath: transforms.Array.size
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8493170030744519296, guid: 98a5764052318944dbe69a2a0028e2f4,
+        type: 3}
+      propertyPath: _kdManager.RawGuidValue.Array.data[0]
+      value: -5407371571833460038
+      objectReference: {fileID: 0}
+    - target: {fileID: 8493170030744519296, guid: 98a5764052318944dbe69a2a0028e2f4,
+        type: 3}
+      propertyPath: _kdManager.RawGuidValue.Array.data[1]
+      value: 4172404239129462059
+      objectReference: {fileID: 0}
+    - target: {fileID: 8493170030744519296, guid: 98a5764052318944dbe69a2a0028e2f4,
+        type: 3}
+      propertyPath: _roundManager.RawGuidValue.Array.data[0]
+      value: 3791840108791752345
+      objectReference: {fileID: 0}
+    - target: {fileID: 8493170030744519296, guid: 98a5764052318944dbe69a2a0028e2f4,
+        type: 3}
+      propertyPath: _roundManager.RawGuidValue.Array.data[1]
+      value: -8545943936884186264
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

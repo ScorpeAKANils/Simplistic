@@ -36,14 +36,6 @@ public class Health : NetworkBehaviour
         }
         UpdateHealthBar();
     }
-    private void FixedUpdate()
-    {
-        if (_playerCount != BasicSpawner.PlayerCount) 
-        {
-            _playerCount = BasicSpawner.PlayerCount;
-            //_kdManager = FindObjectsOfType<KdManager>().ToList(); 
-        }
-    }
     public void UpdateHealthBar()
     {
         _healthBar.value = _health / _maxHealth;

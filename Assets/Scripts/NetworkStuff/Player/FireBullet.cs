@@ -69,7 +69,7 @@ public class FireBullet : NetworkBehaviour
     private void Start()
     {
         Spawner = FindObjectOfType<BasicSpawner>();
-        _hitMarker = GameObject.FindObjectOfType<HitmarkerTag>().gameObject;
+        //_hitMarker = GameObject.FindObjectOfType<HitmarkerTag>().gameObject;
         _ammoHud = FindObjectOfType<PlayerHudTag>().GetComponentInChildren<TextMeshProUGUI>();
         _ammoHud.text = "Ammo: " + AmmoInMag.ToString() + "/" + _magSize;
     }
@@ -105,8 +105,8 @@ public class FireBullet : NetworkBehaviour
         {
             _canFire = true;
         }
-        if (_hitMarker == null)
-            _hitMarker = GameObject.FindObjectOfType<HitmarkerTag>().gameObject;
+        //if (_hitMarker == null)
+            //_hitMarker = GameObject.FindObjectOfType<HitmarkerTag>().gameObject;
     }
 
     
@@ -180,7 +180,7 @@ public class FireBullet : NetworkBehaviour
             }
             PlayerRef target = playerHit.GetPlayer();
             playerHit.DealDamage(target, _damage, _health.GetPlayer());
-            StartCoroutine(ActivateHitmarker()); 
+            //StartCoroutine(ActivateHitmarker()); 
         }
     }
     public void ResetCanFire() 

@@ -13,38 +13,57 @@ public class KdManager : NetworkBehaviour
     
     private BasicSpawner _spawner;
     [Networked, Capacity(7)]private NetworkDictionary<PlayerRef, PlayerScore> _playerScores => default;
-    [SerializeField] private ScoreBoard _board;
+    private ScoreBoard _board { get; set; }
     private List<PlayerInfo> _sortedPlayer = new();
     private bool _scoreBoadIsShown = false;
+    [Networked] public bool IsSpawned { get; set; } = false;
+    [Networked] public PlayerRef Mvp { get; set; } 
 
-    private void Start()
+    public override void Spawned()
     {
+        IsSpawned = true; 
     }
 
     private void Awake()
     {
         if(Instance == null) 
         {
-            Instance = this; 
+            Instance = this;
+            DontDestroyOnLoad(this); 
         } else 
         {
             Destroy(this.gameObject); 
         }
-        _board.transform.parent.gameObject.SetActive(false);
     }
-    private void Update()
+
+    public void Update()
     {
+        if (_board == null)
+        {
+            _board = FindObjectOfType<ScoreBoard>();
+            _board.transform.parent.gameObject.SetActive(false);
+            return;
+        }
         if (Input.GetKeyDown(KeyCode.Tab) && _scoreBoadIsShown == false)
-        { 
-            _scoreBoadIsShown=true;
-            _board.transform.parent.gameObject.SetActive(true);
+        {
             UpdateScoreboard();
-            ShowScoreBoard(_sortedPlayer); 
+            _scoreBoadIsShown = true;
+            _board.transform.parent.gameObject.SetActive(true);
+            ShowScoreBoard(_sortedPlayer);
         }
         else if (Input.GetKeyDown(KeyCode.Tab) && _scoreBoadIsShown == true)
         {
-            _scoreBoadIsShown = false; 
-            HideScoreBoard(); 
+            _scoreBoadIsShown = false;
+            HideScoreBoard();
+        }
+    }
+
+    public override void FixedUpdateNetwork()
+    {
+        base.FixedUpdateNetwork();
+        if(Runner.IsServer) 
+        {
+            Mvp = _sortedPlayer[0].id; 
         }
     }
     public void AddKill(PlayerRef player)
@@ -62,24 +81,20 @@ public class KdManager : NetworkBehaviour
 
     public int GetMVPKills() 
     {
-        if (_sortedPlayer.Count > 0) 
+        if (_sortedPlayer.Count <= 0)
         {
-            return _sortedPlayer[0].score.kills; 
-        } else 
-        {
-            return 0; 
+            return 0;  
         }
+        return _sortedPlayer[0].score.kills; 
     }
 
     public PlayerRef GetMVP()
     {
-        if (_sortedPlayer.Count > 0) 
-        { 
-            return _sortedPlayer[0].id;
-        } else 
+        if(_sortedPlayer.Count <= 0) 
         {
             return new PlayerRef(); 
         }
+        return Mvp;
     } 
     public void AddDeath(PlayerRef player)
     {
