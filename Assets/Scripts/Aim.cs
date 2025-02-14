@@ -19,17 +19,24 @@ public class Aim : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        _isAiming = Input.GetButton("Fire2"); 
-        if(_isAiming) 
+        try 
         {
-            _cam.fieldOfView = _aimFov[_wM.CurrentWeapon];
-            _mL.SetSensitivityFactor((_aimFov[_wM.CurrentWeapon] / _normalFov) * 0.5f); 
-            _wM.GetActiveWeapon().Anim.SetBool("Aim", true);
-        } else 
+             _isAiming = Input.GetButton("Fire2"); 
+             if(_isAiming) 
+             {
+                 _cam.fieldOfView = _aimFov[_wM.CurrentWeapon];
+                 _mL.SetSensitivityFactor((_aimFov[_wM.CurrentWeapon] / _normalFov) * 0.5f); 
+                 _wM.GetActiveWeapon().Anim.SetBool("Aim", true);
+             } else 
+             {
+                 _cam.fieldOfView= _normalFov;
+                 _mL.SetSensitivityFactor(_aimFov[_wM.CurrentWeapon] / _normalFov);
+                 _wM.GetActiveWeapon().Anim.SetBool("Aim", false);
+             }
+        } 
+        catch 
         {
-            _cam.fieldOfView= _normalFov;
-            _mL.SetSensitivityFactor(_aimFov[_wM.CurrentWeapon] / _normalFov);
-            _wM.GetActiveWeapon().Anim.SetBool("Aim", false);
+
         }
     }
 }

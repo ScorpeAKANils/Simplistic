@@ -22,12 +22,13 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
     [SerializeField] private Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new();
     private Dictionary<PlayerRef, Health> _playersHealths = new(); 
     private NetworkRunner _runnerRef;
+    private GameObject _mainCam; 
     public  NetworkRunner RunnerRef;
     private bool _resetInput;
     private NetworkInputData _input = new NetworkInputData();
     private TextMeshProUGUI _kdText;
     public int PlayerCount = 0; 
-
+    
     public string RoomName = string.Empty; 
 
     void Start()
@@ -40,16 +41,38 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
     }
 
 
-    public void LoadNewScene(string path) 
+    public void RestartGame() 
     {
-        int sceneIndex = SceneUtility.GetBuildIndexByScenePath(path);
-        var scene = SceneRef.FromIndex(sceneIndex);
-        var sceneInfo = new NetworkSceneInfo();
-        if (scene.IsValid)
+        DespawnPlayer();
+        _spawnedCharacters.Clear();
+        _playersHealths.Clear();
+        SpawnPlayers();
+    }
+
+    public void SpawnPlayers() 
+    {
+        if(Runner.IsServer) 
         {
-            sceneInfo.AddSceneRef(scene, LoadSceneMode.Single);
+            PlayerCount = 0;
+            foreach (var player in Runner.ActivePlayers)
+            {
+                _mainCam.gameObject.SetActive(true);
+                Vector3 pos = GetRandomPos();
+                NetworkObject networkPlayerObject = Runner.Spawn(_playerPrefab, pos, Quaternion.identity, player);
+                if (_kdText == null)
+                {
+                    _kdText = FindObjectOfType<KdTagText>().GetComponent<TextMeshProUGUI>();
+                }
+                _spawnedCharacters.Add(player, networkPlayerObject);
+                Health playerHealth = networkPlayerObject.GetComponent<Health>();
+                _playersHealths.Add(player, playerHealth);
+                playerHealth.SetPlayerRef(player);
+                playerHealth.InitHealth();
+                PlayerCount++;
+                KdManager.Instance.AddPlayerToScoreBoard(player);
+            }
         }
-    } 
+    }
     public async void StartGame(GameMode mode)
     {
         _runnerRef = GetComponent<NetworkRunner>(); 
@@ -81,6 +104,7 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
     {
         if (runner.IsServer)
         {
+            _mainCam = Camera.main.gameObject; 
             Vector3 pos = GetRandomPos();
             NetworkObject networkPlayerObject = runner.Spawn(_playerPrefab, pos, Quaternion.identity, player);
             if (_kdText == null)
@@ -107,7 +131,7 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
                 KdManager.Instance.AddPlayerToScoreBoard(player);
             }
         }
-
+        _mainCam = Camera.main.gameObject;
     }
 
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
@@ -118,16 +142,16 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
         }
         if (_spawnedCharacters.TryGetValue(player, out NetworkObject networkObject))
         {
-        }
-        PlayerCount--; 
+            PlayerCount--;
             runner.Despawn(networkObject);
-        var kdManagers = FindObjectsOfType<KdManager>();
-        foreach (var kd in kdManagers)
-        {
-            kd.RemovePlayerFromScoreBoard(player); 
+            var kdManagers = FindObjectsOfType<KdManager>();
+            foreach (var kd in kdManagers)
+            {
+                kd.RemovePlayerFromScoreBoard(player);
+            }
+            _playersHealths.Remove(player);
+            _spawnedCharacters.Remove(player);
         }
-        _playersHealths.Remove(player); 
-        _spawnedCharacters.Remove(player);
     }
 
     void IBeforeUpdate.BeforeUpdate()
@@ -143,13 +167,9 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
         }
         
         if (_resetInput)
-        
         {
-        
             _resetInput = false; 
-        
             _input = default;
-        
         }
         if (Cursor.lockState != CursorLockMode.Locked)
             return;
@@ -171,6 +191,17 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
             //_input.AimDirection += lookRotationDelta; 
         }
 
+    }
+
+    public void DespawnPlayer() 
+    {
+        if (Runner.IsServer) 
+        {
+            foreach (var player in Runner.ActivePlayers)
+            {
+                Runner.Despawn(_spawnedCharacters[player]);
+            }
+        }   
     }
 
     public void HealPlayer(PlayerRef player, NetworkObject obj, ItemSpawner i) 

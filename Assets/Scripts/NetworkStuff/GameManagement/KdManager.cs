@@ -3,7 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using System.Linq; 
+using System.Linq;
+using System.Linq.Expressions;
 public class KdManager : NetworkBehaviour
 {
 
@@ -17,8 +18,8 @@ public class KdManager : NetworkBehaviour
     private List<PlayerInfo> _sortedPlayer = new();
     private bool _scoreBoadIsShown = false;
     [Networked] public bool IsSpawned { get; set; } = false;
-    [Networked] public PlayerRef Mvp { get; set; } 
-
+    [Networked] public PlayerRef Mvp { get; set; }
+    private bool _pressedTab; 
     public override void Spawned()
     {
         IsSpawned = true; 
@@ -44,19 +45,23 @@ public class KdManager : NetworkBehaviour
             _board.transform.parent.gameObject.SetActive(false);
             return;
         }
+
         if (Input.GetKeyDown(KeyCode.Tab) && _scoreBoadIsShown == false)
         {
+            _pressedTab = false;
             UpdateScoreboard();
             _scoreBoadIsShown = true;
             _board.transform.parent.gameObject.SetActive(true);
-            ShowScoreBoard(_sortedPlayer);
+            ShowScoreBoard();
         }
         else if (Input.GetKeyDown(KeyCode.Tab) && _scoreBoadIsShown == true)
         {
+            _pressedTab = false;
             _scoreBoadIsShown = false;
             HideScoreBoard();
         }
     }
+
 
     public override void FixedUpdateNetwork()
     {
@@ -79,6 +84,19 @@ public class KdManager : NetworkBehaviour
         UpdateScoreboard();
     }
 
+    public void ShowEndResult() 
+    {
+        UpdateScoreboard();
+        _scoreBoadIsShown = true;
+        _board.transform.parent.gameObject.SetActive(true);
+        ShowScoreBoard();
+    }
+
+    public void HideResult()
+    {
+        _scoreBoadIsShown = false; 
+        HideScoreBoard(); 
+    }
     public int GetMVPKills() 
     {
         if (_sortedPlayer.Count <= 0)
@@ -110,6 +128,14 @@ public class KdManager : NetworkBehaviour
         UpdateScoreboard();
     }
 
+    public void ResetScores()
+    {
+        if(Runner.IsServer) 
+        {
+            _sortedPlayer.Clear();
+            _playerScores.Clear(); 
+        }
+    }
     public void AddPlayerToScoreBoard(PlayerRef newPlayer)
     {
         if (!_playerScores.ContainsKey(newPlayer))
@@ -140,11 +166,11 @@ public class KdManager : NetworkBehaviour
 
         if (_scoreBoadIsShown)
         {
-            ShowScoreBoard(_sortedPlayer, clearScoreBoard, true); 
+            ShowScoreBoard(clearScoreBoard, true); 
         }
     }
 
-    public void ShowScoreBoard(List<PlayerInfo> players, bool clearScoreBoard = false, bool allReadyActive = false)
+    public void ShowScoreBoard(bool clearScoreBoard = false, bool allReadyActive = false)
     {
         if (allReadyActive == false)
         {
@@ -155,7 +181,7 @@ public class KdManager : NetworkBehaviour
             ClearScoreBoard();
         }
         int count = 0;
-        foreach (var item in players)
+        foreach (var item in _sortedPlayer)
         {
             if (Runner.LocalPlayer == item.id)
             {

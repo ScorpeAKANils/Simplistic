@@ -1,21 +1,23 @@
+using Fusion;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class ShowResult : MonoBehaviour
+public class ShowResult : SimulationBehaviour
 {
-    [SerializeField] TextMeshProUGUI _result; 
-    // Start is called before the first frame update
-    void Start()
-    {
-        var DMManager = FindObjectOfType<DeathMatchManager>();
-        _result.text = "Winner: " + DMManager.Winner.ToString(); 
-    }
+    public GameObject EndResultCam;
+    public GameObject EndScreen;
+    public GameObject NormalCam;
 
-    // Update is called once per frame
-    void Update()
+    public void ToggleEndScreen(bool val) 
     {
-        
+        EndResultCam.SetActive(val);
+        EndResultCam.GetComponent<Camera>().enabled = val;
+        EndResultCam.GetComponent<AudioListener>().enabled = val;
+        EndScreen.SetActive(val);
+        NormalCam.SetActive(!val); 
+        NormalCam.GetComponent<Camera>().enabled = !val;
+        NormalCam.GetComponent<AudioListener>().enabled = !val;
     }
 }

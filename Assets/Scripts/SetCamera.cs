@@ -27,10 +27,17 @@ public class SetCamera : SimulationBehaviour
             {
                 _hasBeenPlaceced = true; 
                 _camPos = _playerRef.GetComponentInChildren<TagCamPos>().transform;
-                _cam = Camera.main; 
-                _cam.transform.position = _camPos.position; 
-                _cam.transform.transform.rotation = _camPos.rotation;
-                _cam.transform.parent = _camPos.transform; 
+                _cam = Camera.main;
+                try 
+                {
+                    _cam.transform.position = _camPos.position; 
+                    _cam.transform.transform.rotation = _camPos.rotation;
+                    _cam.transform.parent = _camPos.transform; 
+                } 
+                catch 
+                {
+                    _cam = null; 
+                }
             }
              
          }

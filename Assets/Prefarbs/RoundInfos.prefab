@@ -349,12 +349,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -389,11 +389,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e69c183e6a3e94c43b935899be8ec5ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _leadingPlayerTxt: {fileID: 6919399989230151471}
   _timeTxt: {fileID: 5286923099710252377}
-  RoundDurationInSeconds: 60
+  _timeToNextRound: 10
   KillLimit: 5
-  kdManager: {fileID: 0}
+  RoundDurationInSeconds: 600
 --- !u!114 &2703066304030932444
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -408,7 +407,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SortKey: 3256761621
   ObjectInterest: 1
-  Flags: 1
+  Flags: 262145
   NestedObjects: []
   NetworkedBehaviours:
   - {fileID: 8099872078011586537}
