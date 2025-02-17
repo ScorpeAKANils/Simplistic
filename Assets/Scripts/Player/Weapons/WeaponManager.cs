@@ -16,7 +16,6 @@ public class WeaponManager : NetworkBehaviour
         {
             if (i == (int)weapon)
             {
-                Weapons[i].ResetCanFire(); 
                 Rpc_SetWeaponActive(i, true); 
             }
             else

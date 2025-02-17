@@ -12,6 +12,8 @@ public class MouseLook : NetworkBehaviour
     [SerializeField] private WeaponManager _wM;
     [SerializeField] private SimpleKCC _cc;
 
+    public Transform CamTransform { get { return _camTransform; } }
+
     public override void FixedUpdateNetwork()
     { 
         MoveCamera(); 

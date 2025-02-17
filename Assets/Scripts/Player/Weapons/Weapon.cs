@@ -9,7 +9,7 @@ public class Weapon : NetworkBehaviour
     [Networked] public byte AmmoInMag { get; set; }
     [Networked] public bool PlayerFiresGun { get; set; } 
     public float FireDelay { get { return _delayFireTime;  } }
-    public Animator Anim { get; private set; }
+    public Animator Anim; 
     public AudioSource Audio; 
 
     [SerializeField, Networked] private byte _magSize { get; set; }
@@ -20,25 +20,16 @@ public class Weapon : NetworkBehaviour
     [SerializeField] private float _damage = 10f;
     [SerializeField] private float _range = 50f;
     [SerializeField] private LayerMask _ignoreLayer;
-    [SerializeField] private LineRenderer _lineRenderer;
     [SerializeField] private TextMeshProUGUI _ammoHud;
-    [SerializeField] private bool _isFUllAutomatic = false;
-    [SerializeField] private Health _health; 
-    
-    [SerializeField] private GameObject _killFeed; 
-    private bool _isShooting;
+    [SerializeField] private Health _health;
+    [SerializeField] private WeaponRecoil _recoil;
+    [SerializeField] private GunSoundManager _soundManager; 
+    [SerializeField] private GameObject _killFeed;
+    [SerializeField] private GameObject _hitMarker; 
     private bool _spawned = false; 
-
-    private void Start()
-    {
-        //_hitMarker = GameObject.FindObjectOfType<HitmarkerTag>().gameObject;
-        _ammoHud = FindObjectOfType<PlayerHudTag>().GetComponentInChildren<TextMeshProUGUI>();
-        _ammoHud.text = "Ammo: " + AmmoInMag.ToString() + "/" + _magSize;
-    }
 
     public override void Spawned()
     {
-        base.Spawned();
         if (Runner.IsServer) 
         {
             CanFire = true; 
@@ -46,8 +37,11 @@ public class Weapon : NetworkBehaviour
             _magSize = 30;
             PlayerFiresGun = false; 
         }
+        _ammoHud = FindObjectOfType<PlayerHudTag>().GetComponentInChildren<TextMeshProUGUI>();
+        _ammoHud.text = "Ammo: " + AmmoInMag.ToString() + "/" + _magSize;
         _spawned = true; 
     }
+
     public void OnEnable()
     {
         if(_spawned && Runner.IsServer) 
@@ -55,74 +49,54 @@ public class Weapon : NetworkBehaviour
             CanFire = true;
         }
     }
-
-    
+  
     public override void FixedUpdateNetwork()
     {
-        if (Runner.IsServer) 
-        {
-            if(AmmoInMag <= 0) 
-            {
-                AmmoInMag = _magSize; 
-            }
-             if (GetInput(out NetworkInputData data) && AmmoInMag > 0)
-             {
-                if (data.Buttons.IsSet(MyButtons.Shooting) && CanFire)
-                {
-                    PlayerFiresGun = true;
-                    _isShooting = true;
-                    Shoot(GunBarrel.position, GunBarrel.forward);
-                    CanFire = false;
-                    if (!_isFUllAutomatic)
-                    {
-                        data.Buttons.Set(MyButtons.Shooting, false);
-                    }
-                    AmmoInMag--;
-                    StartCoroutine(FireCoolDown(_delayFireTime));
-                }
-                else if (data.Buttons.IsSet(MyButtons.Shooting) == false) 
-                {
-                    PlayerFiresGun = false;
-                    _isShooting = false; 
-                }
-             }
-             else 
-             {
-                 _isShooting = false;
-                 PlayerFiresGun = false;
-             }
-        }
-        if(_ammoHud != null && HasInputAuthority) 
-        {
+        if (_ammoHud != null && HasInputAuthority)
             _ammoHud.text = "Ammo: " + AmmoInMag.ToString() + "/" + _magSize;
+
+        if (!Runner.IsServer)
+            return; 
+
+        if(AmmoInMag <= 0) 
+            AmmoInMag = _magSize; 
+
+        if (GetInput(out NetworkInputData data) == false)
+            return; 
+
+        if (data.Buttons.IsSet(MyButtons.Shooting) && CanFire)
+        {
+            PlayerFiresGun = true;
+            CanFire = false;
+            Shoot(GunBarrel.position, GunBarrel.forward);
+            _soundManager.Rpc_PlayShotSound(); 
+            _recoil.ApplyRecoil();
+            AmmoInMag--;
+            StartCoroutine(FireCoolDown(_delayFireTime));
+        }
+        else if (data.Buttons.IsSet(MyButtons.Shooting) == false) 
+        {
+            PlayerFiresGun = false;
         }
     }
 
-        IEnumerator FireCoolDown(float time)
-        {
-             yield return new WaitForSeconds(time);
-             CanFire = true; 
-        }
+    IEnumerator FireCoolDown(float time)
+    {
+         yield return new WaitForSeconds(time);
+         CanFire = true; 
+    }
 
     void Shoot(Vector3 pos, Vector3 dir) 
     {
-        if (Runner.LagCompensation.Raycast(pos, dir, _range, Runner.LocalPlayer, out LagCompensatedHit hit, ~_ignoreLayer, HitOptions.IncludePhysX))
+        if (!Runner.LagCompensation.Raycast(pos, dir, _range, Runner.LocalPlayer, out LagCompensatedHit hit, ~_ignoreLayer, HitOptions.IncludePhysX))
+            return;
+        try 
         {
-            Health playerHit = null; 
-            try 
-            {
-                playerHit = hit.Hitbox.GetComponent<Health>(); 
-            } 
-            catch
-            {
-                return; 
-            }
+            Health playerHit = hit.Hitbox.GetComponent<Health>(); 
             PlayerRef target = playerHit.GetPlayer();
             playerHit.DealDamage(target, _damage, _health.GetPlayer());
+            _hitMarker.SetActive(true);
         }
-    }
-    public void ResetCanFire() 
-    {
-        CanFire = true; 
+        catch { }    
     }
 }

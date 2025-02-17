@@ -9,7 +9,7 @@ using TMPro;
 using Fusion.Addons.SimpleKCC;
 using System.Linq;
 
-public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCallbacks
+public class BasicSpawner : SimulationBehaviour, INetworkRunnerCallbacks
 {
     [SerializeField] private NetworkPrefabRef _playerPrefab;
     [SerializeField] private NetworkPrefabRef _roundManager;
@@ -18,14 +18,12 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
     [SerializeField] private Camera _cam;
     [SerializeField] private KdManager kdManager;
     [SerializeField] private string _sceneToLoad; 
-    private Vector2Accumulator _accumulator = new Vector2Accumulator(0.02f, true);
     [SerializeField] private Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new();
+    [SerializeField] private PlayerInput _input; 
     private Dictionary<PlayerRef, Health> _playersHealths = new(); 
     private NetworkRunner _runnerRef;
     private GameObject _mainCam; 
     public  NetworkRunner RunnerRef;
-    private bool _resetInput;
-    private NetworkInputData _input = new NetworkInputData();
     private TextMeshProUGUI _kdText;
     public int PlayerCount = 0; 
     
@@ -34,7 +32,8 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
 
     void Start() 
     {
-        Application.runInBackground = true; 
+        Application.runInBackground = true;
+        Application.targetFrameRate = 60; 
     }
     public float ReturnPlayerHealth(PlayerRef player) 
     {
@@ -76,10 +75,10 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
     }
     public async void StartGame(GameMode mode)
     {
-        _runnerRef = GetComponent<NetworkRunner>(); 
+        _runnerRef = GetComponent<NetworkRunner>();
         // Create the Fusion runner and let it know that we will be providing user input
         var networkEvents = this.gameObject.GetComponent<NetworkEvents>();
-        networkEvents.OnInput.AddListener(OnInput);
+        networkEvents.OnInput.AddListener(_input.OnInput);
         RunnerRef = _runnerRef;
         // Create the NetworkSceneInfo from the current scene
         int sceneIndex = SceneUtility.GetBuildIndexByScenePath(_sceneToLoad);
@@ -155,45 +154,6 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
         }
     }
 
-    void IBeforeUpdate.BeforeUpdate()
-    {
-        if (_runnerRef != null)
-        {
-               float pingRaw =  (float)_runnerRef.GetPlayerRtt(_runnerRef.LocalPlayer) * 1000;
-            int ping = Mathf.RoundToInt(pingRaw);
-            if(_kdText != null) 
-            {
-                _kdText.text = ping.ToString(); 
-            }
-        }
-        
-        if (_resetInput)
-        {
-            _resetInput = false; 
-            _input = default;
-        }
-        if (Cursor.lockState != CursorLockMode.Locked)
-            return;
-        _input.Buttons.Set(MyButtons.Forward, Input.GetKey(KeyCode.W));
-        _input.Buttons.Set(MyButtons.Left, Input.GetKey(KeyCode.A));
-        _input.Buttons.Set(MyButtons.Backward, Input.GetKey(KeyCode.S));
-        _input.Buttons.Set(MyButtons.Right, Input.GetKey(KeyCode.D));
-        _input.Buttons.Set(MyButtons.Jump, Input.GetButton("Jump"));
-        _input.Buttons.Set(MyButtons.Shooting, Input.GetButton("Fire1"));
-        _input.Buttons.Set(MyButtons.Crouch, Input.GetButton("Crouch"));
-        _input.Buttons.Set(MyButtons.ShowScoreBoard, Input.GetKey(KeyCode.Tab)); 
-
-        Mouse mouse = Mouse.current;
-        if (mouse != null)
-        {
-            Vector2 mouseDelta = mouse.delta.ReadValue();
-            Vector2 lookRotationDelta = new(-mouseDelta.y, mouseDelta.x);
-            _accumulator.Accumulate(lookRotationDelta * (7.5f * Runner.DeltaTime));
-            //_input.AimDirection += lookRotationDelta; 
-        }
-
-    }
-
     public void DespawnPlayer() 
     {
         if (Runner.IsServer) 
@@ -233,9 +193,6 @@ public class BasicSpawner : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
     }
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
-        _input.AimDirection = _accumulator.ConsumeTickAligned(runner); 
-        input.Set(_input);
-        _resetInput = true; 
     }
 
     public static void SetIsCollectedTrue_Static()

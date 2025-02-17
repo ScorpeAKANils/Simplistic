@@ -18,11 +18,11 @@ public class Crouch : NetworkBehaviour
     public override void Spawned()
     {
         _originalScale = transform.localScale;
-        _crouchScale = _originalScale / 2;
+        _crouchScale = _originalScale * 0.75f;
         _hitBoxOSize = _hitBox.BoxExtents;
-        _hitBoxCrouchSize = _hitBoxOSize / 2;
+        _hitBoxCrouchSize = _hitBoxOSize * 0.75f; 
         _hitBoxOffsetY = _hitBox.Offset.y;
-        _hitBoxOffsetYCrouch = _hitBoxOffsetY / 2f; 
+        _hitBoxOffsetYCrouch = _hitBoxOffsetY * 0.75f;
         _cc = this.GetComponent<SimpleKCC>();
 
     }
