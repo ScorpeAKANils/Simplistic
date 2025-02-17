@@ -11,17 +11,17 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 42186c81a47bc534baaa5eac12a2124e,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 12.188932
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 42186c81a47bc534baaa5eac12a2124e,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 5.4360337
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 42186c81a47bc534baaa5eac12a2124e,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -125.85113
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 42186c81a47bc534baaa5eac12a2124e,
         type: 3}
@@ -85,6 +85,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1652921682794004860}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 42186c81a47bc534baaa5eac12a2124e,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4676978525559815242}
   m_SourcePrefab: {fileID: 100100000, guid: 42186c81a47bc534baaa5eac12a2124e, type: 3}
 --- !u!1 &5916216388738198806 stripped
 GameObject:
@@ -110,6 +114,7 @@ MonoBehaviour:
   NestedObjects: []
   NetworkedBehaviours:
   - {fileID: 1652921682794004860}
+  - {fileID: 4676978525559815242}
   ForceRemoteRenderTimeframe: 0
 --- !u!114 &1652921682794004860
 MonoBehaviour:
@@ -125,3 +130,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DestroyWhenUsed: 1
   _type: 1
+--- !u!114 &4676978525559815242
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5916216388738198806}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 158639473, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _stateAuthorityChangeErrorCorrectionDelta: 0.15
+  SyncScale: 0
+  SyncParent: 0
+  _autoAOIOverride: 1
+  DisableSharedModeInterpolation: 0

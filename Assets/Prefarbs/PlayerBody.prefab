@@ -852,7 +852,7 @@ PrefabInstance:
     - target: {fileID: 1930721255770883541, guid: c7a0efb3c2a24da4ea5d2dd7290493ee,
         type: 3}
       propertyPath: _recoilFactor
-      value: 1
+      value: 35
       objectReference: {fileID: 0}
     - target: {fileID: 1930721255770883541, guid: c7a0efb3c2a24da4ea5d2dd7290493ee,
         type: 3}
@@ -1175,12 +1175,12 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 4147de442aca4874ba4ed2827294a8d5, type: 2}
+      objectReference: {fileID: 2100000, guid: cd5675508f57200479ae5263135d8399, type: 2}
     - target: {fileID: -7511558181221131132, guid: 4b5510b840c490e44847203859628a8d,
         type: 3}
       propertyPath: m_Materials.Array.data[1]
       value: 
-      objectReference: {fileID: 2100000, guid: cd5675508f57200479ae5263135d8399, type: 2}
+      objectReference: {fileID: 2100000, guid: 4147de442aca4874ba4ed2827294a8d5, type: 2}
     - target: {fileID: 919132149155446097, guid: 4b5510b840c490e44847203859628a8d,
         type: 3}
       propertyPath: m_Name
@@ -1391,7 +1391,7 @@ MonoBehaviour:
     RawGuidValue: cab44bb5df000394ab24d541e84382c7
   _type: 0
   _delayFireTime: 0.16667
-  _recoilFactor: 0.15
+  _recoilFactor: 0.05
   _damage: 15
   _range: 500
   _gunBarrel: {fileID: 4022458691614968933}
@@ -1684,11 +1684,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _zoomFovs:
-  - 10
   - 7.5
   - 5
   - 2.5
   - 1.25
+  - 0.625
   _cam: {fileID: 5023064047708035922}
 --- !u!1 &8880628238516232590 stripped
 GameObject:
