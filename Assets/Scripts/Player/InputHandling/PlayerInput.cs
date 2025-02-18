@@ -23,13 +23,21 @@ public class PlayerInput : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCal
         }
         if (Cursor.lockState != CursorLockMode.Locked)
             return;
+        //Movement
         _input.Buttons.Set(MyButtons.Forward, Input.GetKey(KeyCode.W));
         _input.Buttons.Set(MyButtons.Left, Input.GetKey(KeyCode.A));
         _input.Buttons.Set(MyButtons.Backward, Input.GetKey(KeyCode.S));
         _input.Buttons.Set(MyButtons.Right, Input.GetKey(KeyCode.D));
         _input.Buttons.Set(MyButtons.Jump, Input.GetButton("Jump"));
-        _input.Buttons.Set(MyButtons.Shooting, Input.GetButton("Fire1"));
         _input.Buttons.Set(MyButtons.Crouch, Input.GetButton("Crouch"));
+
+        //Weapons
+        _input.Buttons.Set(MyButtons.Shooting, Input.GetButton("Fire1"));
+        _input.Buttons.Set(MyButtons.Reload, Input.GetKey(KeyCode.R));
+        _input.Buttons.Set(MyButtons.Protogun, Input.GetKey(KeyCode.Alpha1));
+        _input.Buttons.Set(MyButtons.SilentDeath, Input.GetKey(KeyCode.Alpha2));
+
+        //UI
         _input.Buttons.Set(MyButtons.ShowScoreBoard, Input.GetKey(KeyCode.Tab));
 
         Mouse mouse = Mouse.current;
@@ -49,6 +57,8 @@ public class PlayerInput : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCal
         _resetInput = true;
     }
 
+
+    //this shit needs to be here, because of the INetworkRunnerCallbacks, because Fusion gives a shit about solid i guess 
     public void OnConnectedToServer(NetworkRunner runner)
     {
     }
@@ -120,17 +130,5 @@ public class PlayerInput : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCal
 
     public void OnUserSimulationMessage(NetworkRunner runner, SimulationMessagePtr message)
     {
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

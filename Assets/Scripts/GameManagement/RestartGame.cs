@@ -11,6 +11,7 @@ public class RestartGame : NetworkBehaviour
 
     public void LeaveGame() 
     {
-        Runner.Disconnect(Runner.LocalPlayer); 
+        Runner.Disconnect(Runner.LocalPlayer);
+        UnityEngine.SceneManagement.SceneManager.LoadScene(0); 
     }
 }

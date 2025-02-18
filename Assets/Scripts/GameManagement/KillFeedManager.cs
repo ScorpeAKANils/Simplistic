@@ -22,16 +22,16 @@ public class KillFeedManager : MonoBehaviour
 
     public static void ShowKillMessage(PlayerRef killedPlayer, PlayerRef killer) 
     {
-        KillFeedMessage[KillFeedShown].text = killer.ToString() + " killed " + killedPlayer.ToString();
-        FindObjectOfType<KillFeedManager>().StartCoroutine(ShowMessageYield(KillFeedMessage[KillFeedShown], 2f));
-        if(KillFeedShown < KillFeedMessage.Count-1) 
-        {
-            KillFeedShown++; 
-        } else 
-        {
-            KillFeedShown = 0; 
-        }
-    } 
+       //KillFeedMessage[KillFeedShown].text = killer.ToString() + " killed " + killedPlayer.ToString();
+       //FindObjectOfType<KillFeedManager>().StartCoroutine(ShowMessageYield(KillFeedMessage[KillFeedShown], 2f));
+       //if(KillFeedShown < KillFeedMessage.Count-1) 
+       //{
+       //    KillFeedShown++; 
+       //} else 
+       //{
+       //    KillFeedShown = 0; 
+       //}
+    }  //
 
     private static IEnumerator ShowMessageYield(TextMeshProUGUI msg, float duration) 
     {

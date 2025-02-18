@@ -862,6 +862,16 @@ PrefabInstance:
       objectReference: {fileID: 4022458691614968933}
     - target: {fileID: 1930721255770883541, guid: c7a0efb3c2a24da4ea5d2dd7290493ee,
         type: 3}
+      propertyPath: __magSize
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1930721255770883541, guid: c7a0efb3c2a24da4ea5d2dd7290493ee,
+        type: 3}
+      propertyPath: _AmmoInMag
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1930721255770883541, guid: c7a0efb3c2a24da4ea5d2dd7290493ee,
+        type: 3}
       propertyPath: _gunBarrel
       value: 
       objectReference: {fileID: 4022458691614968933}
@@ -870,6 +880,11 @@ PrefabInstance:
       propertyPath: _hitMarker
       value: 
       objectReference: {fileID: 3173156255776849338}
+    - target: {fileID: 1930721255770883541, guid: c7a0efb3c2a24da4ea5d2dd7290493ee,
+        type: 3}
+      propertyPath: _reloadDelay
+      value: 1.5
+      objectReference: {fileID: 0}
     - target: {fileID: 1930721255770883541, guid: c7a0efb3c2a24da4ea5d2dd7290493ee,
         type: 3}
       propertyPath: _lineRenderer
@@ -888,7 +903,7 @@ PrefabInstance:
     - target: {fileID: 1930721255770883541, guid: c7a0efb3c2a24da4ea5d2dd7290493ee,
         type: 3}
       propertyPath: _delayFireTime
-      value: 1.2
+      value: 1.167
       objectReference: {fileID: 0}
     - target: {fileID: 1930721255770883541, guid: c7a0efb3c2a24da4ea5d2dd7290493ee,
         type: 3}
@@ -1444,16 +1459,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _CanFire: 1
   _IsCollected: 0
-  _AmmoInMag: 0
+  _AmmoInMag: 30
   _PlayerFiresGun: 0
   Anim: {fileID: 2549587303477303879}
   Audio: {fileID: 4524447171109843989}
-  __magSize: 0
+  __magSize: 30
   GunBarrel: {fileID: 4022458691614968933}
   _bulletPrefab:
     RawGuidValue: cab44bb5df000394ab24d541e84382c7
   _type: 0
-  _delayFireTime: 0.16667
+  _delayFireTime: 0.117
+  _reloadDelay: 1.5
   _damage: 15
   _range: 500
   _ignoreLayer:
@@ -1521,7 +1537,7 @@ PrefabInstance:
     - target: {fileID: 946537676642354101, guid: c6d6714a78e6e8e4aaca488db3968124,
         type: 3}
       propertyPath: field of view
-      value: 20
+      value: 7.5
       objectReference: {fileID: 0}
     - target: {fileID: 946537676642354101, guid: c6d6714a78e6e8e4aaca488db3968124,
         type: 3}
@@ -1889,16 +1905,26 @@ PrefabInstance:
     - target: {fileID: 2091270960797683194, guid: f43a9429f66a94340b64175a6bd37916,
         type: 3}
       propertyPath: m_Color.b
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2091270960797683194, guid: f43a9429f66a94340b64175a6bd37916,
         type: 3}
       propertyPath: m_Color.g
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2091270960797683194, guid: f43a9429f66a94340b64175a6bd37916,
         type: 3}
       propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2091270960797683194, guid: f43a9429f66a94340b64175a6bd37916,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2091270960797683194, guid: f43a9429f66a94340b64175a6bd37916,
+        type: 3}
+      propertyPath: m_RaycastTarget
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2249817638768207324, guid: f43a9429f66a94340b64175a6bd37916,
@@ -1909,7 +1935,27 @@ PrefabInstance:
     - target: {fileID: 5036300854511293462, guid: f43a9429f66a94340b64175a6bd37916,
         type: 3}
       propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7130677186887106456, guid: f43a9429f66a94340b64175a6bd37916,
+        type: 3}
+      propertyPath: m_UiScaleMode
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7130677186887106456, guid: f43a9429f66a94340b64175a6bd37916,
+        type: 3}
+      propertyPath: m_MatchWidthOrHeight
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7130677186887106456, guid: f43a9429f66a94340b64175a6bd37916,
+        type: 3}
+      propertyPath: m_ReferenceResolution.x
+      value: 800
+      objectReference: {fileID: 0}
+    - target: {fileID: 7130677186887106456, guid: f43a9429f66a94340b64175a6bd37916,
+        type: 3}
+      propertyPath: m_ReferenceResolution.y
+      value: 600
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
