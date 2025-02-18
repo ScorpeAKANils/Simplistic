@@ -883,7 +883,7 @@ PrefabInstance:
     - target: {fileID: 1930721255770883541, guid: c7a0efb3c2a24da4ea5d2dd7290493ee,
         type: 3}
       propertyPath: _reloadDelay
-      value: 1.5
+      value: 2.84
       objectReference: {fileID: 0}
     - target: {fileID: 1930721255770883541, guid: c7a0efb3c2a24da4ea5d2dd7290493ee,
         type: 3}
