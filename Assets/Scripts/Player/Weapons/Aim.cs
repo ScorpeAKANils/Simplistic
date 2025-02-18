@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Aim : SimulationBehaviour
+public class Aim : NetworkBehaviour
 {
     [SerializeField] private float _normalFov = 90f;
     [SerializeField] private float _aimFov; 
@@ -23,7 +23,7 @@ public class Aim : SimulationBehaviour
     {
         try 
         {
-            if (Runner.LocalPlayer != _health.GetPlayer())
+            if (!HasInputAuthority)
                 return;
              _isAiming = Input.GetButton("Fire2"); 
              if(_isAiming) 
