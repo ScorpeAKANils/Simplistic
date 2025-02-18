@@ -42,19 +42,29 @@ public class WeaponManager : NetworkBehaviour
 
     public override void FixedUpdateNetwork()
     {
-        base.FixedUpdateNetwork();
-        if (oldWeapon != CurrentWeapon)
+        if(Runner.IsServer) 
         {
-            oldWeapon = CurrentWeapon;
-            ActivateWeapon((WeaponType)CurrentWeapon);
-        }
-
-        for (int i = 0; i <= Weapons.Count-1; i++)
-        {
-            if (Input.GetKeyDown((KeyCode)((int)KeyCode.Alpha0 + i)))
+            if(GetInput(out NetworkInputData data)) 
             {
-                Rpc_InformOverWeaponChange(i); 
+                if(data.Buttons.IsSet(MyButtons.Protogun)) 
+                {
+                    SetWeaponActive(WeaponType.Protogun);
+                }
+
+                if (data.Buttons.IsSet(MyButtons.SilentDeath))
+                {
+                    SetWeaponActive(WeaponType.Sniper); 
+                }
+                ActivateWeapon((WeaponType)CurrentWeapon); 
             }
+        }
+    }
+
+    public void SetWeaponActive(WeaponType type) 
+    {
+        if (WeaponsCollectionStatus[type] == true | (int)type == 0) 
+        {
+            CurrentWeapon = (int)type;
         }
     }
 

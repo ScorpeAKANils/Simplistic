@@ -5,7 +5,7 @@ using UnityEngine;
 public class Aim : MonoBehaviour
 {
     [SerializeField] private float _normalFov = 90f;
-    [SerializeField] private List<float> _aimFov = new(); 
+    [SerializeField] private float _aimFov; 
     [SerializeField] private WeaponManager _wM;
     [SerializeField] private MouseLook _mL; 
     private bool _isAiming; 
@@ -24,13 +24,11 @@ public class Aim : MonoBehaviour
              _isAiming = Input.GetButton("Fire2"); 
              if(_isAiming) 
              {
-                 _cam.fieldOfView = _aimFov[_wM.CurrentWeapon];
-                 _mL.SetSensitivityFactor((_aimFov[_wM.CurrentWeapon] / _normalFov) * 0.5f); 
+                 _cam.fieldOfView = _aimFov;
                  _wM.GetActiveWeapon().Anim.SetBool("Aim", true);
              } else 
              {
                  _cam.fieldOfView= _normalFov;
-                 _mL.SetSensitivityFactor(_aimFov[_wM.CurrentWeapon] / _normalFov);
                  _wM.GetActiveWeapon().Anim.SetBool("Aim", false);
              }
         } 
