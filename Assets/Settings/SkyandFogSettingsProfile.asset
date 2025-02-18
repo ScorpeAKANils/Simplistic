@@ -17,10 +17,10 @@ MonoBehaviour:
     m_OverrideState: 1
     m_Value: 0
   skyIntensityMode:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 0
   exposure:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 0
   multiplier:
     m_OverrideState: 1
@@ -35,17 +35,17 @@ MonoBehaviour:
     m_OverrideState: 1
     m_Value: 20000
   updateMode:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 0
   updatePeriod:
     m_OverrideState: 1
     m_Value: 0
   includeSunInBaking:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 1
   type:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 0
   sphericalMode:
     m_OverrideState: 1
     m_Value: 1
@@ -146,10 +146,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 953beb541740ddc499d005ee80c9ff29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   quality:
     m_OverrideState: 1
-    m_Value: 2
+    m_Value: 0
   enabled:
     m_OverrideState: 1
     m_Value: 1
@@ -215,10 +215,10 @@ MonoBehaviour:
     m_Value: 64
   m_VolumetricFogBudget:
     m_OverrideState: 1
-    m_Value: 0.666
+    m_Value: 0.166
   m_ResolutionDepthRatio:
     m_OverrideState: 1
-    m_Value: 0.5
+    m_Value: 0.666
   directionalLightsOnly:
     m_OverrideState: 0
     m_Value: 0
@@ -282,7 +282,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d08ce26990eb1a4a9177b860541e702, type: 3}
   m_Name: Exposure
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   mode:
     m_OverrideState: 1
     m_Value: 4
