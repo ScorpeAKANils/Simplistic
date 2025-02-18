@@ -23,7 +23,7 @@ public class MouseLook : NetworkBehaviour
     {
         if (GetInput(out NetworkInputData data))
         {
-            Vector2 mouseDir = data.AimDirection;
+            Vector2 mouseDir = data.AimDirection * _sensitivityFactor;
             _cc.AddLookRotation(mouseDir, -89f, 89f); 
             _camTransform.localRotation = Quaternion.Euler(_cc.GetLookRotation().x, 0, 0);
         }
@@ -31,7 +31,8 @@ public class MouseLook : NetworkBehaviour
 
     public void SetSensitivityFactor(float val) 
     {
-        _sensitivityFactor = val; 
+        if(HasInputAuthority)
+            _sensitivityFactor = val; 
     }
 
    public override void Render()

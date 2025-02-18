@@ -6,7 +6,7 @@ public class Aim : MonoBehaviour
 {
     [SerializeField] private float _normalFov = 90f;
     [SerializeField] private float _aimFov; 
-    [SerializeField] private WeaponManager _wM;
+    [SerializeField] private Weapon _wM;
     [SerializeField] private MouseLook _mL; 
     private bool _isAiming; 
     private Camera _cam; 
@@ -25,11 +25,13 @@ public class Aim : MonoBehaviour
              if(_isAiming) 
              {
                  _cam.fieldOfView = _aimFov;
-                 _wM.GetActiveWeapon().Anim.SetBool("Aim", true);
-             } else 
+                 _wM.Anim.SetBool("Aim", true);
+                _mL.SetSensitivityFactor(_aimFov/_normalFov);
+            } else 
              {
                  _cam.fieldOfView= _normalFov;
-                 _wM.GetActiveWeapon().Anim.SetBool("Aim", false);
+                 _wM.Anim.SetBool("Aim", false);
+                _mL.SetSensitivityFactor(1); 
              }
         } 
         catch 
