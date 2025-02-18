@@ -1130,6 +1130,7 @@ MonoBehaviour:
   _aimFov: 15
   _wM: {fileID: 853071977118636490}
   _mL: {fileID: 7265498075871173010}
+  _health: {fileID: -6877333901596746198}
 --- !u!4 &3331032172397891309 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4550817800063980274, guid: c7a0efb3c2a24da4ea5d2dd7290493ee,
@@ -1547,6 +1548,7 @@ MonoBehaviour:
   _aimFov: 40
   _wM: {fileID: 6750560298107990950}
   _mL: {fileID: 7265498075871173010}
+  _health: {fileID: -6877333901596746198}
 --- !u!1001 &5230725509534898407
 PrefabInstance:
   m_ObjectHideFlags: 0

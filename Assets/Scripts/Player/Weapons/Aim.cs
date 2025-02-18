@@ -1,13 +1,15 @@
+using Fusion;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Aim : MonoBehaviour
+public class Aim : SimulationBehaviour
 {
     [SerializeField] private float _normalFov = 90f;
     [SerializeField] private float _aimFov; 
     [SerializeField] private Weapon _wM;
-    [SerializeField] private MouseLook _mL; 
+    [SerializeField] private MouseLook _mL;
+    [SerializeField] private Health _health; 
     private bool _isAiming; 
     private Camera _cam; 
     void Start()
@@ -21,6 +23,8 @@ public class Aim : MonoBehaviour
     {
         try 
         {
+            if (Runner.LocalPlayer != _health.GetPlayer())
+                return;
              _isAiming = Input.GetButton("Fire2"); 
              if(_isAiming) 
              {
