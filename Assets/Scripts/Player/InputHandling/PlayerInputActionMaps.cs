@@ -32,7 +32,7 @@ public partial class @PlayerInputActionMaps: IInputActionCollection2, IDisposabl
                     ""type"": ""Value"",
                     ""id"": ""7e6db57a-82a9-4cf2-add0-9695033e56f1"",
                     ""expectedControlType"": ""Vector2"",
-                    ""processors"": """",
+                    ""processors"": ""StickDeadzone"",
                     ""interactions"": """",
                     ""initialStateCheck"": true
                 },
@@ -41,7 +41,7 @@ public partial class @PlayerInputActionMaps: IInputActionCollection2, IDisposabl
                     ""type"": ""Value"",
                     ""id"": ""9dfa405e-c3e6-4a38-870a-03e5ee93e440"",
                     ""expectedControlType"": ""Vector2"",
-                    ""processors"": """",
+                    ""processors"": ""StickDeadzone"",
                     ""interactions"": """",
                     ""initialStateCheck"": true
                 }
@@ -75,7 +75,7 @@ public partial class @PlayerInputActionMaps: IInputActionCollection2, IDisposabl
                     ""path"": ""<Keyboard>/w"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";KeyboadMouse"",
                     ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -86,7 +86,7 @@ public partial class @PlayerInputActionMaps: IInputActionCollection2, IDisposabl
                     ""path"": ""<Keyboard>/s"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";KeyboadMouse"",
                     ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -97,7 +97,7 @@ public partial class @PlayerInputActionMaps: IInputActionCollection2, IDisposabl
                     ""path"": ""<Keyboard>/a"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";KeyboadMouse"",
                     ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -108,7 +108,7 @@ public partial class @PlayerInputActionMaps: IInputActionCollection2, IDisposabl
                     ""path"": ""<Keyboard>/d"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";KeyboadMouse"",
                     ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -130,7 +130,7 @@ public partial class @PlayerInputActionMaps: IInputActionCollection2, IDisposabl
                     ""path"": ""<XInputController>/leftStick/up"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";Controller"",
                     ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -141,7 +141,7 @@ public partial class @PlayerInputActionMaps: IInputActionCollection2, IDisposabl
                     ""path"": ""<XInputController>/leftStick/down"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";Controller"",
                     ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -152,7 +152,7 @@ public partial class @PlayerInputActionMaps: IInputActionCollection2, IDisposabl
                     ""path"": ""<XInputController>/leftStick/left"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";Controller"",
                     ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -163,7 +163,7 @@ public partial class @PlayerInputActionMaps: IInputActionCollection2, IDisposabl
                     ""path"": ""<XInputController>/leftStick/right"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";Controller"",
                     ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -171,10 +171,10 @@ public partial class @PlayerInputActionMaps: IInputActionCollection2, IDisposabl
                 {
                     ""name"": """",
                     ""id"": ""1c324c6d-f7b4-465d-9560-b2570b756924"",
-                    ""path"": """",
+                    ""path"": ""<Pointer>/delta"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";KeyboadMouse"",
                     ""action"": ""MouseLook"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -182,9 +182,9 @@ public partial class @PlayerInputActionMaps: IInputActionCollection2, IDisposabl
                 {
                     ""name"": ""Mouse"",
                     ""id"": ""b5d95a09-97d3-4fa7-a6a0-3b327fb9ae64"",
-                    ""path"": ""2DVector"",
+                    ""path"": ""2DVector(mode=1)"",
                     ""interactions"": """",
-                    ""processors"": """",
+                    ""processors"": ""StickDeadzone"",
                     ""groups"": """",
                     ""action"": ""MouseLook"",
                     ""isComposite"": true,
@@ -193,7 +193,7 @@ public partial class @PlayerInputActionMaps: IInputActionCollection2, IDisposabl
                 {
                     ""name"": ""up"",
                     ""id"": ""a4e4836b-4188-49bc-bbe2-cd9475de35d7"",
-                    ""path"": ""<Mouse>/delta/up"",
+                    ""path"": """",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -204,7 +204,7 @@ public partial class @PlayerInputActionMaps: IInputActionCollection2, IDisposabl
                 {
                     ""name"": ""down"",
                     ""id"": ""1c1babc5-44d6-4e26-b815-1028e11a34bc"",
-                    ""path"": ""<Mouse>/delta/down"",
+                    ""path"": """",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -215,7 +215,7 @@ public partial class @PlayerInputActionMaps: IInputActionCollection2, IDisposabl
                 {
                     ""name"": ""left"",
                     ""id"": ""c25a7687-5e26-4de5-a238-92c621201974"",
-                    ""path"": ""<Mouse>/delta/left"",
+                    ""path"": """",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -226,7 +226,7 @@ public partial class @PlayerInputActionMaps: IInputActionCollection2, IDisposabl
                 {
                     ""name"": ""right"",
                     ""id"": ""7b854390-9729-4294-8037-19a453850deb"",
-                    ""path"": ""<Mouse>/delta/right"",
+                    ""path"": """",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -237,9 +237,9 @@ public partial class @PlayerInputActionMaps: IInputActionCollection2, IDisposabl
                 {
                     ""name"": ""RightStick"",
                     ""id"": ""9b98c474-1d2a-4dcb-a20a-612bf38a7ec6"",
-                    ""path"": ""2DVector"",
+                    ""path"": ""2DVector(mode=1)"",
                     ""interactions"": """",
-                    ""processors"": """",
+                    ""processors"": ""StickDeadzone"",
                     ""groups"": """",
                     ""action"": ""MouseLook"",
                     ""isComposite"": true,
@@ -248,7 +248,7 @@ public partial class @PlayerInputActionMaps: IInputActionCollection2, IDisposabl
                 {
                     ""name"": ""up"",
                     ""id"": ""0167fd72-b730-44b3-abb4-63efbf573a9e"",
-                    ""path"": ""<XInputController>/rightStick/up"",
+                    ""path"": """",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -259,7 +259,7 @@ public partial class @PlayerInputActionMaps: IInputActionCollection2, IDisposabl
                 {
                     ""name"": ""down"",
                     ""id"": ""2c94909b-83ba-4eb1-a026-10fb630cf28f"",
-                    ""path"": ""<XInputController>/rightStick/down"",
+                    ""path"": """",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -270,7 +270,7 @@ public partial class @PlayerInputActionMaps: IInputActionCollection2, IDisposabl
                 {
                     ""name"": ""left"",
                     ""id"": ""9c9c2e63-229d-4e8e-81bb-2e4a1f040ab4"",
-                    ""path"": ""<XInputController>/rightStick/left"",
+                    ""path"": """",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -281,18 +281,40 @@ public partial class @PlayerInputActionMaps: IInputActionCollection2, IDisposabl
                 {
                     ""name"": ""right"",
                     ""id"": ""cbaf45c1-7f99-4210-a352-066698a207ea"",
-                    ""path"": ""<XInputController>/rightStick/right"",
+                    ""path"": """",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""MouseLook"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f85c1d77-5eff-4e44-a494-f3bd0ac9c9bb"",
+                    ""path"": ""<XInputController>/rightStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Controller"",
+                    ""action"": ""MouseLook"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
     ],
-    ""controlSchemes"": []
+    ""controlSchemes"": [
+        {
+            ""name"": ""KeyboadMouse"",
+            ""bindingGroup"": ""KeyboadMouse"",
+            ""devices"": []
+        },
+        {
+            ""name"": ""Controller"",
+            ""bindingGroup"": ""Controller"",
+            ""devices"": []
+        }
+    ]
 }");
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
@@ -414,6 +436,24 @@ public partial class @PlayerInputActionMaps: IInputActionCollection2, IDisposabl
         }
     }
     public PlayerActions @Player => new PlayerActions(this);
+    private int m_KeyboadMouseSchemeIndex = -1;
+    public InputControlScheme KeyboadMouseScheme
+    {
+        get
+        {
+            if (m_KeyboadMouseSchemeIndex == -1) m_KeyboadMouseSchemeIndex = asset.FindControlSchemeIndex("KeyboadMouse");
+            return asset.controlSchemes[m_KeyboadMouseSchemeIndex];
+        }
+    }
+    private int m_ControllerSchemeIndex = -1;
+    public InputControlScheme ControllerScheme
+    {
+        get
+        {
+            if (m_ControllerSchemeIndex == -1) m_ControllerSchemeIndex = asset.FindControlSchemeIndex("Controller");
+            return asset.controlSchemes[m_ControllerSchemeIndex];
+        }
+    }
     public interface IPlayerActions
     {
         void OnMovement(InputAction.CallbackContext context);

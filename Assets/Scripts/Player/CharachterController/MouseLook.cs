@@ -23,9 +23,9 @@ public class MouseLook : NetworkBehaviour
     {
         if (GetInput(out NetworkInputData data))
         {
-            Vector2 mouseDir = data.AimDirection * _sensitivityFactor;
-            _cc.AddLookRotation(mouseDir, -89f, 89f); 
-            _camTransform.localRotation = Quaternion.Euler(_cc.GetLookRotation().x, 0, 0);
+            Vector2 mouseDir = data.AimDirection;
+            _cc.AddLookRotation(mouseDir);
+            RefreshCamera(); 
         }
     }
 
@@ -37,6 +37,17 @@ public class MouseLook : NetworkBehaviour
 
    public override void Render()
    {
-       //MoveCamera(); 
+        RefreshCamera();
    }
+
+    public void LateUpdate()
+    {
+        RefreshCamera();
+    }
+
+    public void RefreshCamera()
+    {
+        Vector2 pitchRotation = _cc.GetLookRotation(true, false);
+        _camTransform.localRotation = Quaternion.Euler(pitchRotation);
+    }
 }

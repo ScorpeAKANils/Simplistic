@@ -3,10 +3,6 @@ using UnityEngine;
 
 enum MyButtons 
 {
-    Forward, 
-    Backward, 
-    Left, 
-    Right, 
     Jump, 
     Shooting, 
     Crouch, 
@@ -20,5 +16,6 @@ enum MyButtons
 public struct NetworkInputData : INetworkInput
 {
     public NetworkButtons Buttons;
-    public Vector2 AimDirection; 
+    public Vector2 AimDirection;
+    public Vector2 MoveDirection; 
 }

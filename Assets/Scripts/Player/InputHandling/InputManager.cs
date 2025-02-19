@@ -8,7 +8,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 
-public class InputManager : SimulationBehaviour, INetworkRunnerCallbacks
+public class InputManager : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCallbacks
 {
     private bool _resetInput;
     private Vector2Accumulator _accumulator = new Vector2Accumulator(0.02f, true);
@@ -25,44 +25,9 @@ public class InputManager : SimulationBehaviour, INetworkRunnerCallbacks
     {
         _inputActions.Player.Disable();
     }
-    void Update()
-    {
-        
-
-    }
 
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
-        if (_resetInput)
-        {
-            _resetInput = false;
-            _input = default;
-        }
-        if (Cursor.lockState != CursorLockMode.Locked)
-            return;
-
-        //Movement
-        _input.Buttons.Set(MyButtons.Forward, Input.GetKey(KeyCode.W));
-        _input.Buttons.Set(MyButtons.Left, Input.GetKey(KeyCode.A));
-        _input.Buttons.Set(MyButtons.Backward, Input.GetKey(KeyCode.S));
-        _input.Buttons.Set(MyButtons.Right, Input.GetKey(KeyCode.D));
-        _input.Buttons.Set(MyButtons.Jump, Input.GetButton("Jump"));
-        _input.Buttons.Set(MyButtons.Crouch, Input.GetButton("Crouch"));
-
-        //Weapons
-        _input.Buttons.Set(MyButtons.Shooting, Input.GetButton("Fire1"));
-        _input.Buttons.Set(MyButtons.Reload, Input.GetKey(KeyCode.R));
-        _input.Buttons.Set(MyButtons.Protogun, Input.GetKey(KeyCode.Alpha1));
-        _input.Buttons.Set(MyButtons.SilentDeath, Input.GetKey(KeyCode.Alpha2));
-
-        //UI
-        _input.Buttons.Set(MyButtons.ShowScoreBoard, Input.GetKey(KeyCode.Tab));
-
-
-        Vector2 mouseDelta = _inputActions.Player.MouseLook.ReadValue<Vector2>(); 
-        Debug.Log(mouseDelta);
-        Vector2 lookRotationDelta = new(-mouseDelta.y, mouseDelta.x);
-        _accumulator.Accumulate(lookRotationDelta * 100f * Runner.DeltaTime);
         _input.AimDirection = _accumulator.ConsumeTickAligned(runner);
         input.Set(_input);
         _resetInput = true;
@@ -141,5 +106,36 @@ public class InputManager : SimulationBehaviour, INetworkRunnerCallbacks
 
     public void OnUserSimulationMessage(NetworkRunner runner, SimulationMessagePtr message)
     {
+    }
+
+    public void BeforeUpdate()
+    {
+        if (_resetInput)
+        {
+            _resetInput = false;
+            _input = default;
+        }
+        if (Cursor.lockState != CursorLockMode.Locked)
+            return;
+
+        //Movement
+        _input.MoveDirection = _inputActions.Player.Movement.ReadValue<Vector2>();
+        _input.Buttons.Set(MyButtons.Jump, Input.GetButton("Jump"));
+        _input.Buttons.Set(MyButtons.Crouch, Input.GetButton("Crouch"));
+
+        //Weapons
+        _input.Buttons.Set(MyButtons.Shooting, Input.GetButton("Fire1"));
+        _input.Buttons.Set(MyButtons.Reload, Input.GetKey(KeyCode.R));
+        _input.Buttons.Set(MyButtons.Protogun, Input.GetKey(KeyCode.Alpha1));
+        _input.Buttons.Set(MyButtons.SilentDeath, Input.GetKey(KeyCode.Alpha2));
+
+        //UI
+        _input.Buttons.Set(MyButtons.ShowScoreBoard, Input.GetKey(KeyCode.Tab));
+
+
+        Vector2 mouseDelta = _inputActions.Player.MouseLook.ReadValue<Vector2>();
+        Debug.Log(mouseDelta);
+        Vector2 lookRotationDelta = new(-mouseDelta.y, mouseDelta.x);
+        _accumulator.Accumulate(lookRotationDelta * (250f/60));
     }
 }

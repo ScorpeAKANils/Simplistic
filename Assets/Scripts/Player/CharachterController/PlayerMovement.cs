@@ -31,20 +31,20 @@ public class PlayerMovement : NetworkBehaviour
     private Vector3 ReadInput(NetworkInputData data) 
     {
         Vector3 moveVector = Vector3.zero;
-        if(data.Buttons.IsSet(MyButtons.Forward)) 
+        if(data.MoveDirection.y > 0) 
         {
             moveVector += transform.forward;  
         } 
-        else if (data.Buttons.IsSet(MyButtons.Backward)) 
+        else if (data.MoveDirection.y < 0) 
         {
             moveVector += transform.forward*-1;
         }
 
-        if (data.Buttons.IsSet(MyButtons.Right))
+        if (data.MoveDirection.x > 0)
         {
             moveVector += transform.right;
         }
-        else if (data.Buttons.IsSet(MyButtons.Left))
+        else if (data.MoveDirection.x < 0)
         {
             moveVector += transform.right * -1;
         }
