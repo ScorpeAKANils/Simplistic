@@ -8,13 +8,30 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 
-public class PlayerInput : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCallbacks
+public class InputManager : SimulationBehaviour, INetworkRunnerCallbacks
 {
     private bool _resetInput;
     private Vector2Accumulator _accumulator = new Vector2Accumulator(0.02f, true);
     private NetworkInputData _input = new NetworkInputData();
+    private PlayerInputActionMaps _inputActions;
 
-    void IBeforeUpdate.BeforeUpdate()
+
+    void Awake()
+    {
+        _inputActions = new PlayerInputActionMaps();
+        _inputActions.Player.Enable();
+    }
+    public void OnDisable()
+    {
+        _inputActions.Player.Disable();
+    }
+    void Update()
+    {
+        
+
+    }
+
+    public void OnInput(NetworkRunner runner, NetworkInput input)
     {
         if (_resetInput)
         {
@@ -23,6 +40,7 @@ public class PlayerInput : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCal
         }
         if (Cursor.lockState != CursorLockMode.Locked)
             return;
+
         //Movement
         _input.Buttons.Set(MyButtons.Forward, Input.GetKey(KeyCode.W));
         _input.Buttons.Set(MyButtons.Left, Input.GetKey(KeyCode.A));
@@ -40,18 +58,11 @@ public class PlayerInput : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCal
         //UI
         _input.Buttons.Set(MyButtons.ShowScoreBoard, Input.GetKey(KeyCode.Tab));
 
-        Mouse mouse = Mouse.current;
-        if (mouse != null)
-        {
-            Vector2 mouseDelta = mouse.delta.ReadValue();
-            Vector2 lookRotationDelta = new(-mouseDelta.y, mouseDelta.x);
-            _accumulator.Accumulate(lookRotationDelta * (7.5f * Runner.DeltaTime));
-        }
 
-    }
-
-    public void OnInput(NetworkRunner runner, NetworkInput input)
-    {
+        Vector2 mouseDelta = _inputActions.Player.MouseLook.ReadValue<Vector2>(); 
+        Debug.Log(mouseDelta);
+        Vector2 lookRotationDelta = new(-mouseDelta.y, mouseDelta.x);
+        _accumulator.Accumulate(lookRotationDelta * 100f * Runner.DeltaTime);
         _input.AimDirection = _accumulator.ConsumeTickAligned(runner);
         input.Set(_input);
         _resetInput = true;

@@ -37,6 +37,6 @@ public class MouseLook : NetworkBehaviour
 
    public override void Render()
    {
-       MoveCamera(); 
+       //MoveCamera(); 
    }
 }

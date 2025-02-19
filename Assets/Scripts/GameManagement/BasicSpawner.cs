@@ -19,7 +19,7 @@ public class BasicSpawner : SimulationBehaviour, INetworkRunnerCallbacks
     [SerializeField] private KdManager kdManager;
     [SerializeField] private string _sceneToLoad; 
     [SerializeField] private Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new();
-    [SerializeField] private PlayerInput _input; 
+    [SerializeField] private InputManager _input; 
     private Dictionary<PlayerRef, Health> _playersHealths = new(); 
     private NetworkRunner _runnerRef;
     private GameObject _mainCam; 
