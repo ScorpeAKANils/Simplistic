@@ -6,12 +6,12 @@ using UnityEngine;
 public class Aim : NetworkBehaviour
 {
     [SerializeField] private float _normalFov = 90f;
-    [SerializeField] private float _aimFov; 
+    [SerializeField] private float _aimFov;
     [SerializeField] private Weapon _wM;
     [SerializeField] private MouseLook _mL;
-    [SerializeField] private Health _health; 
-    private bool _isAiming; 
-    private Camera _cam; 
+    [SerializeField] private Health _health;
+    private bool _isAiming;
+    private Camera _cam;
     void Start()
     {
         _cam = Camera.main;
@@ -19,26 +19,27 @@ public class Aim : NetworkBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    public override void FixedUpdateNetwork()
     {
-        try 
+        try
         {
-            if (!HasInputAuthority)
-                return;
-             _isAiming = Input.GetButton("Fire2"); 
-             if(_isAiming) 
-             {
-                 _cam.fieldOfView = _aimFov;
-                 _wM.Anim.SetBool("Aim", true);
-                _mL.SetSensitivityFactor(_aimFov/_normalFov);
-            } else 
-             {
-                 _cam.fieldOfView= _normalFov;
-                 _wM.Anim.SetBool("Aim", false);
-                _mL.SetSensitivityFactor(1); 
-             }
-        } 
-        catch 
+            if (GetInput(out NetworkInputData data))
+            {
+                if (data.Buttons.IsSet(MyButtons.Aim))
+                {
+                    _cam.fieldOfView = _aimFov;
+                    _wM.Anim.SetBool("Aim", true);
+                    _mL.SetSensitivityFactor(_aimFov / _normalFov);
+                }
+                else
+                {
+                    _cam.fieldOfView = _normalFov;
+                    _wM.Anim.SetBool("Aim", false);
+                    _mL.SetSensitivityFactor(1);
+                }
+            }
+        }
+        catch
         {
 
         }

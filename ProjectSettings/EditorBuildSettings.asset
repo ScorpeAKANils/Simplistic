@@ -11,4 +11,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/GameScenes/LakeSide.unity
     guid: 8124e5870f4fd4c779e7a5f994e84ad1
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.input.settings: {fileID: 11400000, guid: a0aa9f705707f1f41a5bae667fae963f,
+      type: 2}
+    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: fdebb2abf220440b3bb42ec28fafa46f,
+      type: 3}

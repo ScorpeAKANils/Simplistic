@@ -11,7 +11,7 @@ public class MouseLook : NetworkBehaviour
     [SerializeField] private List<Weapon> _bullet = new();
     [SerializeField] private WeaponManager _wM;
     [SerializeField] private SimpleKCC _cc;
-
+ 
     public Transform CamTransform { get { return _camTransform; } }
 
     public override void FixedUpdateNetwork()
@@ -23,10 +23,9 @@ public class MouseLook : NetworkBehaviour
     {
         if (GetInput(out NetworkInputData data))
         {
-            Vector2 mouseDir = data.AimDirection;
-            _cc.AddLookRotation(mouseDir);
-            RefreshCamera(); 
+            _cc.AddLookRotation(data.AimDirection, -89f, 89);
         }
+        RefreshCamera(); 
     }
 
     public void SetSensitivityFactor(float val) 

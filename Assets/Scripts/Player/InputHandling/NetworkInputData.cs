@@ -10,7 +10,8 @@ enum MyButtons
     ShowScoreBoard,
     Reload, 
     Protogun, 
-    SilentDeath
+    SilentDeath,
+    Aim
 }
 
 public struct NetworkInputData : INetworkInput

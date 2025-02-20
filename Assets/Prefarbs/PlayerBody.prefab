@@ -1015,16 +1015,21 @@ PrefabInstance:
     - target: {fileID: 8243837931432367183, guid: c7a0efb3c2a24da4ea5d2dd7290493ee,
         type: 3}
       propertyPath: NetworkedBehaviours.Array.size
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 8243837931432367183, guid: c7a0efb3c2a24da4ea5d2dd7290493ee,
         type: 3}
       propertyPath: NetworkedBehaviours.Array.data[1]
       value: 
-      objectReference: {fileID: 3007083739468844812}
+      objectReference: {fileID: 2817797530517956870}
     - target: {fileID: 8243837931432367183, guid: c7a0efb3c2a24da4ea5d2dd7290493ee,
         type: 3}
       propertyPath: NetworkedBehaviours.Array.data[2]
+      value: 
+      objectReference: {fileID: 3007083739468844812}
+    - target: {fileID: 8243837931432367183, guid: c7a0efb3c2a24da4ea5d2dd7290493ee,
+        type: 3}
+      propertyPath: NetworkedBehaviours.Array.data[3]
       value: 
       objectReference: {fileID: 8598452497370200902}
     m_RemovedComponents: []
@@ -1449,6 +1454,7 @@ MonoBehaviour:
   NestedObjects: []
   NetworkedBehaviours:
   - {fileID: 6750560298107990950}
+  - {fileID: 4352426777705120798}
   - {fileID: 5418927132254815709}
   - {fileID: 4207129891527672227}
   ForceRemoteRenderTimeframe: 0

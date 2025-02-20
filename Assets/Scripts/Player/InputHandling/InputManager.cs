@@ -11,10 +11,9 @@ using UnityEngine.InputSystem;
 public class InputManager : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCallbacks
 {
     private bool _resetInput;
-    private Vector2Accumulator _accumulator = new Vector2Accumulator(0.02f, true);
+    private Vector2Accumulator _accumulator = new Vector2Accumulator(0.2f,true);
     private NetworkInputData _input = new NetworkInputData();
-    private PlayerInputActionMaps _inputActions;
-
+    private PlayerInputActionMaps _inputActions; 
 
     void Awake()
     {
@@ -28,7 +27,7 @@ public class InputManager : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
 
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
-        _input.AimDirection = _accumulator.ConsumeTickAligned(runner);
+        //_input.AimDirection = _accumulator.ConsumeTickAligned(runner);
         input.Set(_input);
         _resetInput = true;
     }
@@ -120,22 +119,25 @@ public class InputManager : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
 
         //Movement
         _input.MoveDirection = _inputActions.Player.Movement.ReadValue<Vector2>();
-        _input.Buttons.Set(MyButtons.Jump, Input.GetButton("Jump"));
-        _input.Buttons.Set(MyButtons.Crouch, Input.GetButton("Crouch"));
+        _input.Buttons.Set(MyButtons.Jump, _inputActions.Player.Jump.IsPressed());
+        _input.Buttons.Set(MyButtons.Crouch, _inputActions.Player.Crouch.IsPressed());
 
         //Weapons
-        _input.Buttons.Set(MyButtons.Shooting, Input.GetButton("Fire1"));
-        _input.Buttons.Set(MyButtons.Reload, Input.GetKey(KeyCode.R));
-        _input.Buttons.Set(MyButtons.Protogun, Input.GetKey(KeyCode.Alpha1));
-        _input.Buttons.Set(MyButtons.SilentDeath, Input.GetKey(KeyCode.Alpha2));
+        _input.Buttons.Set(MyButtons.Shooting, _inputActions.Player.Shoot.IsPressed());
+        _input.Buttons.Set(MyButtons.Reload, _inputActions.Player.Reload.IsPressed());
+        _input.Buttons.Set(MyButtons.Aim, _inputActions.Player.Aim.IsPressed()); 
+        _input.Buttons.Set(MyButtons.Protogun, _inputActions.Player.ProtoGun.IsPressed());
+        _input.Buttons.Set(MyButtons.SilentDeath, _inputActions.Player.SilentDeath.IsPressed());
 
         //UI
         _input.Buttons.Set(MyButtons.ShowScoreBoard, Input.GetKey(KeyCode.Tab));
 
-
+        //Mouse Input in the BeforeUpdate from the IBeforeUpdate Interface
+        //Infos: https://doc-api.photonengine.com/en/fusion/current/interface_fusion_1_1_i_before_update.html
         Vector2 mouseDelta = _inputActions.Player.MouseLook.ReadValue<Vector2>();
-        Debug.Log(mouseDelta);
-        Vector2 lookRotationDelta = new(-mouseDelta.y, mouseDelta.x);
-        _accumulator.Accumulate(lookRotationDelta * (250f/60));
+        //_mouseInputVector = Vector2.SmoothDamp(_mouseInputVector, mouseDelta, ref _smoothInputVelocity, _smoothInputSpeed, 1); 
+        /*Vector2 lookRotationDelta*/ _input.AimDirection = new(-mouseDelta.y, mouseDelta.x);
+        _input.AimDirection *= 2; 
+        //_accumulator.Accumulate(lookRotationDelta * (250f/60));
     }
 }

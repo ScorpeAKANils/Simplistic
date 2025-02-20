@@ -11,7 +11,7 @@
     "EnqueueIncompleteSynchronousSpawns": false,
     "InvokeRenderInBatchMode": false,
     "NetworkIdIsObjectName": false,
-    "HideNetworkObjectInactivityGuard": false,
+    "HideNetworkObjectInactivityGuard": true,
     "AllowClientServerModesInWebGL": false,
     "Simulation": {
         "InputDataWordCount": 0,
@@ -22,8 +22,8 @@
         "TickRateSelection": {
             "Client": 64,
             "ServerIndex": 0,
-            "ClientSendIndex": 0,
-            "ServerSendIndex": 0
+            "ClientSendIndex": 1,
+            "ServerSendIndex": 1
         }
     },
     "Network": {
