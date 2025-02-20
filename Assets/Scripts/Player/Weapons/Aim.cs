@@ -23,7 +23,7 @@ public class Aim : NetworkBehaviour
     {
         try
         {
-            if (GetInput(out NetworkInputData data))
+            if (GetInput(out NetworkInputData data) && HasInputAuthority)
             {
                 if (data.Buttons.IsSet(MyButtons.Aim))
                 {

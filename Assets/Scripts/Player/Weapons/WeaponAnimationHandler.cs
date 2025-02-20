@@ -23,7 +23,7 @@ public class WeaponAnimationHandler : NetworkBehaviour
         {
             return;
         }
-        if (GetInput(out NetworkInputData data))
+        if (GetInput(out NetworkInputData data) && HasInputAuthority)
         {
 
             if (data.Buttons.IsSet(MyButtons.Shooting) && _retriggerGunAnim && _gun.AmmoInMag > 0 && _retriggerReloadDelay)

@@ -21,7 +21,7 @@ public class MouseLook : NetworkBehaviour
 
     private void MoveCamera() 
     {
-        if (GetInput(out NetworkInputData data))
+        if (GetInput(out NetworkInputData data) && HasInputAuthority)
         {
             _cc.AddLookRotation(data.AimDirection, -89f, 89);
         }
@@ -46,7 +46,10 @@ public class MouseLook : NetworkBehaviour
 
     public void RefreshCamera()
     {
-        Vector2 pitchRotation = _cc.GetLookRotation(true, false);
-        _camTransform.localRotation = Quaternion.Euler(pitchRotation);
+        if(HasInputAuthority) 
+        {
+            Vector2 pitchRotation = _cc.GetLookRotation(true, false);
+            _camTransform.localRotation = Quaternion.Euler(pitchRotation);
+        }
     }
 }
