@@ -49,7 +49,7 @@ public class InputManager : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
         Vector2 mouseDelta = Vector2.zero;  //= _inputActions.Player.MouseLook.ReadValue<Vector2>();
         Mouse mouse = Mouse.current;
         Gamepad gamepad = Gamepad.current;
-        _accumulator.SmoothingWindow = 1 * Time.unscaledDeltaTime;
+        _accumulator.SmoothingWindow = 1 / (1 / Time.unscaledDeltaTime);
         if (mouse != null && gamepad == null) 
         {
             mouseDelta = mouse.delta.ReadValue(); 
