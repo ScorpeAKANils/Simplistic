@@ -5,10 +5,9 @@ using UnityEngine.Audio;
 
 public class Settings : MonoBehaviour
 {
-    public float MouseSensitivity = 0.15f;
     public AudioMixer audioMixer;
 
-
+    [SerializeField] private MouseLook _mL; 
     private void Start()
     {
         audioMixer.SetFloat("Volume", Mathf.Log10(0.25f) * 20);
@@ -21,6 +20,6 @@ public class Settings : MonoBehaviour
 
     public void SetMouseSensitivity(float sensitivity)
     {
-        MouseSensitivity = sensitivity;
+        _mL.SetSensitivity(sensitivity);
     }
 }

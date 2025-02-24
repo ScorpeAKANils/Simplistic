@@ -56,9 +56,8 @@ public class InputManager : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
         {
             mouseDelta = gamepad.rightStick.ReadValue() * 15f;
         }
-            Vector2 lookRotationDelta = new(-mouseDelta.y, mouseDelta.x);
-            lookRotationDelta *= (10f / 64);
-            _accumulator.Accumulate(lookRotationDelta);
+        Vector2 lookRotationDelta = new(-mouseDelta.y, mouseDelta.x);
+        _accumulator.Accumulate(lookRotationDelta);
         _input.Buttons.Set(MyButtons.Jump, _inputActions.Player.Jump.IsPressed());
         _input.Buttons.Set(MyButtons.Crouch, _inputActions.Player.Crouch.IsPressed());
 
