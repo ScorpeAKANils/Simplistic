@@ -1,55 +1,42 @@
 using Fusion;
-using Fusion.Addons.SimpleKCC; 
+using Fusion.Addons.SimpleKCC;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class MouseLook : NetworkBehaviour
 {
-    [SerializeField] private float _sensitivityFactor = 1; 
+    [SerializeField] private float _sensitivityFactor = 1;
     [SerializeField] private Transform _camTransform;
     [SerializeField] private List<Weapon> _bullet = new();
     [SerializeField] private WeaponManager _wM;
     [SerializeField] private SimpleKCC _cc;
-    private Vector2 _mouseVec; 
- 
+
     public Transform CamTransform { get { return _camTransform; } }
 
     public override void FixedUpdateNetwork()
     {
-        if (GetInput(out NetworkInputData data) /*&& HasInputAuthority*/)
+        MoveCamera();
+    }
+
+    private void MoveCamera()
+    {
+        if (GetInput(out NetworkInputData data))
         {
-            _mouseVec = data.AimDirection * _sensitivityFactor; 
-            MoveCamera(); 
+            Vector2 mouseDir = data.AimDirection * _sensitivityFactor;
+            _cc.AddLookRotation(mouseDir, -89f, 89f);
+            _camTransform.localRotation = Quaternion.Euler(_cc.GetLookRotation().x, 0, 0);
         }
     }
 
-    private void MoveCamera() 
+    public void SetSensitivityFactor(float val)
     {
-        _cc.AddLookRotation(_mouseVec); 
-        RefreshCamera(); 
-    }
-
-    public void SetSensitivityFactor(float val) 
-    {
-        if(HasInputAuthority)
-            _sensitivityFactor = val; 
+        if (HasInputAuthority)
+            _sensitivityFactor = val;
     }
 
     public override void Render()
     {
-         MoveCamera();
-    }
-    public void LateUpdate()
-    {
-        MoveCamera(); 
-    }
-    public void RefreshCamera()
-    {
-        if(HasInputAuthority) 
-        {
-            Vector2 pitchRotation = _cc.GetLookRotation(true, false);
-            _camTransform.localRotation = Quaternion.Euler(pitchRotation);
-        }
+        MoveCamera();
     }
 }
