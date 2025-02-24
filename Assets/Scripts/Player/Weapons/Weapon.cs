@@ -94,16 +94,12 @@ public class Weapon : NetworkBehaviour
     public void OnDisable()
     {
         _hitMarker.SetActive(false);
-        if (Runner.IsServer) 
+        _hitEnemy = false; 
+        if(_reload) 
         {
-            _hitEnemy = false; 
-            if(_reload) 
-            {
-                AmmoInMag = 0;
-                _reload = false; 
-            }
+            AmmoInMag = 0;
+            _reload = false; 
         }
-
     }
 
     IEnumerator FireCoolDown(float time)

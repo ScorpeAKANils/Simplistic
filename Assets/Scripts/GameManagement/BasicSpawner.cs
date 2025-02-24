@@ -33,7 +33,7 @@ public class BasicSpawner : SimulationBehaviour, INetworkRunnerCallbacks
     void Start() 
     {
         Application.runInBackground = true;
-        Application.targetFrameRate = 60; 
+        Application.targetFrameRate = 64; 
     }
     public float ReturnPlayerHealth(PlayerRef player) 
     {

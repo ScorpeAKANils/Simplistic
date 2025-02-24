@@ -357,7 +357,7 @@ public partial class @PlayerInputActionMaps: IInputActionCollection2, IDisposabl
                     ""id"": ""f85c1d77-5eff-4e44-a494-f3bd0ac9c9bb"",
                     ""path"": ""<XInputController>/rightStick"",
                     ""interactions"": """",
-                    ""processors"": """",
+                    ""processors"": ""StickDeadzone"",
                     ""groups"": "";Controller"",
                     ""action"": ""MouseLook"",
                     ""isComposite"": false,

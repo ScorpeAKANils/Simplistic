@@ -11,7 +11,7 @@ using UnityEngine.InputSystem;
 public class InputManager : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCallbacks
 {
     private bool _resetInput;
-    private Vector2Accumulator _accumulator = new Vector2Accumulator(0.2f,true);
+    private Vector2Accumulator _accumulator = new Vector2Accumulator(0.0156f, true);
     private NetworkInputData _input = new NetworkInputData();
     private PlayerInputActionMaps _inputActions; 
 
@@ -27,11 +27,54 @@ public class InputManager : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
 
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
-        //_input.AimDirection = _accumulator.ConsumeTickAligned(runner);
+        _input.AimDirection = _accumulator.ConsumeTickAligned(runner);
         input.Set(_input);
         _resetInput = true;
+        _input.AimDirection = default; 
     }
 
+
+    public void BeforeUpdate() 
+    {
+        if (_resetInput)
+        {
+            _resetInput = false;
+            _input = default;
+        }
+        if (Cursor.lockState != CursorLockMode.Locked)
+            return;
+
+        //Movement
+        _input.MoveDirection = _inputActions.Player.Movement.ReadValue<Vector2>();
+        Vector2 mouseDelta = Vector2.zero;  //= _inputActions.Player.MouseLook.ReadValue<Vector2>();
+        Mouse mouse = Mouse.current;
+        Gamepad gamepad = Gamepad.current; 
+        if(mouse != null && gamepad == null) 
+        {
+            _accumulator.SmoothingWindow = 0.0156f;
+            mouseDelta = mouse.delta.ReadValue(); 
+            Vector2 lookRotationDelta = new(-mouseDelta.y, mouseDelta.x);
+            lookRotationDelta *= (10f / 64);
+            _accumulator.Accumulate(lookRotationDelta);
+        } else if(gamepad != null)
+        {
+            _accumulator.SmoothingWindow = 0.0156f; 
+            mouseDelta = gamepad.rightStick.ReadValue() * 15f;
+            Vector2 lookRotationDelta = new(-mouseDelta.y, mouseDelta.x);
+            lookRotationDelta *= (10f / 64);
+            _accumulator.Accumulate(lookRotationDelta);
+        }
+        _input.Buttons.Set(MyButtons.Jump, _inputActions.Player.Jump.IsPressed());
+        _input.Buttons.Set(MyButtons.Crouch, _inputActions.Player.Crouch.IsPressed());
+
+        //Weapons
+        _input.Buttons.Set(MyButtons.Shooting, _inputActions.Player.Shoot.IsPressed());
+        _input.Buttons.Set(MyButtons.Reload, _inputActions.Player.Reload.IsPressed());
+        _input.Buttons.Set(MyButtons.Aim, _inputActions.Player.Aim.IsPressed());
+        _input.Buttons.Set(MyButtons.Protogun, _inputActions.Player.ProtoGun.IsPressed());
+        _input.Buttons.Set(MyButtons.SilentDeath, _inputActions.Player.SilentDeath.IsPressed());
+        _input.Buttons.Set(MyButtons.ShowScoreBoard, Input.GetKey(KeyCode.Tab));
+    }
 
     //this shit needs to be here, because of the INetworkRunnerCallbacks, because Fusion gives a shit about solid i guess 
     public void OnConnectedToServer(NetworkRunner runner)
@@ -105,39 +148,5 @@ public class InputManager : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
 
     public void OnUserSimulationMessage(NetworkRunner runner, SimulationMessagePtr message)
     {
-    }
-
-    public void BeforeUpdate()
-    {
-        if (_resetInput)
-        {
-            _resetInput = false;
-            _input = default;
-        }
-        if (Cursor.lockState != CursorLockMode.Locked)
-            return;
-
-        //Movement
-        _input.MoveDirection = _inputActions.Player.Movement.ReadValue<Vector2>();
-        _input.Buttons.Set(MyButtons.Jump, _inputActions.Player.Jump.IsPressed());
-        _input.Buttons.Set(MyButtons.Crouch, _inputActions.Player.Crouch.IsPressed());
-
-        //Weapons
-        _input.Buttons.Set(MyButtons.Shooting, _inputActions.Player.Shoot.IsPressed());
-        _input.Buttons.Set(MyButtons.Reload, _inputActions.Player.Reload.IsPressed());
-        _input.Buttons.Set(MyButtons.Aim, _inputActions.Player.Aim.IsPressed()); 
-        _input.Buttons.Set(MyButtons.Protogun, _inputActions.Player.ProtoGun.IsPressed());
-        _input.Buttons.Set(MyButtons.SilentDeath, _inputActions.Player.SilentDeath.IsPressed());
-
-        //UI
-        _input.Buttons.Set(MyButtons.ShowScoreBoard, Input.GetKey(KeyCode.Tab));
-
-        //Mouse Input in the BeforeUpdate from the IBeforeUpdate Interface
-        //Infos: https://doc-api.photonengine.com/en/fusion/current/interface_fusion_1_1_i_before_update.html
-        Vector2 mouseDelta = _inputActions.Player.MouseLook.ReadValue<Vector2>();
-        //_mouseInputVector = Vector2.SmoothDamp(_mouseInputVector, mouseDelta, ref _smoothInputVelocity, _smoothInputSpeed, 1); 
-        /*Vector2 lookRotationDelta*/ _input.AimDirection = new(-mouseDelta.y, mouseDelta.x);
-        _input.AimDirection *= 2; 
-        //_accumulator.Accumulate(lookRotationDelta * (250f/60));
     }
 }

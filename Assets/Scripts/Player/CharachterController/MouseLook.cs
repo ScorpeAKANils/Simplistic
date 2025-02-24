@@ -11,21 +11,27 @@ public class MouseLook : NetworkBehaviour
     [SerializeField] private List<Weapon> _bullet = new();
     [SerializeField] private WeaponManager _wM;
     [SerializeField] private SimpleKCC _cc;
+    private Vector2 _mouseVec; 
  
     public Transform CamTransform { get { return _camTransform; } }
 
     public override void FixedUpdateNetwork()
-    { 
+    {
+        if (Runner.TryGetInputForPlayer(Runner.LocalPlayer, out NetworkInputData data) /*&& HasInputAuthority*/)
+        {
+            _mouseVec = data.AimDirection * _sensitivityFactor; 
+        }
         MoveCamera(); 
     }
 
     private void MoveCamera() 
     {
-        if (GetInput(out NetworkInputData data) && HasInputAuthority)
+        if (HasInputAuthority)
         {
-            _cc.AddLookRotation(data.AimDirection, -89f, 89);
+            //_cc.AddLookRotation(data.AimDirection * _sensitivityFactor, -89f, 89);
+            _cc.AddLookRotation(_mouseVec); 
+            RefreshCamera(); 
         }
-        RefreshCamera(); 
     }
 
     public void SetSensitivityFactor(float val) 
@@ -34,16 +40,14 @@ public class MouseLook : NetworkBehaviour
             _sensitivityFactor = val; 
     }
 
-   public override void Render()
-   {
-        RefreshCamera();
-   }
-
+    public override void Render()
+    {
+         MoveCamera();
+    }
     public void LateUpdate()
     {
-        RefreshCamera();
+        MoveCamera(); 
     }
-
     public void RefreshCamera()
     {
         if(HasInputAuthority) 
