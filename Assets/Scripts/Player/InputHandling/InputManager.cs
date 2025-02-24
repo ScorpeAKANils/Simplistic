@@ -48,22 +48,18 @@ public class InputManager : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
         _input.MoveDirection = _inputActions.Player.Movement.ReadValue<Vector2>();
         Vector2 mouseDelta = Vector2.zero;  //= _inputActions.Player.MouseLook.ReadValue<Vector2>();
         Mouse mouse = Mouse.current;
-        Gamepad gamepad = Gamepad.current; 
-        if(mouse != null && gamepad == null) 
+        Gamepad gamepad = Gamepad.current;
+        _accumulator.SmoothingWindow = 1 * Time.unscaledDeltaTime;
+        if (mouse != null && gamepad == null) 
         {
-            _accumulator.SmoothingWindow = 0.0156f;
             mouseDelta = mouse.delta.ReadValue(); 
-            Vector2 lookRotationDelta = new(-mouseDelta.y, mouseDelta.x);
-            lookRotationDelta *= (10f / 64);
-            _accumulator.Accumulate(lookRotationDelta);
         } else if(gamepad != null)
         {
-            _accumulator.SmoothingWindow = 0.0156f; 
             mouseDelta = gamepad.rightStick.ReadValue() * 15f;
+        }
             Vector2 lookRotationDelta = new(-mouseDelta.y, mouseDelta.x);
             lookRotationDelta *= (10f / 64);
             _accumulator.Accumulate(lookRotationDelta);
-        }
         _input.Buttons.Set(MyButtons.Jump, _inputActions.Player.Jump.IsPressed());
         _input.Buttons.Set(MyButtons.Crouch, _inputActions.Player.Crouch.IsPressed());
 
