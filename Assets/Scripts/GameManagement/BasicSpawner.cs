@@ -100,9 +100,9 @@ public class BasicSpawner : SimulationBehaviour, INetworkRunnerCallbacks
 
     void Update()
     {
-        if (Runner != null)
+        if (_runnerRef != null)
         {
-            _kdText.text = "Ping: " + (Runner.GetPlayerRtt(Runner.LocalPlayer) * 1000).ToString() + "ms"; 
+            _kdText.text = "Ping: " + (_runnerRef.GetPlayerRtt(Runner.LocalPlayer) * 1000).ToString() + "ms"; 
         }
     }
 

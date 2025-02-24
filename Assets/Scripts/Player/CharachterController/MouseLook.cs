@@ -17,21 +17,17 @@ public class MouseLook : NetworkBehaviour
 
     public override void FixedUpdateNetwork()
     {
-        if (Runner.TryGetInputForPlayer(Runner.LocalPlayer, out NetworkInputData data) /*&& HasInputAuthority*/)
+        if (GetInput(out NetworkInputData data) /*&& HasInputAuthority*/)
         {
             _mouseVec = data.AimDirection * _sensitivityFactor; 
+            MoveCamera(); 
         }
-        MoveCamera(); 
     }
 
     private void MoveCamera() 
     {
-        if (HasInputAuthority)
-        {
-            //_cc.AddLookRotation(data.AimDirection * _sensitivityFactor, -89f, 89);
-            _cc.AddLookRotation(_mouseVec); 
-            RefreshCamera(); 
-        }
+        _cc.AddLookRotation(_mouseVec); 
+        RefreshCamera(); 
     }
 
     public void SetSensitivityFactor(float val) 
