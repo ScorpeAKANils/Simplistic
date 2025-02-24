@@ -11,7 +11,7 @@ using UnityEngine.InputSystem;
 public class InputManager : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCallbacks
 {
     private bool _resetInput;
-    private Vector2Accumulator _accumulator = new Vector2Accumulator(0.0156f, true);
+    private Vector2Accumulator _accumulator = new Vector2Accumulator();
     private NetworkInputData _input = new NetworkInputData();
     private PlayerInputActionMaps _inputActions; 
 
@@ -30,7 +30,6 @@ public class InputManager : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
         _input.AimDirection = _accumulator.ConsumeTickAligned(runner);
         input.Set(_input);
         _resetInput = true;
-        //_input.AimDirection = default; 
     }
 
 
