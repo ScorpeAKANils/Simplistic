@@ -38,6 +38,7 @@ public class MouseLook : NetworkBehaviour
         }
         _sensitivityFactor = val;
     }
+
     public void SetSensitivity(float val) 
     {
         if (!HasInputAuthority)
@@ -46,6 +47,7 @@ public class MouseLook : NetworkBehaviour
         }
         _sensitivity = val; 
     }
+
     public override void Render()
     {
         MoveCamera();
