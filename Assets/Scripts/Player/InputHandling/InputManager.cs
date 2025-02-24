@@ -30,7 +30,7 @@ public class InputManager : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
         _input.AimDirection = _accumulator.ConsumeTickAligned(runner);
         input.Set(_input);
         _resetInput = true;
-        _input.AimDirection = default; 
+        //_input.AimDirection = default; 
     }
 
 
