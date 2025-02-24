@@ -32,10 +32,18 @@ public class MouseLook : NetworkBehaviour
 
     public void SetSensitivityFactor(float val)
     {
+        if(!HasInputAuthority) 
+        {
+            return; 
+        }
         _sensitivityFactor = val;
     }
     public void SetSensitivity(float val) 
     {
+        if (!HasInputAuthority)
+        {
+            return;
+        }
         _sensitivity = val; 
     }
     public override void Render()
