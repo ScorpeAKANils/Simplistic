@@ -11,7 +11,7 @@ using UnityEngine.InputSystem;
 public class InputManager : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCallbacks
 {
     private bool _resetInput;
-    private Vector2Accumulator _accumulator = new Vector2Accumulator();
+    private Vector2Accumulator _accumulator = new Vector2Accumulator(0.02f, true);
     private NetworkInputData _input = new NetworkInputData();
     private PlayerInputActionMaps _inputActions; 
 
@@ -48,7 +48,6 @@ public class InputManager : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
         Vector2 mouseDelta = Vector2.zero;  //= _inputActions.Player.MouseLook.ReadValue<Vector2>();
         Mouse mouse = Mouse.current;
         Gamepad gamepad = Gamepad.current;
-        _accumulator.SmoothingWindow = 1 / (1 / Time.unscaledDeltaTime);
         if (mouse != null && gamepad == null) 
         {
             mouseDelta = mouse.delta.ReadValue(); 

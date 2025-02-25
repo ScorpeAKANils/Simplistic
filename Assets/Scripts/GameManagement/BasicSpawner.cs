@@ -98,14 +98,6 @@ public class BasicSpawner : SimulationBehaviour, INetworkRunnerCallbacks
         });
     }
 
-    void Update()
-    {
-        if (_runnerRef != null)
-        {
-            _kdText.text = "Ping: " + (_runnerRef.GetPlayerRtt(Runner.LocalPlayer) * 1000).ToString() + "ms"; 
-        }
-    }
-
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
         if (runner.IsServer)

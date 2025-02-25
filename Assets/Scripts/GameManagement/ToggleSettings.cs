@@ -4,14 +4,13 @@ using UnityEngine;
 
 public class ToggleSettings : MonoBehaviour
 {
-    private GameObject _settings;
+    [SerializeField] private SettingsTag _settings;
     private bool _settingsActive = false;
     private bool _cursorLocked;
 
     // Start is called before the first frame update
     void Start()
     {
-        _settings = FindObjectOfType<SettingsTag>().gameObject;
         ToggleMouseState();
     }
 
@@ -28,7 +27,7 @@ public class ToggleSettings : MonoBehaviour
             _settingsActive = false;
             ToggleMouseState();
         }
-        SettingsTag.Instance.ToggleSettings(_settingsActive); 
+        _settings.ToggleSettings(_settingsActive); 
     }
 
     private void ToggleMouseState()

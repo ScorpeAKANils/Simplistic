@@ -24,7 +24,7 @@ public class MouseLook : NetworkBehaviour
     {
         if (GetInput(out NetworkInputData data))
         {
-            Vector2 mouseDir = data.AimDirection * (_sensitivity * _sensitivityFactor * Runner.DeltaTime);
+            Vector2 mouseDir = data.AimDirection * ((_sensitivity/64f) * _sensitivityFactor);
             _cc.AddLookRotation(mouseDir, -89f, 89f);
             _camTransform.localRotation = Quaternion.Euler(_cc.GetLookRotation().x, 0, 0);
         }
