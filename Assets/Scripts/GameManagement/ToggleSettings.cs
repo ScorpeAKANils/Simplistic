@@ -1,10 +1,12 @@
+using Fusion;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ToggleSettings : MonoBehaviour
+public class ToggleSettings : SimulationBehaviour
 {
     [SerializeField] private SettingsTag _settings;
+    [SerializeField] private Health _health; 
     private bool _settingsActive = false;
     private bool _cursorLocked;
 
@@ -17,6 +19,10 @@ public class ToggleSettings : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(Runner.LocalPlayer != _health.GetPlayer()) 
+        {
+            return; 
+        }
         if (Input.GetKeyDown(KeyCode.Escape) && !_settingsActive)
         {
             _settingsActive = true;

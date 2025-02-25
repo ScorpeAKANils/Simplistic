@@ -1,5 +1,6 @@
 using Fusion;
 using Fusion.Addons.SimpleKCC;
+using Fusion.Addons.KCC;  
 using Fusion.Sockets;
 using System;
 using System.Collections;
@@ -11,7 +12,8 @@ using UnityEngine.InputSystem;
 public class InputManager : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCallbacks
 {
     private bool _resetInput;
-    private Vector2Accumulator _accumulator = new Vector2Accumulator(0.02f, true);
+    private Fusion.Addons.SimpleKCC.Vector2Accumulator _accumulator = new Fusion.Addons.SimpleKCC.Vector2Accumulator(0.02f, true);
+    private Fusion.Addons.KCC.SmoothVector2 _smoother = new(128);
     private NetworkInputData _input = new NetworkInputData();
     private PlayerInputActionMaps _inputActions; 
 
@@ -50,12 +52,15 @@ public class InputManager : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
         Gamepad gamepad = Gamepad.current;
         if (mouse != null && gamepad == null) 
         {
-            mouseDelta = mouse.delta.ReadValue(); 
+            mouseDelta = mouse.delta.ReadValue();
+            
         } else if(gamepad != null)
         {
             mouseDelta = gamepad.rightStick.ReadValue() * 15f;
         }
-        Vector2 lookRotationDelta = new(-mouseDelta.y, mouseDelta.x);
+        _smoother.AddValue(Time.frameCount, Time.unscaledDeltaTime, mouseDelta);
+        Vector2 smoothedVal = _smoother.CalculateSmoothValue(0.01, Time.unscaledDeltaTime); 
+        Vector2 lookRotationDelta = new(-smoothedVal.y, smoothedVal.x);
         _accumulator.Accumulate(lookRotationDelta);
         _input.Buttons.Set(MyButtons.Jump, _inputActions.Player.Jump.IsPressed());
         _input.Buttons.Set(MyButtons.Crouch, _inputActions.Player.Crouch.IsPressed());
