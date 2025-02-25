@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ToggleSettings : SimulationBehaviour
+public class ToggleSettings : NetworkBehaviour
 {
     [SerializeField] private SettingsTag _settings;
     [SerializeField] private Health _health; 
