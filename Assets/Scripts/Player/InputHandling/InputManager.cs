@@ -29,7 +29,7 @@ public class InputManager : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
 
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
-        _input.AimDirection = _accumulator.ConsumeTickAligned(runner);
+        //_input.AimDirection = _accumulator.ConsumeTickAligned(runner);
         input.Set(_input);
         _resetInput = true;
     }
@@ -60,8 +60,8 @@ public class InputManager : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
         }
         _smoother.AddValue(Time.frameCount, Time.unscaledDeltaTime, mouseDelta);
         Vector2 smoothedVal = _smoother.CalculateSmoothValue(0.01, Time.unscaledDeltaTime); 
-        Vector2 lookRotationDelta = new(-smoothedVal.y, smoothedVal.x);
-        _accumulator.Accumulate(lookRotationDelta);
+        /*Vector2 lookRotationDelta*/ _input.AimDirection = new(-smoothedVal.y, smoothedVal.x);
+        //_accumulator.Accumulate(lookRotationDelta);
         _input.Buttons.Set(MyButtons.Jump, _inputActions.Player.Jump.IsPressed());
         _input.Buttons.Set(MyButtons.Crouch, _inputActions.Player.Crouch.IsPressed());
 
