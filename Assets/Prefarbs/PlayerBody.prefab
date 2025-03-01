@@ -228,6 +228,7 @@ MonoBehaviour:
   - {fileID: 4096057149777970709}
   - {fileID: 2311609778973043392}
   - {fileID: 6195596081404704528}
+  - {fileID: 1719648158973481750}
   ForceRemoteRenderTimeframe: 0
 --- !u!114 &7645471081167716647
 MonoBehaviour:
@@ -291,6 +292,7 @@ MonoBehaviour:
   - {fileID: 853071977118636490}
   _wM: {fileID: 6195596081404704528}
   _cc: {fileID: 1258091120750514204}
+  _player: {fileID: -6877333901596746198}
 --- !u!114 &5011711113002730216
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -821,6 +823,11 @@ PrefabInstance:
       propertyPath: _mL
       value: 
       objectReference: {fileID: 7265498075871173010}
+    - target: {fileID: 1809177340236678861, guid: 4a846b55dbf92ec4695cbe9cb610a171,
+        type: 3}
+      propertyPath: _health
+      value: 
+      objectReference: {fileID: -6877333901596746198}
     - target: {fileID: 2472130594342675971, guid: 4a846b55dbf92ec4695cbe9cb610a171,
         type: 3}
       propertyPath: m_Name

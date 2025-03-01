@@ -12,6 +12,7 @@ public class MouseLook : NetworkBehaviour
     [SerializeField] private List<Weapon> _bullet = new();
     [SerializeField] private WeaponManager _wM;
     [SerializeField] private SimpleKCC _cc;
+    [SerializeField] private Health _player; 
 
     public Transform CamTransform { get { return _camTransform; } }
 
@@ -24,7 +25,7 @@ public class MouseLook : NetworkBehaviour
     {
         if (GetInput(out NetworkInputData data))
         {
-            Vector2 mouseDir = data.AimDirection * _sensitivity / 64f;// * _sensitivityFactor;
+            Vector2 mouseDir = data.AimDirection * (_sensitivity / 64f) * _sensitivityFactor;
             _cc.AddLookRotation(mouseDir, -89f, 89f);
             _camTransform.localRotation = Quaternion.Euler(_cc.GetLookRotation().x, 0, 0);
         }
@@ -32,20 +33,18 @@ public class MouseLook : NetworkBehaviour
 
     public void SetSensitivityFactor(float val)
     {
-        if(!HasInputAuthority) 
+        if(Runner.LocalPlayer == _player.GetPlayer()) 
         {
-            return; 
-        }
-        _sensitivityFactor = val;
+            _sensitivityFactor = val;
+        } 
     }
 
     public void SetSensitivity(float val) 
     {
-        if (!HasInputAuthority)
+        if (Runner.LocalPlayer == _player.GetPlayer())
         {
-            return;
+            _sensitivity = val; 
         }
-        _sensitivity = val; 
     }
 
     public override void Render()
