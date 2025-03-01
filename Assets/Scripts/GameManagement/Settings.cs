@@ -7,22 +7,20 @@ using UnityEngine.Audio;
 public class Settings : NetworkBehaviour
 {
     public AudioMixer audioMixer;
-
-    [SerializeField] private MouseLook _mL;
-    [SerializeField] private Health _health; 
+    private InputManager _inputManager;
     private void Start()
     {
         audioMixer.SetFloat("Volume", Mathf.Log10(0.25f) * 20);
+        _inputManager = FindObjectOfType<InputManager>(); 
     }
     // Setzt die Lautstärke des Master-AudioMixers
     public void SetMasterVolume(float volume)
     {
-        if(Runner.LocalPlayer == _health.GetPlayer())
-            audioMixer.SetFloat("Volume", Mathf.Log10(volume) * 20);
+        audioMixer.SetFloat("Volume", Mathf.Log10(volume) * 20);
     }
 
     public void SetMouseSensitivity(float sensitivity)
     {
-        _mL.Rpc_SetSensitivity(sensitivity);
+        _inputManager.SetSensitivity(sensitivity);
     }
 }

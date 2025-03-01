@@ -10,12 +10,13 @@ public class Aim : NetworkBehaviour
     [SerializeField] private Weapon _wM;
     [SerializeField] private MouseLook _mL;
     [SerializeField] private Health _health;
-    private bool _isAiming;
+    private InputManager _inputManager; 
     private Camera _cam;
     void Start()
     {
         _cam = Camera.main;
         _cam.fieldOfView = _normalFov;
+        _inputManager = FindObjectOfType<InputManager>(); 
     }
 
     // Update is called once per frame
@@ -29,13 +30,13 @@ public class Aim : NetworkBehaviour
                 {
                     _cam.fieldOfView = _aimFov;
                     _wM.Anim.SetBool("Aim", true);
-                    _mL.Rpc_SetSensitivityFactor(_aimFov / _normalFov);
+                    _inputManager.SetSensitivityFactor(_aimFov / _normalFov);
                 }
                 else 
                 {
                     _cam.fieldOfView = _normalFov;
                     _wM.Anim.SetBool("Aim", false);
-                    _mL.Rpc_SetSensitivityFactor(1);
+                    _inputManager.SetSensitivityFactor(1);
                 }
             }
         }

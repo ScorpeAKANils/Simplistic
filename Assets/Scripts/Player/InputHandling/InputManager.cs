@@ -15,7 +15,9 @@ public class InputManager : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
     private Fusion.Addons.SimpleKCC.Vector2Accumulator _accumulator = new Fusion.Addons.SimpleKCC.Vector2Accumulator(0.02f, true);
     private Fusion.Addons.KCC.SmoothVector2 _smoother = new(128);
     private NetworkInputData _input = new NetworkInputData();
-    private PlayerInputActionMaps _inputActions; 
+    private PlayerInputActionMaps _inputActions;
+    private float _sensitivityFactor = 1;
+    private float _sensitivity = 10f;
 
     void Awake()
     {
@@ -57,6 +59,8 @@ public class InputManager : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
         {
             mouseDelta = gamepad.rightStick.ReadValue() * 15f;
         }
+
+        mouseDelta *= (_sensitivity / Application.targetFrameRate) * _sensitivityFactor; 
         _smoother.AddValue(Time.frameCount, Time.unscaledDeltaTime, mouseDelta);
         Vector2 smoothedVal = _smoother.CalculateSmoothValue(0.01, Time.unscaledDeltaTime); 
         _input.AimDirection = new(-smoothedVal.y, smoothedVal.x);
@@ -70,6 +74,16 @@ public class InputManager : SimulationBehaviour, IBeforeUpdate, INetworkRunnerCa
         _input.Buttons.Set(MyButtons.Protogun, _inputActions.Player.ProtoGun.IsPressed());
         _input.Buttons.Set(MyButtons.SilentDeath, _inputActions.Player.SilentDeath.IsPressed());
         _input.Buttons.Set(MyButtons.ShowScoreBoard, Input.GetKey(KeyCode.Tab));
+    }
+
+    public void SetSensitivityFactor(float val)
+    {
+        _sensitivityFactor = val;
+    }
+
+    public void SetSensitivity(float val)
+    {
+        _sensitivity = val;
     }
 
     //this shit needs to be here, because of the INetworkRunnerCallbacks, because Fusion gives a shit about solid i guess 
