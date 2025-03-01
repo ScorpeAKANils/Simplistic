@@ -23,7 +23,6 @@ public class Settings : NetworkBehaviour
 
     public void SetMouseSensitivity(float sensitivity)
     {
-        if (Runner.LocalPlayer == _health.GetPlayer())
-            _mL.SetSensitivity(sensitivity);
+        _mL.Rpc_SetSensitivity(sensitivity);
     }
 }

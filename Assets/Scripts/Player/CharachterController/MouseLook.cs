@@ -30,21 +30,16 @@ public class MouseLook : NetworkBehaviour
             _camTransform.localRotation = Quaternion.Euler(_cc.GetLookRotation().x, 0, 0);
         }
     }
-
-    public void SetSensitivityFactor(float val)
+    [Rpc(RpcSources.All, RpcTargets.InputAuthority)]
+    public void Rpc_SetSensitivityFactor(float val)
     {
-        if(Runner.LocalPlayer == _player.GetPlayer()) 
-        {
-            _sensitivityFactor = val;
-        } 
+        _sensitivityFactor = val;
     }
 
-    public void SetSensitivity(float val) 
+    [Rpc(RpcSources.All, RpcTargets.InputAuthority)]
+    public void Rpc_SetSensitivity(float val) 
     {
-        if (Runner.LocalPlayer == _player.GetPlayer())
-        {
-            _sensitivity = val; 
-        }
+        _sensitivity = val; 
     }
 
     public override void Render()
