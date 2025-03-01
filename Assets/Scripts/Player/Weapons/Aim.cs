@@ -25,13 +25,13 @@ public class Aim : NetworkBehaviour
         {
             if (GetInput(out NetworkInputData data) && HasInputAuthority)
             {
-                if (data.Buttons.IsSet(MyButtons.Aim) && Runner.LocalPlayer == _health.GetPlayer())
+                if (data.Buttons.IsSet(MyButtons.Aim))
                 {
                     _cam.fieldOfView = _aimFov;
                     _wM.Anim.SetBool("Aim", true);
                     _mL.Rpc_SetSensitivityFactor(_aimFov / _normalFov);
                 }
-                else if(!data.Buttons.IsSet(MyButtons.Aim) && Runner.LocalPlayer == _health.GetPlayer())
+                else 
                 {
                     _cam.fieldOfView = _normalFov;
                     _wM.Anim.SetBool("Aim", false);

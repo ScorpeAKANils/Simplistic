@@ -30,13 +30,13 @@ public class MouseLook : NetworkBehaviour
             _camTransform.localRotation = Quaternion.Euler(_cc.GetLookRotation().x, 0, 0);
         }
     }
-    [Rpc(RpcSources.All, RpcTargets.InputAuthority)]
+    [Rpc(RpcSources.InputAuthority, RpcTargets.InputAuthority)]
     public void Rpc_SetSensitivityFactor(float val)
     {
         _sensitivityFactor = val;
     }
 
-    [Rpc(RpcSources.All, RpcTargets.InputAuthority)]
+    [Rpc(RpcSources.InputAuthority, RpcTargets.InputAuthority)]
     public void Rpc_SetSensitivity(float val) 
     {
         _sensitivity = val; 
