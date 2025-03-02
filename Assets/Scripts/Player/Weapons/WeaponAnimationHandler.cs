@@ -18,7 +18,7 @@ public class WeaponAnimationHandler : NetworkBehaviour
     {
         if (_wasEnabled) 
         {
-            _gunAnim.Rpc_SetTrigger("idle");
+            _gunAnim.SetTrigger("idle");
         }
         _wasEnabled = true; 
         _retriggerGunAnim = true;
@@ -31,19 +31,27 @@ public class WeaponAnimationHandler : NetworkBehaviour
         {
             return;
         }
+        if(!Runner.IsServer)
+        {
+            return; 
+        }
         if (GetInput(out NetworkInputData data))
         {
-
-            if (data.Buttons.IsSet(MyButtons.Shooting) && _retriggerGunAnim && _gun.AmmoInMag > 0 && _retriggerReloadDelay)
+            bool isShooting = data.Buttons.IsSet(MyButtons.Shooting);
+            if (isShooting && _retriggerGunAnim && _gun.AmmoInMag > 0 && _retriggerReloadDelay)
             {
-                _gunAnim.Rpc_SetTrigger("Shoot");
+                Debug.Log("your mom"); 
+                _gunAnim.SetBool("Shoot", true);
                 StartCoroutine(FireDelay());
-            }
-
-            if (data.Buttons.IsSet(MyButtons.Reload) && _retriggerGunAnim && _gun.AmmoInMag < _gun.MagSize)
+            } 
+            if (data.Buttons.IsSet(MyButtons.Reload) && _retriggerReloadDelay && _gun.AmmoInMag < _gun.MagSize)
             {
-                _gunAnim.Rpc_SetTrigger("Reload");
+                Debug.Log("Reload..."); 
                 StartCoroutine(ReloadDelay());
+            }
+            if(!isShooting && _retriggerReloadDelay)
+            {
+                _gunAnim.SetBool("Shoot", false);
             }
         }
     }
@@ -54,11 +62,14 @@ public class WeaponAnimationHandler : NetworkBehaviour
         yield return new WaitForSeconds(_gun.FireDelay);
         _retriggerGunAnim = true;
     }
-
+    
     private IEnumerator ReloadDelay()
     {
         _retriggerReloadDelay = false;
+        _gunAnim.SetBool("Reloading", true);
         yield return new WaitForSeconds(_gun.ReloadDelay);
+        Debug.Log("Set reload false"); 
         _retriggerReloadDelay = true;
+        _gunAnim.SetBool("Reloading", false); 
     }
 }
