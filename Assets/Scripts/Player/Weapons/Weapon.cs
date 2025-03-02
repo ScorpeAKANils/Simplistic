@@ -2,6 +2,7 @@ using Fusion;
 using TMPro;
 using UnityEngine;
 using System.Collections;
+
 public class Weapon : NetworkBehaviour
 {
     [Networked] public bool CanFire { get; private set; }
@@ -13,8 +14,6 @@ public class Weapon : NetworkBehaviour
     public float FireDelay { get { return _delayFireTime; } }
     public float ReloadDelay { get { return _reloadDelay; } }
     public float MagSize { get { return _magSize; } }
-
-    public Animator Anim; 
     public AudioSource Audio;
    
     [SerializeField, Networked] private byte _magSize { get; set; }
@@ -54,10 +53,12 @@ public class Weapon : NetworkBehaviour
             CanFire = true;
         }
     }
-    
 
+   
     public override void FixedUpdateNetwork()
     {
+        if (!_spawned)
+            return; 
         if (_ammoHud != null && HasInputAuthority)
             _ammoHud.text = "Ammo: " + AmmoInMag.ToString() + "/" + _magSize;
         if (_hitEnemy && HasInputAuthority)
@@ -93,8 +94,11 @@ public class Weapon : NetworkBehaviour
 
     public void OnDisable()
     {
-        _hitMarker.SetActive(false);
-        _hitEnemy = false; 
+        if(_spawned) 
+        {
+            _hitMarker.SetActive(false);
+            _hitEnemy = false; 
+        }
         if(_reload) 
         {
             AmmoInMag = 0;
