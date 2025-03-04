@@ -9,7 +9,7 @@ public class Weapon : NetworkBehaviour
     [Networked] public bool IsCollected { get; set; }
     [Networked] public byte AmmoInMag { get; set; }
     [Networked] public bool PlayerFiresGun { get; set; }
-    [Networked] private bool _hitEnemy { get; set; }
+    private bool _hitEnemy { get; set; }
     [Networked] private bool _reload { get; set; }
     public float FireDelay { get { return _delayFireTime; } }
     public float ReloadDelay { get { return _reloadDelay; } }
@@ -32,18 +32,18 @@ public class Weapon : NetworkBehaviour
     [SerializeField] private GameObject _killFeed;
     [SerializeField] private GameObject _hitMarker;
 
-    private bool _spawned = false; 
+    private bool _spawned { get; set; }
 
     public override void Spawned()
     {
         if (Runner.IsServer) 
         {
             CanFire = true; 
-            PlayerFiresGun = false; 
+            PlayerFiresGun = false;
         }
+        _spawned = true;
         _ammoHud = FindObjectOfType<PlayerHudTag>().GetComponentInChildren<TextMeshProUGUI>();
         _ammoHud.text = "Ammo: " + AmmoInMag.ToString() + "/" + _magSize;
-        _spawned = true; 
     }
 
     public void OnEnable()
@@ -94,11 +94,12 @@ public class Weapon : NetworkBehaviour
 
     public void OnDisable()
     {
-        if(_spawned) 
-        {
-            _hitMarker.SetActive(false);
-            _hitEnemy = false; 
-        }
+        if (!_spawned)
+            return; 
+        
+        _hitMarker.SetActive(false);
+        _hitEnemy = false; 
+        
         if(_reload) 
         {
             AmmoInMag = 0;
@@ -138,6 +139,4 @@ public class Weapon : NetworkBehaviour
         AmmoInMag = _magSize; 
         _reload = false; 
     }
-
-
 }

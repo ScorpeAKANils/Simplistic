@@ -7,16 +7,23 @@ using UnityEngine;
 [DefaultExecutionOrder(-100)] // Dieses Script wird früher ausgeführt
 public class WeaponAnimationHandler : NetworkBehaviour
 {
+    private bool _spawned { get; set; }    
+
     [SerializeField] private Weapon _gun;
     [SerializeField] private NetworkedAnimationController _gunAnim;
     private bool _retriggerGunAnim = true;
     private bool _retriggerReloadDelay = true;
-    private bool _wasEnabled = false; 
+    private bool _wasEnabled = false;
 
-
+    public override void Spawned()
+    {
+        base.Spawned();
+        Debug.Log("Spawned has been called"); 
+        _spawned = true; 
+    }
     public void OnEnable()
     {
-        if (_wasEnabled) 
+        if (_spawned) 
         {
             _gunAnim.SetTrigger("idle");
         }
@@ -40,11 +47,10 @@ public class WeaponAnimationHandler : NetworkBehaviour
             bool isShooting = data.Buttons.IsSet(MyButtons.Shooting);
             if (isShooting && _retriggerGunAnim && _gun.AmmoInMag > 0 && _retriggerReloadDelay)
             {
-                Debug.Log("your mom"); 
                 _gunAnim.SetBool("Shoot", true);
                 StartCoroutine(FireDelay());
             } 
-            if (data.Buttons.IsSet(MyButtons.Reload) && _retriggerReloadDelay && _gun.AmmoInMag < _gun.MagSize)
+            if (data.Buttons.IsSet(MyButtons.Reload) && _retriggerReloadDelay && _gun.AmmoInMag < _gun.MagSize && _retriggerGunAnim)
             {
                 Debug.Log("Reload..."); 
                 StartCoroutine(ReloadDelay());
@@ -68,8 +74,11 @@ public class WeaponAnimationHandler : NetworkBehaviour
         _retriggerReloadDelay = false;
         _gunAnim.SetBool("Reloading", true);
         yield return new WaitForSeconds(_gun.ReloadDelay);
-        Debug.Log("Set reload false"); 
         _retriggerReloadDelay = true;
-        _gunAnim.SetBool("Reloading", false); 
+    }
+
+    public void OnReloadEnd() 
+    {
+        _gunAnim.DisableBoolOnAnimationEnd("Reloading", false); 
     }
 }

@@ -1,6 +1,7 @@
 using UnityEngine;
 using Fusion;
 using System.Runtime.CompilerServices;
+using System;
 
 [RequireComponent(typeof(Animator))]
 public class NetworkedAnimationController : NetworkBehaviour
@@ -34,7 +35,8 @@ public class NetworkedAnimationController : NetworkBehaviour
             case ParamType.Bool:
                 if (_newParamIsOfSameType) 
                 {
-                    ResetBool(); 
+                    ResetBool();
+                    return; 
                 }
                 _anim.SetBool(_paramName, _boolValue);
                 break;
@@ -92,7 +94,6 @@ public class NetworkedAnimationController : NetworkBehaviour
     {
         if(paramName == _paramName && val == _boolValue) 
         {
-            Debug.Log("couldnt set bool: " + paramName +"\n current paramName is: " + _paramName +"\n" + "the values are the same: " + (val == _boolValue)); 
             return; 
         } 
         if(_curParam == ParamType.Bool) 
@@ -103,9 +104,16 @@ public class NetworkedAnimationController : NetworkBehaviour
         _curParam = ParamType.Bool;
         _paramName = paramName;
         _boolValue = val;
-        Debug.Log("Set bool " + paramName + " " + val); 
     }
-
+    
+    public void DisableBoolOnAnimationEnd(string paramName, bool val)
+    {
+        _anim.SetBool(paramName, val);
+        if (Runner.IsServer) 
+        {
+            SetBool(paramName, val); 
+        }
+    }
     private enum ParamType 
     {
         None, 
