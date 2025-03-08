@@ -25,7 +25,9 @@ public class BasicSpawner : SimulationBehaviour, INetworkRunnerCallbacks
     private GameObject _mainCam; 
     public  NetworkRunner RunnerRef;
     private TextMeshProUGUI _kdText;
-    public int PlayerCount = 0; 
+    public int PlayerCount = 0;
+
+    [Networked] public static int CurrentGameScene { get; set; }
     
     public string RoomName = string.Empty; 
 
@@ -33,7 +35,10 @@ public class BasicSpawner : SimulationBehaviour, INetworkRunnerCallbacks
     void Start() 
     {
         Application.runInBackground = true;
-        Application.targetFrameRate = 64; 
+        Application.targetFrameRate = 64;
+        _runnerRef = GetComponent<NetworkRunner>();
+        RunnerRef = _runnerRef;
+        var res = SeassionManager.ConnectToLobby(_runnerRef); 
     }
     public float ReturnPlayerHealth(PlayerRef player) 
     {
@@ -75,11 +80,9 @@ public class BasicSpawner : SimulationBehaviour, INetworkRunnerCallbacks
     }
     public async void StartGame(GameMode mode)
     {
-        _runnerRef = GetComponent<NetworkRunner>();
         // Create the Fusion runner and let it know that we will be providing user input
         var networkEvents = this.gameObject.GetComponent<NetworkEvents>();
         networkEvents.OnInput.AddListener(_input.OnInput);
-        RunnerRef = _runnerRef;
         // Create the NetworkSceneInfo from the current scene
         int sceneIndex = SceneUtility.GetBuildIndexByScenePath(_sceneToLoad);
         var scene = SceneRef.FromIndex(sceneIndex);
@@ -88,14 +91,17 @@ public class BasicSpawner : SimulationBehaviour, INetworkRunnerCallbacks
         {
             sceneInfo.AddSceneRef(scene, LoadSceneMode.Additive);
         }
-        // Start or join (depends on gamemode) a session with a specific name
-        await _runnerRef.StartGame(new StartGameArgs()
+        switch(mode) 
         {
-            GameMode = mode,
-            SessionName = RoomName,
-            Scene = scene,
-            SceneManager = gameObject.AddComponent<NetworkSceneManagerDefault>()
-        });
+            case GameMode.Host:
+                var createRes = SeassionManager.CreateSeassion(_runnerRef, RoomName, scene, this.gameObject);
+                if (createRes.IsCompleted)
+                    CurrentGameScene = sceneIndex; 
+                break;
+            case GameMode.Client:
+                var joinRes = SeassionManager.JoinLobby(_runnerRef, RoomName, this.gameObject);
+                break; 
+        }
     }
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
