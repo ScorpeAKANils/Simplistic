@@ -94,17 +94,16 @@ public class Weapon : NetworkBehaviour
 
     public void OnDisable()
     {
-        if (!_spawned)
-            return; 
-        
-        _hitMarker.SetActive(false);
-        _hitEnemy = false; 
-        
-        if(_reload) 
+        if (_spawned) 
         {
-            AmmoInMag = 0;
-            _reload = false; 
-        }
+            _hitMarker.SetActive(false);
+            _hitEnemy = false; 
+            if(_reload) 
+            {
+                AmmoInMag = 0;
+                _reload = false; 
+            }
+        } 
     }
 
     IEnumerator FireCoolDown(float time)
