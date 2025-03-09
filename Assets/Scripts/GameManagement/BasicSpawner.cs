@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 using TMPro;
 using Fusion.Addons.SimpleKCC;
 using System.Linq;
+using UnityEngine.UI;
 
 public class BasicSpawner : SimulationBehaviour, INetworkRunnerCallbacks
 {
@@ -19,13 +20,17 @@ public class BasicSpawner : SimulationBehaviour, INetworkRunnerCallbacks
     [SerializeField] private KdManager kdManager;
     [SerializeField] private string _sceneToLoad; 
     [SerializeField] private Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new();
-    [SerializeField] private InputManager _input; 
+    [SerializeField] private InputManager _input;
+    [SerializeField] private SessionObject _session;
+    [SerializeField] private ScrollRect m_scrollRect; 
     private Dictionary<PlayerRef, Health> _playersHealths = new(); 
     private NetworkRunner _runnerRef;
     private GameObject _mainCam; 
     public  NetworkRunner RunnerRef;
     private TextMeshProUGUI _kdText;
     public int PlayerCount = 0;
+    private List<SessionObject> m_sessions = new(); 
+    
 
     [Networked] public static int CurrentGameScene { get; set; }
     
@@ -38,7 +43,7 @@ public class BasicSpawner : SimulationBehaviour, INetworkRunnerCallbacks
         Application.targetFrameRate = 64;
         _runnerRef = GetComponent<NetworkRunner>();
         RunnerRef = _runnerRef;
-        var res = SeassionManager.ConnectToLobby(_runnerRef); 
+        var res = SessionManager.ConnectToLobby(_runnerRef); 
     }
     public float ReturnPlayerHealth(PlayerRef player) 
     {
@@ -94,12 +99,12 @@ public class BasicSpawner : SimulationBehaviour, INetworkRunnerCallbacks
         switch(mode) 
         {
             case GameMode.Host:
-                var createRes = SeassionManager.CreateSeassion(_runnerRef, RoomName, scene, this.gameObject);
+                var createRes = SessionManager.CreateSession(_runnerRef, RoomName, scene, this.gameObject);
                 if (createRes.IsCompleted)
                     CurrentGameScene = sceneIndex; 
                 break;
             case GameMode.Client:
-                var joinRes = SeassionManager.JoinLobby(_runnerRef, RoomName, this.gameObject);
+                var joinRes = SessionManager.JoinLobby(_runnerRef, RoomName, this.gameObject);
                 break; 
         }
     }
@@ -212,7 +217,17 @@ public class BasicSpawner : SimulationBehaviour, INetworkRunnerCallbacks
     public void OnConnectRequest(NetworkRunner runner, NetworkRunnerCallbackArgs.ConnectRequest request, byte[] token) { }
     public void OnConnectFailed(NetworkRunner runner, NetAddress remoteAddress, NetConnectFailedReason reason) { }
     public void OnUserSimulationMessage(NetworkRunner runner, SimulationMessagePtr message) { }
-    public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList) { }
+    public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList) 
+    {
+        foreach(SessionInfo sessionInfo in sessionList) 
+        {
+            Debug.Log("Found session: " + sessionInfo.Name); 
+            var session = Instantiate(_session, m_scrollRect.content.transform);
+            m_sessions.Add(session);
+            session.transform.SetParent(m_scrollRect.content, false);
+            session.Init(sessionInfo, _runnerRef, this.gameObject);
+        }
+    }
     public void OnCustomAuthenticationResponse(NetworkRunner runner, Dictionary<string, object> data) { }
     public void OnHostMigration(NetworkRunner runner, HostMigrationToken hostMigrationToken) { }
     public void OnSceneLoadDone(NetworkRunner runner) { }
