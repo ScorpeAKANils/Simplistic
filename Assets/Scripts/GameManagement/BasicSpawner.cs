@@ -219,6 +219,11 @@ public class BasicSpawner : SimulationBehaviour, INetworkRunnerCallbacks
     public void OnUserSimulationMessage(NetworkRunner runner, SimulationMessagePtr message) { }
     public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList) 
     {
+        foreach(var s in m_sessions) 
+        {
+            Destroy(s.gameObject); 
+        }
+        m_sessions.Clear(); 
         foreach(SessionInfo sessionInfo in sessionList) 
         {
             Debug.Log("Found session: " + sessionInfo.Name); 

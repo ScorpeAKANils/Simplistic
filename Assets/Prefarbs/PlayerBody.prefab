@@ -89,11 +89,13 @@ MonoBehaviour:
   - {fileID: 3007083739468844812}
   - {fileID: 8598452497370200902}
   - {fileID: 2753900894964308824}
+  - {fileID: 3540718073905782068}
   - {fileID: 6750560298107990950}
   - {fileID: 4352426777705120798}
   - {fileID: 5418927132254815709}
   - {fileID: 4207129891527672227}
   - {fileID: 1989194228013630548}
+  - {fileID: 5511196246387046896}
   ForceRemoteRenderTimeframe: 0
 --- !u!1 &2405751550317871566
 GameObject:
@@ -1295,6 +1297,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 2753900894964308824}
+    - targetCorrespondingSourceObject: {fileID: 3777411784221575240, guid: c7a0efb3c2a24da4ea5d2dd7290493ee,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3540718073905782068}
   m_SourcePrefab: {fileID: 100100000, guid: c7a0efb3c2a24da4ea5d2dd7290493ee, type: 3}
 --- !u!114 &853071977118636490 stripped
 MonoBehaviour:
@@ -1327,7 +1333,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _gun: {fileID: 853071977118636490}
-  _gunAnim: {fileID: 2753900894964308824}
+  _gunAnim: {fileID: 4768368032968376195}
 --- !u!114 &3007083739468844812
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1383,12 +1389,30 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2698189096900940887}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1a6aa66fc9c40424dbd6cad2c5ffab5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _anim: {fileID: 4768368032968376195}
+--- !u!114 &3540718073905782068
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2698189096900940887}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 506319458, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Animator: {fileID: 4768368032968376195}
+  ApplyTiming: 2
+  SyncSettings: 79
+  StateHashes: 000000002b1a167c7940695512125e7f96318890eef325099739b6af63cb14a5206527a6
+  TriggerHashes: 0000000015b524dc
+  TotalWords: 1
 --- !u!4 &3331032172397891309 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4550817800063980274, guid: c7a0efb3c2a24da4ea5d2dd7290493ee,
@@ -1546,6 +1570,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1989194228013630548}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 4b5510b840c490e44847203859628a8d,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5511196246387046896}
   m_SourcePrefab: {fileID: 100100000, guid: 4b5510b840c490e44847203859628a8d, type: 3}
 --- !u!4 &2747161333698116023 stripped
 Transform:
@@ -1726,7 +1754,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _gun: {fileID: 6750560298107990950}
-  _gunAnim: {fileID: 1989194228013630548}
+  _gunAnim: {fileID: 2549587303477303879}
 --- !u!114 &5418927132254815709
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1782,12 +1810,30 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3266288410896360205}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1a6aa66fc9c40424dbd6cad2c5ffab5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _anim: {fileID: 2549587303477303879}
+--- !u!114 &5511196246387046896
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3266288410896360205}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 506319458, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Animator: {fileID: 2549587303477303879}
+  ApplyTiming: 2
+  SyncSettings: 79
+  StateHashes: 000000002b1a167c794069550fd9753b4c774638eef325099739b6af0f2cf65d15bdccb763cb14a5206527a6
+  TriggerHashes: 0000000015b524dc
+  TotalWords: 3
 --- !u!1001 &5230725509534898407
 PrefabInstance:
   m_ObjectHideFlags: 0

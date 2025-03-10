@@ -10,7 +10,7 @@ public class WeaponAnimationHandler : NetworkBehaviour
     private bool _spawned { get; set; }    
 
     [SerializeField] private Weapon _gun;
-    [SerializeField] private NetworkedAnimationController _gunAnim;
+    [SerializeField] private Animator _gunAnim;
     private bool _retriggerGunAnim = true;
     private bool _retriggerReloadDelay = true;
     private bool _wasEnabled = false;
@@ -37,10 +37,6 @@ public class WeaponAnimationHandler : NetworkBehaviour
         if (Cursor.lockState == CursorLockMode.None)
         {
             return;
-        }
-        if(!Runner.IsServer)
-        {
-            return; 
         }
         if (GetInput(out NetworkInputData data))
         {
@@ -79,7 +75,7 @@ public class WeaponAnimationHandler : NetworkBehaviour
 
     public void OnReloadEnd() 
     {
-        _gunAnim.DisableBoolOnAnimationEnd("Reloading", false); 
+        _gunAnim.SetBool("Reloading", false); 
     }
 
 }
